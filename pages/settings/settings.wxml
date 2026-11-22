@@ -1,0 +1,70 @@
+<view class="page settings-page">
+  <view class="h1">设置</view>
+  <view class="sub">调整学习偏好，数据只保存在你的手机里</view>
+
+  <!-- 学习偏好 -->
+  <view class="setting-card">
+    <view class="setting-title">🔔 学习提醒</view>
+    <view class="setting-row">
+      <view class="setting-info">
+        <text class="setting-name">单词发音</text>
+        <text class="setting-desc">点击喇叭时尝试播放音频</text>
+      </view>
+      <switch checked="{{settings.sound}}" data-key="sound" bindchange="onSwitch" color="#2EC4B6" />
+    </view>
+    <view class="setting-row">
+      <view class="setting-info">
+        <text class="setting-name">答对震动</text>
+        <text class="setting-desc">答对时给予轻微触感反馈</text>
+      </view>
+      <switch checked="{{settings.vibrate}}" data-key="vibrate" bindchange="onSwitch" color="#2EC4B6" />
+    </view>
+    <view class="setting-row">
+      <view class="setting-info">
+        <text class="setting-name">显示音标</text>
+        <text class="setting-desc">在单词卡与词书中展示音标</text>
+      </view>
+      <switch checked="{{settings.showPhonetic}}" data-key="showPhonetic" bindchange="onSwitch" color="#2EC4B6" />
+    </view>
+  </view>
+
+  <!-- 提醒时间 -->
+  <view class="setting-card">
+    <view class="setting-title">⏰ 每日提醒</view>
+    <view class="setting-row">
+      <view class="setting-info">
+        <text class="setting-name">提醒时间</text>
+        <text class="setting-desc">建议选择每天固定的空闲时段</text>
+      </view>
+      <picker mode="time" value="{{settings.reminder}}" bindchange="onReminder">
+        <view class="time-value">{{settings.reminder}} ›</view>
+      </picker>
+    </view>
+    <view class="setting-note">提醒时间仅作为本地学习计划记录，正式上线可接入微信订阅消息。</view>
+  </view>
+
+  <!-- 数据 -->
+  <view class="setting-card">
+    <view class="setting-title">💾 数据管理</view>
+    <view class="setting-row">
+      <view class="setting-info">
+        <text class="setting-name">本地数据占用</text>
+        <text class="setting-desc">学习记录、错题与养成进度</text>
+      </view>
+      <text class="setting-value">{{storage}} KB</text>
+    </view>
+    <view class="setting-row" bindtap="goAbout">
+      <view class="setting-info">
+        <text class="setting-name">关于词灵岛</text>
+        <text class="setting-desc">版本 {{version}}</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="danger-btn" bindtap="clearData">清除全部学习数据</view>
+  </view>
+
+  <view class="settings-footer">
+    <text>词灵岛 v{{version}}</text>
+    <text>数据存储于本机，卸载小程序会一并清除</text>
+  </view>
+</view>

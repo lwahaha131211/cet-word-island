@@ -1,0 +1,155 @@
+<view class="page writing-page">
+  <!-- 切换 -->
+  <view class="tab-row">
+    <view class="tab {{tab === 'essay' ? 'is-active' : ''}}" data-tab="essay" bindtap="switchTab">✍️ 写作</view>
+    <view class="tab {{tab === 'trans' ? 'is-active' : ''}}" data-tab="trans" bindtap="switchTab">🀄 翻译</view>
+    <view class="timer">⏱ {{minutes}} 分钟</view>
+  </view>
+
+  <!-- 写作 -->
+  <block wx:if="{{tab === 'essay'}}">
+    <scroll-view scroll-x class="task-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="task-row">
+        <view
+          wx:for="{{essays}}"
+          wx:key="id"
+          class="task-chip {{essayIndex === index ? 'is-active' : ''}}"
+          data-index="{{index}}"
+          bindtap="selectEssay"
+        >{{item.level}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="task-card">
+      <view class="task-tag">命题作文</view>
+      <view class="task-title">{{essay.title}}</view>
+      <view class="task-cn">{{essay.cnTitle}} · {{essay.level}}</view>
+      <view class="task-direction">{{essay.direction}}</view>
+      <view class="outline">
+        <view wx:for="{{essay.outline}}" wx:key="*this" class="outline-item">
+          <text class="outline-num">{{index + 1}}</text>
+          <text class="outline-text">{{item}}</text>
+        </view>
+      </view>
+      <view class="phrase-row">
+        <text wx:for="{{essay.keyPhrases}}" wx:key="*this" class="phrase">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="editor-card">
+      <textarea
+        class="textarea"
+        placeholder="在这里写下你的作文……"
+        placeholder-class="placeholder"
+        value="{{text}}"
+        bindinput="onInput"
+        maxlength="2000"
+        auto-height
+      ></textarea>
+      <view class="editor-bar">
+        <text class="word-count {{wordCount >= 120 ? 'is-ok' : ''}}">{{wordCount}} 词</text>
+        <text class="editor-hint">建议 120-180 词</text>
+        <text class="editor-clear" bindtap="resetText">清空</text>
+      </view>
+    </view>
+
+    <view class="btn btn-primary btn-block" bindtap="diagnose" disabled="{{diagnosing}}">
+      {{diagnosing ? '诊断中…' : '🔍 智能诊断'}}
+    </view>
+
+    <!-- 诊断结果 -->
+    <view wx:if="{{result}}" class="result-card anim-fade-up">
+      <view class="result-hd">
+        <ring-progress percent="{{result.score}}" size="130" color="#2EC4B6" value="{{result.score}}" label="得分" />
+        <view class="flex1 result-summary">
+          <view class="result-grade">{{result.grade}}</view>
+          <view class="result-sub">{{result.wordCount}} 词 · {{result.sentenceCount}} 句 · 平均 {{result.avgLen}} 词/句</view>
+          <view class="result-tags">
+            <text class="tag tag-green">{{result.uniqueCount}} 个不同单词</text>
+            <text class="tag tag-blue">{{result.links.length}} 处衔接</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="dimension">
+        <view class="dim-row">
+          <text class="dim-name">篇幅</text>
+          <view class="bar bar-thin flex1"><view class="bar-inner" style="width:{{result.wordCount >= 120 ? 100 : result.wordCount / 1.2}}%"></view></view>
+        </view>
+        <view class="dim-row">
+          <text class="dim-name">句式</text>
+          <view class="bar bar-thin flex1 bar-blue"><view class="bar-inner" style="width:{{result.sentenceCount >= 8 ? 100 : result.sentenceCount * 12}}%"></view></view>
+        </view>
+        <view class="dim-row">
+          <text class="dim-name">衔接</text>
+          <view class="bar bar-thin flex1 bar-green"><view class="bar-inner" style="width:{{result.links.length * 18 > 100 ? 100 : result.links.length * 18}}%"></view></view>
+        </view>
+        <view class="dim-row">
+          <text class="dim-name">词汇</text>
+          <view class="bar bar-thin flex1 bar-pink"><view class="bar-inner" style="width:{{result.uniqueRate}}%"></view></view>
+        </view>
+      </view>
+
+      <view class="advice-box">
+        <view class="advice-title">📋 修改建议</view>
+        <view wx:for="{{result.advice}}" wx:key="*this" class="advice-item">
+          <text class="advice-dot">·</text>
+          <text class="advice-text">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="sample-toggle" bindtap="toggleSample">
+        {{showSample ? '收起参考范文 ▲' : '查看参考范文 ▼'}}
+      </view>
+      <view wx:if="{{showSample}}" class="sample">{{essay.sample}}</view>
+    </view>
+
+    <view wx:if="{{!result}}" class="sample-toggle plain" bindtap="toggleSample">
+      {{showSample ? '收起参考范文 ▲' : '先看看参考范文 ▼'}}
+    </view>
+    <view wx:if="{{!result && showSample}}" class="sample">{{essay.sample}}</view>
+  </block>
+
+  <!-- 翻译 -->
+  <block wx:else>
+    <scroll-view scroll-x class="task-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="task-row">
+        <view
+          wx:for="{{translations}}"
+          wx:key="id"
+          class="task-chip {{translationIndex === index ? 'is-active' : ''}}"
+          data-index="{{index}}"
+          bindtap="selectTranslation"
+        >{{item.title}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="task-card">
+      <view class="task-tag">段落翻译</view>
+      <view class="task-title">{{translation.title}}</view>
+      <view class="trans-zh">{{translation.zh}}</view>
+    </view>
+
+    <view class="editor-card">
+      <textarea
+        class="textarea"
+        placeholder="写下你的英文翻译……"
+        placeholder-class="placeholder"
+        value="{{transText}}"
+        bindinput="onTransInput"
+        maxlength="2000"
+        auto-height
+      ></textarea>
+    </view>
+
+    <view class="btn btn-ghost btn-block" bindtap="toggleRef">{{showRef ? '隐藏参考译文' : '对照参考译文'}}</view>
+    <view wx:if="{{showRef}}" class="ref-box">
+      <view class="ref-title">参考译文</view>
+      <text class="ref-text">{{translation.ref}}</text>
+      <view class="ref-points">
+        <view class="ref-points-title">采分点</view>
+        <view wx:for="{{translation.points}}" wx:key="*this" class="point">· {{item}}</view>
+      </view>
+    </view>
+  </block>
+</view>

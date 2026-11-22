@@ -1,0 +1,423 @@
+/* 知识花园 */
+.garden-page {
+  padding-bottom: 80rpx;
+}
+
+.garden-hd {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.garden-count {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+  padding: 6rpx 18rpx;
+  background: var(--green-soft);
+  border: 3rpx solid var(--ink);
+  border-radius: 18rpx;
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.garden-count-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.garden-count-label {
+  font-size: 18rpx;
+  color: var(--ink-soft);
+}
+
+.garden-scene {
+  position: relative;
+  padding: 110rpx 18rpx 70rpx;
+  background: linear-gradient(180deg, #cdeeff 0%, #eafaff 52%, #d9f7e6 100%);
+  border: 4rpx solid var(--ink);
+  border-radius: 36rpx;
+  box-shadow: 0 12rpx 0 rgba(59, 46, 42, 0.14);
+  overflow: hidden;
+}
+
+.sun {
+  position: absolute;
+  right: 34rpx;
+  top: 28rpx;
+  width: 76rpx;
+  height: 76rpx;
+  background: #ffd166;
+  border: 4rpx solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 0 0 12rpx rgba(255, 209, 102, 0.28);
+}
+
+.cloud {
+  position: absolute;
+  width: 120rpx;
+  height: 42rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 999rpx;
+  opacity: 0.9;
+}
+
+.c1 {
+  left: 30rpx;
+  top: 36rpx;
+}
+
+.c2 {
+  right: 140rpx;
+  top: 80rpx;
+  transform: scale(0.7);
+}
+
+.decor {
+  position: absolute;
+  font-size: 40rpx;
+  z-index: 3;
+  animation: floaty 3.4s ease-in-out infinite;
+}
+
+.decor-butterfly {
+  left: 90rpx;
+  top: 170rpx;
+  animation-duration: 2.4s;
+}
+
+.decor-fence {
+  right: 16rpx;
+  bottom: 60rpx;
+  font-size: 46rpx;
+}
+
+.decor-lantern {
+  left: 18rpx;
+  bottom: 180rpx;
+}
+
+.decor-fountain {
+  right: 40rpx;
+  top: 130rpx;
+}
+
+.decor-rainbow {
+  left: 50%;
+  top: 20rpx;
+  margin-left: -20rpx;
+  font-size: 64rpx;
+  opacity: 0.85;
+}
+
+.garden-grid {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.plot {
+  width: calc((100% - 36rpx) / 4);
+  height: 190rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8rpx;
+  background: rgba(255, 255, 255, 0.55);
+  border: 3rpx solid rgba(59, 46, 42, 0.22);
+  border-radius: 20rpx;
+}
+
+.plot.is-empty {
+  border-style: dashed;
+  border-color: rgba(59, 46, 42, 0.22);
+  background: rgba(255, 255, 255, 0.25);
+  justify-content: center;
+}
+
+.plot-plus {
+  font-size: 34rpx;
+  color: rgba(59, 46, 42, 0.22);
+  font-weight: 800;
+}
+
+.plot-word {
+  font-size: 16rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+  max-width: 100%;
+  padding: 1rpx 8rpx;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 999rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ground {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: -40rpx;
+  height: 110rpx;
+  background: #8fe0b0;
+  border-top: 4rpx solid var(--ink);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  z-index: 2;
+}
+
+/* 花朵 */
+.flower {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rpx;
+}
+
+.flower-head {
+  position: relative;
+  width: 76rpx;
+  height: 76rpx;
+}
+
+.flower-head.big {
+  width: 140rpx;
+  height: 140rpx;
+  transform: scale(1.4);
+}
+
+.petal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30rpx;
+  height: 40rpx;
+  margin-left: -15rpx;
+  margin-top: -20rpx;
+  background: var(--fc, #ff86ae);
+  border: 3rpx solid var(--ink);
+  border-radius: 50% 50% 42% 42%;
+}
+
+.p1 {
+  transform: rotate(0deg) translateY(-22rpx);
+}
+
+.p2 {
+  transform: rotate(72deg) translateY(-22rpx);
+}
+
+.p3 {
+  transform: rotate(144deg) translateY(-22rpx);
+}
+
+.p4 {
+  transform: rotate(216deg) translateY(-22rpx);
+}
+
+.p5 {
+  transform: rotate(288deg) translateY(-22rpx);
+}
+
+.flower-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30rpx;
+  height: 30rpx;
+  margin-left: -15rpx;
+  margin-top: -15rpx;
+  background: #ffd166;
+  border: 3rpx solid var(--ink);
+  border-radius: 50%;
+}
+
+.flower-stem {
+  position: relative;
+  width: 6rpx;
+  height: 52rpx;
+  background: #2f8f63;
+  border-radius: 999rpx;
+}
+
+.flower-leaf {
+  position: absolute;
+  left: 4rpx;
+  top: 16rpx;
+  width: 26rpx;
+  height: 16rpx;
+  background: #6fd39b;
+  border: 2rpx solid var(--ink);
+  border-radius: 100% 0 100% 0;
+  transform: rotate(-16deg);
+}
+
+/* 数据 */
+.garden-stats {
+  display: flex;
+  align-items: center;
+  margin-top: 24rpx;
+  padding: 22rpx 0;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 28rpx;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.gstat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+}
+
+.gstat .num {
+  font-size: 38rpx;
+}
+
+.gstat-label {
+  font-size: 18rpx;
+  color: var(--muted);
+}
+
+.gstat-divider {
+  width: 2rpx;
+  height: 44rpx;
+  background: var(--line);
+}
+
+/* 下一装饰 */
+.next-card {
+  margin-top: 20rpx;
+  padding: 22rpx;
+  background: var(--yellow-soft);
+  border: 3rpx solid var(--ink);
+  border-radius: 26rpx;
+}
+
+.next-card.is-done {
+  background: var(--green-soft);
+}
+
+.next-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.next-title {
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.next-name {
+  font-size: 20rpx;
+  color: var(--orange-deep);
+  font-weight: 800;
+}
+
+.next-tip {
+  display: block;
+  font-size: 18rpx;
+  color: var(--ink-soft);
+  margin-top: 8rpx;
+}
+
+/* 装饰 */
+.decor-card {
+  margin-top: 20rpx;
+  padding: 22rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 28rpx;
+}
+
+.decor-title {
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.decor-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.decor-item {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 6rpx 14rpx;
+  background: var(--cream);
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 999rpx;
+}
+
+.decor-emoji {
+  font-size: 24rpx;
+}
+
+.decor-name {
+  font-size: 18rpx;
+  font-weight: 700;
+}
+
+.decor-empty {
+  font-size: 19rpx;
+  color: var(--muted);
+}
+
+/* 提示 */
+.garden-tip {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: var(--purple-soft);
+  border: 3rpx dashed rgba(59, 46, 42, 0.25);
+  border-radius: 24rpx;
+}
+
+.garden-tip-title {
+  display: block;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.garden-tip-text {
+  display: block;
+  font-size: 19rpx;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-top: 6rpx;
+}
+
+.garden-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+/* 弹层 */
+.flower-modal {
+  text-align: center;
+}
+
+.flower-big {
+  display: flex;
+  justify-content: center;
+  height: 150rpx;
+  align-items: center;
+}
+
+.flower-meta {
+  margin-top: 8rpx;
+  font-size: 18rpx;
+  color: var(--muted);
+}

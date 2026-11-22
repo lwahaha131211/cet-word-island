@@ -1,0 +1,64 @@
+<view class="page achievements-page">
+  <!-- 总览 -->
+  <view class="ach-hero">
+    <view class="ach-hero-left">
+      <view class="h1">成就墙</view>
+      <view class="sub">每一个徽章，都是一段学习记忆</view>
+      <view class="ach-hero-count">
+        <text class="ach-num">{{unlockedCount}}</text>
+        <text class="ach-total">/ {{total}} 已解锁</text>
+      </view>
+      <view class="bar bar-thin ach-bar">
+        <view class="bar-inner" style="width:{{percent}}%"></view>
+      </view>
+    </view>
+    <ring-progress percent="{{percent}}" size="150" color="#FFD166" value="{{percent}}%" label="收集度" />
+  </view>
+
+  <!-- 筛选 -->
+  <view class="filter-row">
+    <view
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="filter-chip {{filter === item.key ? 'is-active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="onFilter"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 成就列表 -->
+  <view class="ach-grid">
+    <view
+      wx:for="{{view}}"
+      wx:key="id"
+      class="ach-card {{item.unlocked ? 'is-unlocked' : 'is-locked'}}"
+    >
+      <view class="ach-emoji-wrap">
+        <text class="ach-emoji">{{item.emoji}}</text>
+        <view wx:if="{{item.unlocked}}" class="ach-check">✓</view>
+        <view wx:else class="ach-lock">🔒</view>
+      </view>
+      <text class="ach-name">{{item.name}}</text>
+      <text class="ach-desc">{{item.desc}}</text>
+      <view class="ach-progress">
+        <view class="bar bar-thin">
+          <view class="bar-inner {{item.unlocked ? 'bar-green' : ''}}" style="width:{{item.percent}}%"></view>
+        </view>
+        <text class="ach-count">{{item.current}}/{{item.target}}</text>
+      </view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:if="{{view.length === 0}}"
+    emoji="🏅"
+    title="这里还没有徽章"
+    desc="去学习就能点亮第一枚成就"
+  >
+    <view class="btn btn-primary btn-sm" bindtap="goStudy">去学习</view>
+  </empty-state>
+
+  <view class="ach-tip">
+    💡 解锁成就会额外获得 30 条小鱼干，可以拿去喂词灵。
+  </view>
+</view>

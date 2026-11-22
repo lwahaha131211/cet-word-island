@@ -1,0 +1,20 @@
+# 依赖
+node_modules/
+package-lock.json
+
+# 微信开发者工具本地配置（含个人 AppID 与本地路径，不应提交）
+project.private.config.json
+
+# 查重工具缓存（含其他项目源码，禁止上传）
+.dupcheck/
+
+# 临时文件
+tools/tmp/
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml

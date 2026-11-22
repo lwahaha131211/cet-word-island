@@ -1,0 +1,337 @@
+/* 阅读闯关 */
+.article-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+}
+
+.article-row {
+  display: inline-flex;
+  gap: 12rpx;
+  padding: 2rpx;
+}
+
+.article-chip {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 18rpx;
+  background: #fffdf7;
+  border: 3rpx solid rgba(59, 46, 42, 0.22);
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.article-chip.is-active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.article-chip-emoji {
+  font-size: 24rpx;
+}
+
+.paper {
+  padding: 30rpx 28rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: 0 10rpx 0 rgba(59, 46, 42, 0.12);
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 54rpx,
+    rgba(59, 46, 42, 0.05) 54rpx,
+    rgba(59, 46, 42, 0.05) 56rpx
+  );
+}
+
+.paper-hd {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 2rpx dashed var(--line);
+}
+
+.paper-emoji {
+  font-size: 44rpx;
+}
+
+.paper-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.paper-sub {
+  font-size: 20rpx;
+  color: var(--muted);
+}
+
+.timer-chip {
+  flex: none;
+  padding: 4rpx 12rpx;
+  background: var(--yellow-soft);
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 999rpx;
+  font-size: 18rpx;
+  font-weight: 700;
+}
+
+.paper-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin: 16rpx 0;
+}
+
+.paragraph {
+  display: block;
+  font-size: 26rpx;
+  line-height: 2.15;
+  text-align: justify;
+  margin-bottom: 14rpx;
+}
+
+.keyword-box {
+  margin-top: 16rpx;
+  padding: 16rpx;
+  background: var(--blue-soft);
+  border: 2rpx dashed rgba(59, 46, 42, 0.22);
+  border-radius: 18rpx;
+}
+
+.keyword-title {
+  font-size: 20rpx;
+  font-weight: 800;
+  color: #1f6ea8;
+}
+
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 8rpx;
+}
+
+.keyword {
+  padding: 4rpx 14rpx;
+  background: #fff;
+  border: 2rpx solid var(--ink);
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+  box-shadow: 0 3rpx 0 rgba(59, 46, 42, 0.2);
+}
+
+.read-footer {
+  margin-top: 24rpx;
+}
+
+.read-hint {
+  display: block;
+  text-align: center;
+  font-size: 19rpx;
+  color: var(--muted);
+  margin-bottom: 12rpx;
+}
+
+/* 答题 */
+.quiz-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.quiz-progress {
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.quiz-correct {
+  font-size: 21rpx;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.quiz-card {
+  padding: 28rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 32rpx;
+  box-shadow: 0 10rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.quiz-q {
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 16rpx 18rpx;
+  background: var(--cream);
+  border: 3rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 20rpx;
+}
+
+.option.is-correct {
+  background: var(--green-soft);
+  border-color: #147a70;
+}
+
+.option.is-wrong {
+  background: #ffe3e3;
+  border-color: var(--red);
+}
+
+.option-letter {
+  width: 42rpx;
+  height: 42rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 2rpx solid var(--ink);
+  border-radius: 10rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.option-text {
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.explain {
+  margin-top: 18rpx;
+  padding: 18rpx;
+  background: var(--yellow-soft);
+  border-radius: 18rpx;
+}
+
+.explain-hd {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.explain-emoji {
+  font-size: 24rpx;
+}
+
+.explain-title {
+  font-size: 21rpx;
+  font-weight: 800;
+  color: var(--orange-deep);
+}
+
+.explain-text {
+  display: block;
+  font-size: 21rpx;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-top: 6rpx;
+}
+
+/* 结算 */
+.done-card {
+  margin-top: 20rpx;
+  padding: 40rpx 30rpx 32rpx;
+  background: #fffdf7;
+  border: 5rpx solid var(--ink);
+  border-radius: 40rpx;
+  box-shadow: 0 14rpx 0 rgba(59, 46, 42, 0.16);
+  text-align: center;
+}
+
+.done-score {
+  font-size: 100rpx;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1.15;
+  margin-top: 16rpx;
+}
+
+.done-unit {
+  font-size: 36rpx;
+}
+
+.done-label {
+  font-size: 20rpx;
+  color: var(--muted);
+}
+
+.done-comment {
+  margin-top: 14rpx;
+  font-size: 23rpx;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.result-grid {
+  display: flex;
+  margin-top: 22rpx;
+  padding: 18rpx 0;
+  background: var(--cream);
+  border-radius: 22rpx;
+}
+
+.result-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+}
+
+.result-cell .num {
+  font-size: 32rpx;
+}
+
+.result-label {
+  font-size: 18rpx;
+  color: var(--muted);
+}
+
+.done-tip {
+  margin: 18rpx 0;
+  padding: 14rpx;
+  background: var(--green-soft);
+  border-radius: 16rpx;
+  font-size: 20rpx;
+  color: var(--ink-soft);
+}
+
+/* 生词弹层 */
+.word-modal {
+  text-align: center;
+}
+
+.word-pop-word {
+  font-size: 52rpx;
+  font-weight: 800;
+}
+
+.word-pop-cn {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: var(--ink-soft);
+}

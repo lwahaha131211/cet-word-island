@@ -1,0 +1,275 @@
+/* 剧情闯关 */
+.chapters-page {
+  padding-bottom: 80rpx;
+}
+
+.chap-hero {
+  position: relative;
+  padding: 30rpx 28rpx;
+  background: linear-gradient(160deg, #ece4ff 0%, #c9b6ff 100%);
+  border: 4rpx solid var(--ink);
+  border-radius: 34rpx;
+  box-shadow: 0 10rpx 0 rgba(59, 46, 42, 0.14);
+  overflow: hidden;
+}
+
+.chap-hero-deco {
+  position: absolute;
+  right: 20rpx;
+  top: 6rpx;
+  font-size: 110rpx;
+  opacity: 0.35;
+  transform: rotate(-8deg);
+}
+
+.chap-hero-label {
+  font-size: 20rpx;
+  font-weight: 800;
+  color: #5c43a5;
+  letter-spacing: 2rpx;
+}
+
+.chap-hero-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.4;
+  margin-top: 6rpx;
+  max-width: 500rpx;
+}
+
+.chap-hero-meta {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 14rpx;
+}
+
+.chap-chip {
+  padding: 4rpx 14rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 999rpx;
+  font-size: 18rpx;
+  font-weight: 700;
+}
+
+/* 时间线 */
+.timeline {
+  margin-top: 26rpx;
+}
+
+.chap-item {
+  display: flex;
+  gap: 16rpx;
+}
+
+.timeline-left {
+  width: 84rpx;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node {
+  position: relative;
+  width: 76rpx;
+  height: 76rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.node.is-done {
+  background: var(--yellow);
+}
+
+.node.is-locked {
+  filter: grayscale(0.8);
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.node-emoji {
+  font-size: 34rpx;
+}
+
+.node-check {
+  position: absolute;
+  right: -6rpx;
+  top: -6rpx;
+  width: 28rpx;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green);
+  color: #fff;
+  border: 2rpx solid var(--ink);
+  border-radius: 50%;
+  font-size: 15rpx;
+  font-weight: 800;
+}
+
+.line {
+  flex: 1;
+  width: 4rpx;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(59, 46, 42, 0.25) 0,
+    rgba(59, 46, 42, 0.25) 8rpx,
+    transparent 8rpx,
+    transparent 16rpx
+  );
+  margin: 6rpx 0;
+}
+
+.chap-card {
+  flex: 1;
+  margin-bottom: 22rpx;
+  padding: 20rpx;
+  background: #fffdf7;
+  border: 3rpx solid var(--ink);
+  border-radius: 26rpx;
+  box-shadow: 0 5rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.chap-item.is-locked .chap-card {
+  background: #f7f1e6;
+  border-color: rgba(59, 46, 42, 0.3);
+  box-shadow: none;
+}
+
+.chap-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chap-index {
+  font-size: 18rpx;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.chap-title {
+  font-size: 30rpx;
+  font-weight: 800;
+  margin-top: 4rpx;
+}
+
+.chap-desc {
+  font-size: 19rpx;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-top: 4rpx;
+}
+
+.chap-progress {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.chap-progress .bar {
+  flex: 1;
+}
+
+.chap-progress-text {
+  font-size: 17rpx;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.chap-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14rpx;
+}
+
+.chap-reward {
+  font-size: 18rpx;
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+.chap-tip {
+  margin-top: 6rpx;
+  padding: 18rpx;
+  background: var(--purple-soft);
+  border-radius: 20rpx;
+  font-size: 19rpx;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* 剧情弹层 */
+.story-modal {
+  text-align: center;
+}
+
+.story-emoji {
+  font-size: 64rpx;
+}
+
+.story-title {
+  font-size: 34rpx;
+  font-weight: 800;
+  margin-top: 4rpx;
+}
+
+.story-scene {
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 2rpx;
+}
+
+.story-scroll {
+  max-height: 460rpx;
+  margin-top: 18rpx;
+  text-align: left;
+}
+
+.story-line {
+  margin-bottom: 14rpx;
+  padding: 12rpx 14rpx;
+  background: var(--cream);
+  border-radius: 14rpx;
+}
+
+.story-who {
+  display: block;
+  font-size: 17rpx;
+  font-weight: 800;
+  color: var(--purple);
+  margin-bottom: 2rpx;
+}
+
+.story-text {
+  display: block;
+  font-size: 21rpx;
+  line-height: 1.6;
+}
+
+.story-reward {
+  margin-top: 10rpx;
+  padding: 12rpx;
+  background: var(--yellow-soft);
+  border-radius: 12rpx;
+  font-size: 18rpx;
+  color: #a85a00;
+  font-weight: 700;
+  text-align: center;
+}
+
+.story-btns {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 20rpx;
+}

@@ -1,0 +1,156 @@
+<view class="page stats-page">
+  <view class="stats-hd">
+    <view>
+      <view class="h1">学习统计</view>
+      <view class="sub">每一次打卡，都在词灵岛留下痕迹</view>
+    </view>
+    <view class="fish-chip">🐟 {{fish}}</view>
+  </view>
+
+  <!-- 核心指标 -->
+  <view class="metric-grid">
+    <view class="metric">
+      <text class="metric-emoji">📚</text>
+      <text class="num">{{stats.totalLearned}}</text>
+      <text class="metric-label">累计单词</text>
+    </view>
+    <view class="metric">
+      <text class="metric-emoji">🔥</text>
+      <text class="num">{{stats.streak}}</text>
+      <text class="metric-label">连续打卡</text>
+    </view>
+    <view class="metric">
+      <text class="metric-emoji">⏳</text>
+      <text class="num">{{stats.minutes}}</text>
+      <text class="metric-label">学习分钟</text>
+    </view>
+    <view class="metric">
+      <text class="metric-emoji">🎯</text>
+      <text class="num">{{stats.accuracy}}%</text>
+      <text class="metric-label">答题正确率</text>
+    </view>
+  </view>
+
+  <!-- 近 7 天 -->
+  <view class="chart-card">
+    <view class="chart-hd">
+      <text class="h3">近 7 天学习量</text>
+      <text class="sub">单词 + 复习</text>
+    </view>
+    <view class="chart">
+      <view wx:for="{{days}}" wx:key="key" class="chart-col">
+        <text class="chart-val">{{item.total}}</text>
+        <view class="chart-bar-wrap">
+          <view class="chart-bar" style="height:{{item.percent}}%"></view>
+        </view>
+        <text class="chart-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热力图 -->
+  <view class="heat-card">
+    <view class="chart-hd">
+      <text class="h3">打卡热力图</text>
+      <text class="sub">最近 8 周</text>
+    </view>
+    <view class="heat-wrap">
+      <view class="heat-weeks">
+        <view wx:for="{{weeks}}" wx:key="key" wx:for-item="week" class="heat-col">
+          <view
+            wx:for="{{week.cells}}"
+            wx:key="key"
+            wx:for-item="cell"
+            class="heat-cell lv-{{cell.level}}"
+          ></view>
+        </view>
+      </view>
+    </view>
+    <view class="heat-legend">
+      <text class="legend-text">少</text>
+      <view class="heat-cell lv-0"></view>
+      <view class="heat-cell lv-1"></view>
+      <view class="heat-cell lv-2"></view>
+      <view class="heat-cell lv-3"></view>
+      <view class="heat-cell lv-4"></view>
+      <text class="legend-text">多</text>
+    </view>
+  </view>
+
+  <!-- 熟练度分布 -->
+  <view class="level-card">
+    <view class="chart-hd">
+      <text class="h3">词汇熟练度</text>
+      <text class="sub">已掌握 {{stats.mastered}} 词</text>
+    </view>
+    <view class="level-list">
+      <view wx:for="{{levels}}" wx:key="index" class="level-row">
+        <text class="level-name">{{levelLabels[index]}}</text>
+        <view class="level-bar">
+          <view class="level-fill lv-fill-{{index}}" style="width:{{item.percent}}%"></view>
+        </view>
+        <text class="level-count">{{item.count}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 词书进度 -->
+  <view class="book-progress">
+    <view class="chart-hd">
+      <text class="h3">词书进度</text>
+      <text class="sub">按已学单词计算</text>
+    </view>
+    <view wx:for="{{bookProgress}}" wx:key="id" class="bp-row">
+      <text class="bp-emoji">{{item.emoji}}</text>
+      <view class="flex1">
+        <view class="row between">
+          <text class="bp-name">{{item.name}}</text>
+          <text class="bp-count">{{item.learned}}/{{item.total}}</text>
+        </view>
+        <view class="bar bar-thin bar-green">
+          <view class="bar-inner" style="width:{{item.percent}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 模块完成度 -->
+  <view class="module-card">
+    <view class="chart-hd">
+      <text class="h3">模块完成度</text>
+      <text class="sub">坚持解锁全部内容</text>
+    </view>
+    <view wx:for="{{modules}}" wx:key="name" class="module-row">
+      <view class="module-icon bg-{{item.color}}">{{item.emoji}}</view>
+      <view class="flex1">
+        <view class="row between">
+          <text class="module-name">{{item.name}}</text>
+          <text class="module-count">{{item.done}}/{{item.total}}</text>
+        </view>
+        <view class="bar bar-thin">
+          <view class="bar-inner" style="width:{{item.percent}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 模考记录 -->
+  <view wx:if="{{exams.length}}" class="exam-card">
+    <view class="chart-hd">
+      <text class="h3">最近模考</text>
+      <text class="sub">满分 710</text>
+    </view>
+    <view wx:for="{{exams}}" wx:key="date" class="exam-row">
+      <view class="flex1">
+        <text class="exam-date">{{item.date}}</text>
+        <text class="exam-detail">答对 {{item.correct}}/{{item.total}}</text>
+      </view>
+      <text class="exam-score">{{item.score}}</text>
+    </view>
+  </view>
+
+  <view class="stats-actions">
+    <view class="btn btn-ghost btn-sm flex1" bindtap="goPlan">调整备考计划</view>
+    <view class="btn btn-ghost btn-sm flex1" bindtap="goWrongbook">查看错题病历</view>
+  </view>
+</view>

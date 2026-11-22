@@ -1,0 +1,94 @@
+<view class="page plan-page">
+  <!-- 倒计时 -->
+  <view class="countdown">
+    <view class="countdown-deco"></view>
+    <view class="countdown-label">距离四六级考试还有</view>
+    <view class="countdown-num">{{daysLeft}}<text class="countdown-unit">天</text></view>
+    <view class="countdown-date">{{examDate}} · 目标 {{targetScore}} 分</view>
+    <view class="countdown-tip">按当前节奏，预计 {{plan.needDays}} 天可学完剩余 {{plan.remain}} 词</view>
+    <view wx:if="{{!plan.onTrack}}" class="warn-chip">⚠️ 时间有点紧，建议提高每日新词量</view>
+  </view>
+
+  <!-- 计划配置 -->
+  <view class="config-card">
+    <view class="config-title">🎯 计划设置</view>
+    <view class="config-row">
+      <text class="config-label">考试日期</text>
+      <picker mode="date" value="{{examDate}}" start="{{today}}" bindchange="onDateChange">
+        <view class="config-value">{{examDate}} ›</view>
+      </picker>
+    </view>
+    <view class="config-row">
+      <text class="config-label">每日新词</text>
+      <view class="stepper">
+        <view class="stepper-btn" bindtap="decrease">−</view>
+        <text class="stepper-num">{{dailyNew}}</text>
+        <view class="stepper-btn" bindtap="increase">+</view>
+      </view>
+    </view>
+    <view class="config-row">
+      <text class="config-label">目标分数</text>
+      <picker mode="selector" range="{{targetScores}}" value="{{targetIndex}}" bindchange="onTargetChange">
+        <view class="config-value">{{targetScore}} 分 ›</view>
+      </picker>
+    </view>
+    <view class="config-foot">
+      <text class="config-pace">{{plan.pace}}</text>
+      <view class="btn btn-primary btn-sm" bindtap="save">保存计划</view>
+    </view>
+  </view>
+
+  <!-- 阶段 -->
+  <view class="section-hd">
+    <text class="h2">备考三阶段</text>
+    <text class="sub">当前：{{phaseName}}</text>
+  </view>
+  <view class="phase-row">
+    <view
+      wx:for="{{phases}}"
+      wx:key="key"
+      class="phase {{item.current ? 'is-current' : ''}}"
+    >
+      <text class="phase-emoji">{{item.emoji}}</text>
+      <text class="phase-name">{{item.name}}</text>
+      <text class="phase-days">{{item.days}} 天</text>
+      <text class="phase-desc">{{item.desc}}</text>
+    </view>
+  </view>
+
+  <!-- 逐日安排 -->
+  <view class="schedule-card">
+    <view class="schedule-hd">
+      <text class="h3">未来 {{schedule.length}} 天安排</text>
+      <text class="sub">新词 + 复习</text>
+    </view>
+    <view
+      wx:for="{{schedule}}"
+      wx:key="index"
+      class="sched-row {{item.isToday ? 'is-today' : ''}}"
+    >
+      <view class="sched-date">
+        <text class="sched-day">{{item.index}}</text>
+        <text class="sched-week">{{item.week}}</text>
+      </view>
+      <view class="flex1">
+        <view class="sched-top">
+          <text class="sched-date-text">{{item.date}}</text>
+          <text class="tag tag-{{item.stageClass}}">{{item.stage}}</text>
+        </view>
+        <text class="sched-detail">新词 {{item.newWords}} · 复习 {{item.reviewWords}}</text>
+      </view>
+      <text wx:if="{{item.isToday}}" class="sched-today">今天</text>
+    </view>
+  </view>
+
+  <!-- 操作 -->
+  <view class="plan-actions">
+    <view class="btn btn-primary flex1" bindtap="goStudy">按计划学习</view>
+    <view class="btn btn-ghost flex1" bindtap="goExam">去模考</view>
+  </view>
+
+  <view class="plan-note">
+    💡 计划会根据你的实际学习进度动态调整。连续打卡比一次性突击更有效，建议每天固定一个时间段学习。
+  </view>
+</view>

@@ -1,0 +1,185 @@
+<view class="study-page">
+  <!-- 学习进行中 -->
+  <block wx:if="{{phase === 'learn'}}">
+    <view class="study-top">
+      <view class="close-btn" bindtap="back">✕</view>
+      <view class="progress-wrap">
+        <view class="bar bar-thin">
+          <view class="bar-inner" style="width:{{progress}}%"></view>
+        </view>
+        <text class="progress-text">{{index + 1}} / {{total}}</text>
+      </view>
+      <view class="book-chip">{{bookName}}</view>
+    </view>
+
+    <view class="card-stage">
+      <!-- 卡片正面 -->
+      <view wx:if="{{!flipped}}" class="word-card anim-pop" bindtap="flip">
+        <view class="card-tape"></view>
+        <view class="word-tag">新词</view>
+        <view class="word-big" style="font-size:{{wordSize}}rpx;">{{word.word}}</view>
+        <view class="phonetic-row" wx:if="{{showPhonetic}}">
+          <view class="wave {{speaking ? 'wave-play' : ''}}">
+            <view class="wave-item"></view>
+            <view class="wave-item"></view>
+            <view class="wave-item"></view>
+            <view class="wave-item"></view>
+            <view class="wave-item"></view>
+          </view>
+          <text class="phonetic-text">{{word.phonetic}}</text>
+          <view class="speak-btn" catchtap="speak">🔊</view>
+        </view>
+        <view class="word-pos" wx:if="{{word.pos}}">{{word.pos}}</view>
+        <view class="flip-hint">
+          <text class="flip-hand">👆</text>
+          <text>点一下卡片，看看它的意思</text>
+        </view>
+        <view class="word-deco word-deco-1">✦</view>
+        <view class="word-deco word-deco-2">✧</view>
+      </view>
+
+      <!-- 卡片背面 -->
+      <view wx:else class="word-card word-card-back anim-pop" bindtap="flip">
+        <view class="back-hd">
+          <view>
+            <text class="back-word" style="font-size:{{backWordSize}}rpx;">{{word.word}}</text>
+            <text class="back-phonetic" wx:if="{{showPhonetic}}">{{word.phonetic}}</text>
+          </view>
+          <text class="tag tag-orange" wx:if="{{word.pos}}">{{word.pos}}</text>
+        </view>
+        <view class="back-cn">{{word.cn}}</view>
+
+        <view class="example-box" wx:if="{{word.en}}">
+          <text class="example-en">{{word.en}}</text>
+          <text class="example-cn">{{word.cnSent}}</text>
+        </view>
+        <view class="example-box bare" wx:else>
+          <text class="bare-title">先记住它</text>
+          <text class="example-cn">该词暂无例句：跟着音标读三遍，再复述一遍中文释义。</text>
+        </view>
+
+        <view class="root-box" wx:if="{{word.roots.length}}">
+          <view wx:for="{{word.roots}}" wx:key="t" class="root-piece">
+            <text class="piece-text">{{item.t}}</text>
+            <text class="piece-mean">{{item.m}}</text>
+          </view>
+        </view>
+
+        <view class="tip-box" wx:if="{{word.tip}}">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">{{word.tip}}</text>
+        </view>
+        <view class="back-hint">再点一下可以翻回去</view>
+      </view>
+    </view>
+
+    <!-- 操作区 -->
+    <view wx:if="{{!flipped}}" class="action-area">
+      <view class="btn btn-primary btn-block" bindtap="flip">显示释义</view>
+      <text class="action-tip">先在心里回忆一遍，再翻开效果更好</text>
+    </view>
+    <view wx:else class="action-area">
+      <view class="judge-row">
+        <view class="judge judge-unknown" data-q="0" bindtap="choose">
+          <text class="judge-emoji">😵</text>
+          <text class="judge-name">不认识</text>
+          <text class="judge-desc">10 分钟后</text>
+        </view>
+        <view class="judge judge-fuzzy" data-q="1" bindtap="choose">
+          <text class="judge-emoji">🤔</text>
+          <text class="judge-name">有点模糊</text>
+          <text class="judge-desc">明天再见</text>
+        </view>
+        <view class="judge judge-known" data-q="2" bindtap="choose">
+          <text class="judge-emoji">😎</text>
+          <text class="judge-name">认识</text>
+          <text class="judge-desc">间隔拉长</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 没有新词 -->
+  <block wx:elif="{{phase === 'empty'}}">
+    <view class="done-wrap">
+      <empty-state emoji="🌿" title="这本词书的新词学完啦" desc="去复习巩固，或者切换到另一本词书">
+        <view class="row gap-16">
+          <view class="btn btn-green btn-sm" bindtap="goReview">去复习</view>
+          <view class="btn btn-ghost btn-sm" bindtap="goHome">回小岛</view>
+        </view>
+      </empty-state>
+    </view>
+  </block>
+
+  <!-- 会话结算 -->
+  <block wx:else>
+    <view class="done-wrap">
+      <view class="done-card">
+        <view class="done-spark done-spark-1">✦</view>
+        <view class="done-spark done-spark-2">✧</view>
+        <view class="sticker">本次航行完成</view>
+        <view class="done-title">{{result.comment}}</view>
+        <pet-avatar size="200" species="{{pet.species}}" color="{{pet.color}}" accent="{{pet.accent}}" accessory="{{pet.accessory}}" mood="{{pet.mood}}" stage="{{pet.stage.index}}" branch="{{pet.branch}}" />
+        <view wx:if="{{levelUp}}" class="levelup-banner">🎉 {{pet.name}} 升级到 Lv.{{pet.level}} 啦！</view>
+        <view wx:if="{{newPets.length}}" class="new-pets">
+          <view class="new-pets-title">✨ 解锁新伙伴</view>
+          <view wx:for="{{newPets}}" wx:key="id" class="new-pet-item">
+            <text class="new-pet-emoji">{{item.emoji}}</text>
+            <view class="flex1">
+              <text class="new-pet-name">{{item.name}}</text>
+              <text class="new-pet-desc">{{item.desc}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="result-grid">
+          <view class="result-cell">
+            <text class="num">{{result.total}}</text>
+            <text class="result-label">本次单词</text>
+          </view>
+          <view class="result-cell">
+            <text class="num result-green">{{result.known}}</text>
+            <text class="result-label">认识</text>
+          </view>
+          <view class="result-cell">
+            <text class="num result-orange">{{result.fuzzy}}</text>
+            <text class="result-label">模糊</text>
+          </view>
+          <view class="result-cell">
+            <text class="num result-red">{{result.unknown}}</text>
+            <text class="result-label">不认识</text>
+          </view>
+        </view>
+
+        <view class="result-row">
+          <text class="result-row-label">正确率</text>
+          <view class="bar flex1">
+            <view class="bar-inner bar-green" style="width:{{result.accuracy}}%"></view>
+          </view>
+          <text class="result-row-value">{{result.accuracy}}%</text>
+        </view>
+        <view class="result-row">
+          <text class="result-row-label">获得词力</text>
+          <view class="bar flex1 bar-green">
+            <view class="bar-inner" style="width:100%"></view>
+          </view>
+          <text class="result-row-value">+{{result.exp}}</text>
+        </view>
+        <view class="result-meta">用时约 {{result.minutes}} 分钟 · 小鱼干 +{{result.total}}</view>
+
+        <view wx:if="{{achievements.length}}" class="ach-list">
+          <view wx:for="{{achievements}}" wx:key="id" class="ach-item">
+            <text class="ach-emoji">{{item.emoji}}</text>
+            <text class="ach-name">解锁「{{item.name}}」</text>
+            <text class="ach-fish">+30🐟</text>
+          </view>
+        </view>
+
+        <view class="done-btns">
+          <view class="btn btn-primary btn-block" bindtap="again">再来一组</view>
+          <view class="btn btn-ghost btn-block" bindtap="goHome">回到小岛</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

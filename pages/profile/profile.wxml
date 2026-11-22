@@ -1,0 +1,117 @@
+<view class="page page-tab profile-page">
+  <!-- 个人资料 -->
+  <view class="profile-hero">
+    <view class="hero-bubble b1"></view>
+    <view class="hero-bubble b2"></view>
+    <view class="avatar-wrap" bindtap="openEdit">
+      <view class="avatar">{{profile.avatar}}</view>
+      <view class="avatar-edit">✎</view>
+    </view>
+    <view class="profile-info">
+      <view class="row gap-12">
+        <text class="profile-name">{{profile.nickname}}</text>
+        <view class="level-chip">Lv.{{level}}</view>
+      </view>
+      <text class="profile-sub">加入词灵岛第 {{joinDays}} 天 · 已学 {{stats.totalLearned}} 词</text>
+      <view class="profile-chips">
+        <text class="pchip">🔥 {{stats.streak}} 天</text>
+        <text class="pchip">🐟 {{fish}}</text>
+        <text class="pchip">🏅 {{achCount}}/{{achTotal}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据概览 -->
+  <view class="data-row">
+    <view class="data-cell" bindtap="goUrl" data-url="/pages/stats/stats">
+      <text class="num">{{stats.totalLearned}}</text>
+      <text class="data-label">累计单词</text>
+    </view>
+    <view class="data-cell" bindtap="goUrl" data-url="/pages/stats/stats">
+      <text class="num">{{stats.mastered}}</text>
+      <text class="data-label">已掌握</text>
+    </view>
+    <view class="data-cell" bindtap="goUrl" data-url="/pages/garden/garden">
+      <text class="num">{{gardenCount}}</text>
+      <text class="data-label">花园花朵</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-card">
+    <view
+      wx:for="{{menu}}"
+      wx:key="name"
+      class="menu-row"
+      data-url="{{item.url}}"
+      bindtap="goUrl"
+    >
+      <view class="menu-icon bg-{{item.color}}">{{item.icon}}</view>
+      <view class="flex1">
+        <text class="menu-name">{{item.name}}</text>
+        <text class="menu-desc">{{item.desc}}</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view wx:if="{{wrongCount > 0}}" class="wrong-hint" bindtap="goUrl" data-url="/pages/wrongbook/wrongbook">
+      🩺 病历本里还有 {{wrongCount}} 个错词等你复习
+    </view>
+  </view>
+
+  <!-- 设置 -->
+  <view class="menu-card">
+    <view class="menu-row" bindtap="goSettings">
+      <view class="menu-icon bg-blue">⚙️</view>
+      <view class="flex1">
+        <text class="menu-name">设置</text>
+        <text class="menu-desc">音效、提醒与数据管理</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="goAbout">
+      <view class="menu-icon bg-purple">🏝️</view>
+      <view class="flex1">
+        <text class="menu-name">关于词灵岛</text>
+        <text class="menu-desc">v{{version}} · 产品介绍</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 每日一句 -->
+  <view class="quote-card">
+    <text class="quote-label">今日一句</text>
+    <text class="quote-en">{{quote.en}}</text>
+    <text class="quote-cn">{{quote.cn}} —— {{quote.author}}</text>
+  </view>
+
+  <view class="profile-footer">词灵岛 · 让背单词变成一件有生命感的小事</view>
+
+  <!-- 编辑资料 -->
+  <view wx:if="{{showEdit}}" class="mask" bindtap="closeEdit">
+    <view class="modal" catchtap="noop">
+      <view class="modal-title">编辑资料</view>
+      <view class="edit-avatar-row">
+        <view
+          wx:for="{{avatars}}"
+          wx:key="*this"
+          class="edit-avatar {{tempAvatar === item ? 'is-active' : ''}}"
+          data-avatar="{{item}}"
+          bindtap="chooseAvatar"
+        >{{item}}</view>
+      </view>
+      <input
+        class="input edit-input"
+        value="{{tempName}}"
+        maxlength="12"
+        placeholder="给自己起个昵称"
+        placeholder-class="placeholder"
+        bindinput="onNameInput"
+      />
+      <view class="modal-btns">
+        <view class="btn btn-ghost" bindtap="closeEdit">取消</view>
+        <view class="btn btn-primary" bindtap="saveProfile">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

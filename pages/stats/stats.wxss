@@ -1,0 +1,333 @@
+/* 学习统计 */
+.stats-page {
+  padding-bottom: 80rpx;
+}
+
+.stats-hd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22rpx;
+}
+
+.fish-chip {
+  padding: 6rpx 16rpx;
+  background: #fffdf7;
+  border: 3rpx solid var(--ink);
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.metric-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.metric {
+  width: calc((100% - 14rpx) / 2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rpx;
+  padding: 20rpx 22rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 26rpx;
+  box-shadow: 0 6rpx 0 rgba(59, 46, 42, 0.13);
+}
+
+.metric-emoji {
+  font-size: 30rpx;
+}
+
+.metric .num {
+  font-size: 42rpx;
+}
+
+.metric-label {
+  font-size: 19rpx;
+  color: var(--muted);
+}
+
+/* 图表 */
+.chart-card,
+.heat-card,
+.level-card,
+.book-progress,
+.module-card,
+.exam-card {
+  margin-top: 22rpx;
+  padding: 24rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.11);
+}
+
+.chart-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18rpx;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 280rpx;
+  padding: 0 6rpx;
+}
+
+.chart-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.chart-val {
+  font-size: 18rpx;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 4rpx;
+}
+
+.chart-bar-wrap {
+  flex: 1;
+  width: 34rpx;
+  display: flex;
+  align-items: flex-end;
+  background: var(--cream);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.chart-bar {
+  width: 100%;
+  min-height: 6rpx;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--orange),
+    var(--orange) 10rpx,
+    #ffb84d 10rpx,
+    #ffb84d 20rpx
+  );
+  border-radius: 999rpx;
+  transition: height 0.4s ease;
+}
+
+.chart-label {
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 6rpx;
+}
+
+/* 热力图 */
+.heat-wrap {
+  overflow-x: auto;
+}
+
+.heat-weeks {
+  display: flex;
+  gap: 6rpx;
+}
+
+.heat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.heat-cell {
+  width: 26rpx;
+  height: 26rpx;
+  border-radius: 7rpx;
+  border: 2rpx solid rgba(59, 46, 42, 0.12);
+  background: #f2ece2;
+}
+
+.lv-1 {
+  background: #cdeee2;
+}
+
+.lv-2 {
+  background: #8fdfc5;
+}
+
+.lv-3 {
+  background: #4fc9a8;
+}
+
+.lv-4 {
+  background: #1d9e7d;
+}
+
+.heat-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6rpx;
+  margin-top: 14rpx;
+}
+
+.legend-text {
+  font-size: 16rpx;
+  color: var(--muted);
+}
+
+/* 熟练度 */
+.level-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.level-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.level-name {
+  width: 62rpx;
+  font-size: 18rpx;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+.level-bar {
+  flex: 1;
+  height: 26rpx;
+  background: var(--cream);
+  border-radius: 999rpx;
+  overflow: hidden;
+  border: 2rpx solid rgba(59, 46, 42, 0.1);
+}
+
+.level-fill {
+  height: 100%;
+  min-width: 2rpx;
+  border-radius: 999rpx;
+  background: var(--yellow);
+  transition: width 0.4s ease;
+}
+
+.lv-fill-4,
+.lv-fill-5,
+.lv-fill-6 {
+  background: var(--green);
+}
+
+.lv-fill-3 {
+  background: var(--blue);
+}
+
+.lv-fill-2 {
+  background: var(--purple);
+}
+
+.lv-fill-1 {
+  background: var(--pink);
+}
+
+.level-count {
+  width: 46rpx;
+  text-align: right;
+  font-size: 18rpx;
+  font-weight: 700;
+  color: var(--muted);
+  flex: none;
+}
+
+/* 词书 */
+.bp-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 10rpx 0;
+}
+
+.bp-emoji {
+  font-size: 32rpx;
+}
+
+.bp-name {
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.bp-count {
+  font-size: 18rpx;
+  color: var(--muted);
+}
+
+/* 模块 */
+.module-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 10rpx 0;
+}
+
+.module-icon {
+  width: 60rpx;
+  height: 60rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 16rpx;
+  font-size: 28rpx;
+}
+
+.module-name {
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.module-count {
+  font-size: 18rpx;
+  color: var(--muted);
+}
+
+/* 模考 */
+.exam-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 2rpx dashed var(--line);
+}
+
+.exam-row:last-child {
+  border-bottom: none;
+}
+
+.exam-date {
+  display: block;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.exam-detail {
+  display: block;
+  font-size: 18rpx;
+  color: var(--muted);
+}
+
+.exam-score {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--orange-deep);
+}
+
+.stats-actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 24rpx;
+}

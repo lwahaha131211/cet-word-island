@@ -1,0 +1,287 @@
+/* 备考计划 */
+.plan-page {
+  padding-bottom: 80rpx;
+}
+
+.countdown {
+  position: relative;
+  padding: 34rpx 28rpx;
+  background: linear-gradient(160deg, #ffe9c4 0%, #ffcf7a 100%);
+  border: 4rpx solid var(--ink);
+  border-radius: 36rpx;
+  box-shadow: 0 12rpx 0 rgba(59, 46, 42, 0.16);
+  overflow: hidden;
+}
+
+.countdown-deco {
+  position: absolute;
+  right: -60rpx;
+  top: -60rpx;
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.countdown-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.countdown-num {
+  font-size: 110rpx;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2rpx;
+}
+
+.countdown-unit {
+  font-size: 34rpx;
+  margin-left: 6rpx;
+}
+
+.countdown-date {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.countdown-tip {
+  margin-top: 8rpx;
+  font-size: 19rpx;
+  color: var(--ink-soft);
+}
+
+.warn-chip {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 5rpx 14rpx;
+  background: #ffe3e3;
+  border: 2rpx solid var(--red);
+  border-radius: 999rpx;
+  font-size: 18rpx;
+  color: #b03c3c;
+  font-weight: 700;
+}
+
+.config-card {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.config-title {
+  font-size: 26rpx;
+  font-weight: 800;
+  margin-bottom: 8rpx;
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 2rpx dashed var(--line);
+}
+
+.config-label {
+  font-size: 23rpx;
+  color: var(--ink-soft);
+}
+
+.config-value {
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.stepper-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border: 3rpx solid var(--ink);
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  box-shadow: 0 3rpx 0 var(--ink);
+}
+
+.stepper-num {
+  min-width: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.config-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.config-pace {
+  font-size: 19rpx;
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+/* 阶段 */
+.section-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 30rpx 4rpx 16rpx;
+}
+
+.phase-row {
+  display: flex;
+  gap: 12rpx;
+}
+
+.phase {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+  padding: 18rpx 8rpx;
+  background: #fffdf7;
+  border: 3rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 24rpx;
+}
+
+.phase.is-current {
+  background: var(--yellow-soft);
+  border: 3rpx solid var(--ink);
+  box-shadow: 0 5rpx 0 var(--ink);
+}
+
+.phase-emoji {
+  font-size: 36rpx;
+}
+
+.phase-name {
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.phase-days {
+  font-size: 18rpx;
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+.phase-desc {
+  font-size: 16rpx;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* 日程 */
+.schedule-card {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.schedule-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.sched-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 14rpx 10rpx;
+  border-bottom: 2rpx dashed var(--line);
+  border-radius: 12rpx;
+}
+
+.sched-row:last-child {
+  border-bottom: none;
+}
+
+.sched-row.is-today {
+  background: var(--green-soft);
+}
+
+.sched-date {
+  width: 64rpx;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sched-day {
+  font-size: 24rpx;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.sched-week {
+  font-size: 16rpx;
+  color: var(--muted);
+}
+
+.sched-top {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.sched-date-text {
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.sched-detail {
+  display: block;
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 2rpx;
+}
+
+.sched-today {
+  flex: none;
+  font-size: 17rpx;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.plan-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.plan-note {
+  margin-top: 20rpx;
+  padding: 18rpx;
+  background: var(--blue-soft);
+  border-radius: 20rpx;
+  font-size: 19rpx;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}

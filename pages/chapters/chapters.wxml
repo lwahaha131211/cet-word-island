@@ -1,0 +1,79 @@
+<view class="page chapters-page">
+  <!-- 主线概览 -->
+  <view class="chap-hero">
+    <view class="chap-hero-deco">🏝️</view>
+    <view class="chap-hero-label">词灵岛主线</view>
+    <view class="chap-hero-title">跟着故事，把单词走成一段旅程</view>
+    <view class="chap-hero-meta">
+      <text class="chap-chip">已读 {{finishedCount}}/{{chapters.length}} 章</text>
+      <text class="chap-chip">累计 {{totalLearned}} 词</text>
+    </view>
+  </view>
+
+  <!-- 时间线 -->
+  <view class="timeline">
+    <view
+      wx:for="{{chapters}}"
+      wx:key="id"
+      class="chap-item {{item.unlocked ? '' : 'is-locked'}}"
+    >
+      <view class="timeline-left">
+        <view class="node {{item.finished ? 'is-done' : ''}} {{item.unlocked ? '' : 'is-locked'}}">
+          <text class="node-emoji">{{item.emoji}}</text>
+          <view wx:if="{{item.finished}}" class="node-check">✓</view>
+        </view>
+        <view wx:if="{{index < chapters.length - 1}}" class="line"></view>
+      </view>
+
+      <view class="chap-card">
+        <view class="chap-hd">
+          <text class="chap-index">第 {{index + 1}} 章</text>
+          <text class="tag {{item.finished ? 'tag-green' : (item.unlocked ? 'tag-orange' : '')}}">
+            {{item.finished ? '已完成' : (item.unlocked ? '可进入' : '未解锁')}}
+          </text>
+        </view>
+        <view class="chap-title">{{item.title}}</view>
+        <view class="chap-desc">{{item.desc}}</view>
+
+        <view class="chap-progress">
+          <view class="bar bar-thin">
+            <view class="bar-inner {{item.unlocked ? 'bar-green' : ''}}" style="width:{{item.progress}}%"></view>
+          </view>
+          <text class="chap-progress-text">{{item.progress}}%</text>
+        </view>
+
+        <view class="chap-foot">
+          <text class="chap-reward">🎁 {{item.reward}}</text>
+          <view class="btn btn-xs {{item.unlocked ? 'btn-primary' : 'btn-ghost'}}" data-id="{{item.id}}" bindtap="openChapter">
+            {{item.unlocked ? (item.finished ? '重温故事' : '进入章节') : '需 ' + item.need + ' 词'}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="chap-tip">
+    💡 每学一个单词，都会推动故事向前。解锁全部章节，词灵岛会为你点亮王座。
+  </view>
+
+  <!-- 剧情弹层 -->
+  <view wx:if="{{showStory}}" class="mask" bindtap="closeStory">
+    <view class="modal story-modal" catchtap="noop">
+      <view class="story-emoji">{{active.emoji}}</view>
+      <view class="story-title">{{active.title}}</view>
+      <view class="story-scene">场景 · {{active.scene}}</view>
+      <scroll-view scroll-y class="story-scroll">
+        <view wx:for="{{active.story}}" wx:key="text" class="story-line">
+          <text class="story-who">{{item.who}}</text>
+          <text class="story-text">{{item.text}}</text>
+        </view>
+        <view class="story-reward">章节奖励：{{active.reward}} · 词力 +30</view>
+      </scroll-view>
+      <view class="story-btns">
+        <view wx:if="{{!active.finished}}" class="btn btn-primary flex1" bindtap="complete">完成本章</view>
+        <view wx:else class="btn btn-ghost flex1" bindtap="closeStory">已读完</view>
+        <view class="btn btn-ghost flex1" bindtap="closeStory">稍后再来</view>
+      </view>
+    </view>
+  </view>
+</view>

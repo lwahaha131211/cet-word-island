@@ -1,0 +1,105 @@
+<view class="page wrong-page">
+  <!-- 病历总览 -->
+  <view class="record-card">
+    <view class="record-left">
+      <view class="record-label">待复习错题</view>
+      <view class="record-num">{{stats.total}}<text class="record-unit">个</text></view>
+      <view class="record-sub">已治愈 {{resolvedCount}} 个</view>
+    </view>
+    <view class="record-emoji">🩺</view>
+    <view class="record-deco"></view>
+  </view>
+
+  <!-- 错因分布 -->
+  <view class="reason-card">
+    <view class="reason-title">错因分布</view>
+    <view class="reason-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="key"
+        wx:if="{{index > 0}}"
+        class="reason-item"
+      >
+        <text class="reason-name">{{item.label}}</text>
+        <text class="reason-count">{{item.count}}</text>
+      </view>
+    </view>
+    <view class="reason-bar">
+      <view
+        wx:for="{{filters}}"
+        wx:key="key"
+        wx:if="{{index > 0 && item.count > 0}}"
+        class="reason-seg seg-{{index}}"
+        style="width:{{item.count / (stats.total || 1) * 100}}%"
+      ></view>
+    </view>
+  </view>
+
+  <!-- 筛选 -->
+  <scroll-view scroll-x class="filter-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="filter-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="key"
+        class="filter-chip {{filter === item.key ? 'is-active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onFilter"
+      >{{item.label}} {{item.count}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 病历列表 -->
+  <view wx:if="{{view.length}}" class="wrong-list">
+    <view wx:for="{{view}}" wx:key="id" class="wrong-card">
+      <view class="wrong-hd">
+        <view class="flex1">
+          <view class="row gap-12">
+            <text class="wrong-word">{{item.word}}</text>
+            <text class="wrong-phonetic">{{item.phonetic}}</text>
+          </view>
+          <text class="wrong-cn">{{item.pos}} {{item.cn}}</text>
+        </view>
+        <text class="reason-tag bg-{{item.color}}">{{item.reason}}</text>
+      </view>
+
+      <view class="wrong-meta">
+        <text>答错 {{item.count}} 次</text>
+        <text>·</text>
+        <text>{{item.dateText}} 记录</text>
+      </view>
+
+      <view wx:if="{{expanded === item.id}}" class="prescription">
+        <view class="prescription-hd">💊 复习处方</view>
+        <text class="prescription-text">{{item.prescription}}</text>
+        <view class="prescription-example" wx:if="{{item.en}}">
+          <text class="pe-label">回到语境</text>
+          <text class="pe-text">{{item.en}}</text>
+        </view>
+        <view class="prescription-tip" wx:if="{{item.tip}}">记忆提示：{{item.tip}}</view>
+      </view>
+
+      <view class="wrong-actions">
+        <view class="wrong-toggle" data-id="{{item.id}}" bindtap="toggle">
+          {{expanded === item.id ? '收起处方 ▲' : '查看处方 ▼'}}
+        </view>
+        <view class="btn btn-xs btn-green" data-wordid="{{item.wordId}}" bindtap="resolve">已掌握</view>
+      </view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    emoji="🌿"
+    title="病历本空空的"
+    desc="答错或标记不认识的单词会自动记录在这里"
+  >
+    <view class="row gap-16">
+      <view class="btn btn-primary btn-sm" bindtap="goStudy">去学习</view>
+      <view class="btn btn-ghost btn-sm" bindtap="goReview">去复习</view>
+    </view>
+  </empty-state>
+
+  <view class="wrong-footer">
+    错题不是失败，是还没点亮的星星。按处方复习，错词会变成熟词。
+  </view>
+</view>

@@ -1,0 +1,85 @@
+<template name="face">
+  <view class="face face-{{species}}">
+    <view class="eye eye-l"><view class="glint"></view></view>
+    <view class="eye eye-r"><view class="glint"></view></view>
+    <view class="blush blush-l"></view>
+    <view class="blush blush-r"></view>
+    <view class="mouth {{happy ? 'is-happy' : 'is-sad'}}"></view>
+  </view>
+</template>
+
+<view class="pet-wrap" style="width:{{size}}rpx;height:{{size}}rpx;">
+  <view class="pet-scale" style="transform:scale({{scale}});">
+    <view
+      class="pet species-{{species}} stage-{{stage}} branch-{{branch}} {{animate ? 'anim-float' : ''}}"
+      style="--pc:{{color}};--pa:{{accent}};"
+    >
+      <view class="pet-shadow"></view>
+
+      <!-- 芽芽：叶片灵体 -->
+      <block wx:if="{{species === 'sprout'}}">
+        <view class="sprout-stem"></view>
+        <view class="sprout-leaf sprout-leaf-l"></view>
+        <view class="sprout-leaf sprout-leaf-r"></view>
+        <view class="sprout-body body"></view>
+        <view class="sprout-foot sprout-foot-l"></view>
+        <view class="sprout-foot sprout-foot-r"></view>
+        <view wx:if="{{stage >= 2}}" class="sprout-spark">✦</view>
+      </block>
+
+      <!-- 乌乌：墨团小猫 -->
+      <block wx:elif="{{species === 'ink'}}">
+        <view class="ink-tail"></view>
+        <view class="ink-ear ink-ear-l"></view>
+        <view class="ink-ear ink-ear-r"></view>
+        <view class="ink-body body"></view>
+        <view class="ink-drip ink-drip-1"></view>
+        <view class="ink-drip ink-drip-2"></view>
+        <view wx:if="{{stage >= 1}}" class="ink-horn ink-horn-l"></view>
+        <view wx:if="{{stage >= 1}}" class="ink-horn ink-horn-r"></view>
+        <view wx:if="{{stage >= 3}}" class="ink-aura"></view>
+      </block>
+
+      <!-- 泡泡：云鲸 -->
+      <block wx:elif="{{species === 'whale'}}">
+        <view class="whale-spout"><view class="spout-drop"></view></view>
+        <view class="whale-tail"></view>
+        <view class="whale-fin whale-fin-l"></view>
+        <view class="whale-fin whale-fin-r"></view>
+        <view class="whale-body body"></view>
+        <view class="whale-belly"></view>
+        <view wx:if="{{stage >= 2}}" class="whale-star">✦</view>
+        <view wx:if="{{stage >= 4}}" class="whale-ring"></view>
+      </block>
+
+      <!-- 咔哒：齿轮龟 -->
+      <block wx:elif="{{species === 'turtle'}}">
+        <view class="turtle-leg turtle-leg-1"></view>
+        <view class="turtle-leg turtle-leg-2"></view>
+        <view class="turtle-leg turtle-leg-3"></view>
+        <view class="turtle-leg turtle-leg-4"></view>
+        <view class="turtle-tail"></view>
+        <view class="turtle-shell"></view>
+        <view class="turtle-gear"><view class="gear-core"></view></view>
+        <view class="turtle-head"></view>
+        <view wx:if="{{stage >= 2}}" class="turtle-antenna"><view class="antenna-dot"></view></view>
+      </block>
+
+      <!-- 阿燎：焰狐 -->
+      <block wx:else>
+        <view class="fox-tail fox-tail-1"></view>
+        <view wx:if="{{stage >= 2}}" class="fox-tail fox-tail-2"></view>
+        <view wx:if="{{stage >= 4}}" class="fox-tail fox-tail-3"></view>
+        <view class="fox-ear fox-ear-l"></view>
+        <view class="fox-ear fox-ear-r"></view>
+        <view class="fox-body body"></view>
+        <view class="fox-muzzle"></view>
+        <view wx:if="{{stage >= 3}}" class="fox-ember">✦</view>
+      </block>
+
+      <template is="face" data="{{species: species, happy: happy}}" />
+      <view wx:if="{{branch}}" class="branch-mark">{{branch === 'a' ? '◆' : '✧'}}</view>
+      <text wx:if="{{accEmoji}}" class="pet-acc">{{accEmoji}}</text>
+    </view>
+  </view>
+</view>

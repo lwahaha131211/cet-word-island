@@ -1,0 +1,16 @@
+<view class="tabbar">
+  <view
+    wx:for="{{list}}"
+    wx:key="pagePath"
+    class="tab-item {{selected === index ? 'is-active' : ''}}"
+    data-index="{{index}}"
+    bindtap="onTap"
+  >
+    <view class="tab-icon-wrap" style="{{selected === index ? 'background:' + item.color : ''}}">
+      <text class="tab-icon">{{item.icon}}</text>
+      <view wx:if="{{selected === index}}" class="tab-dot"></view>
+    </view>
+    <text class="tab-text">{{item.text}}</text>
+  </view>
+  <view class="safe-area"></view>
+</view>

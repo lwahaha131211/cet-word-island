@@ -1,0 +1,110 @@
+<view class="page dialogue-page">
+  <!-- 场景选择 -->
+  <scroll-view scroll-x class="scene-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="scene-row">
+      <view
+        wx:for="{{scenes}}"
+        wx:key="id"
+        class="scene-chip {{activeId === item.id ? 'is-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectScene"
+      >
+        <text class="scene-chip-emoji">{{item.emoji}}</text>
+        <text>{{item.title}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <block wx:if="{{phase === 'chat'}}">
+    <!-- 场景信息 -->
+    <view class="scene-card">
+      <view class="scene-emoji">{{scene.emoji}}</view>
+      <view class="flex1">
+        <view class="scene-title">{{scene.title}}</view>
+        <view class="scene-sub">{{scene.cnTitle}} · 第 {{turnIndex + 1}}/{{turns.length}} 轮</view>
+      </view>
+      <view class="scene-score">⭐ {{score}}/{{maxScore}}</view>
+    </view>
+
+    <!-- 对话窗口 -->
+    <scroll-view
+      scroll-y
+      class="chat"
+      scroll-into-view="{{scrollTo}}"
+      scroll-with-animation
+      enhanced
+      show-scrollbar="{{false}}"
+    >
+      <view class="chat-inner">
+        <view
+          wx:for="{{transcript}}"
+          wx:key="id"
+          id="{{item.id}}"
+          class="msg {{item.role === 'me' ? 'msg-me' : ''}}"
+        >
+          <view class="avatar {{item.role === 'me' ? 'avatar-me' : ''}}">{{item.role === 'me' ? '🐣' : '🧑‍🏫'}}</view>
+          <view class="bubble-wrap">
+            <view class="bubble {{item.role === 'me' ? 'bubble-me' : ''}}" data-index="{{index}}" bindtap="speakLine">
+              <text class="bubble-en">{{item.en}}</text>
+              <text class="bubble-cn">{{item.cn}}</text>
+            </view>
+            <text class="bubble-tip">{{item.role === 'me' ? '你' : '对方'}} · 点击可看全文</text>
+          </view>
+        </view>
+        <view class="chat-pad"></view>
+      </view>
+    </scroll-view>
+
+    <!-- 回应选择 -->
+    <view wx:if="{{!answered}}" class="reply-panel">
+      <view class="reply-title">选择一个最合适的回应</view>
+      <view
+        wx:for="{{options}}"
+        wx:key="en"
+        class="reply-option"
+        data-index="{{index}}"
+        bindtap="choose"
+      >
+        <view class="reply-letter">{{item.letter}}</view>
+        <view class="flex1">
+          <text class="reply-en">{{item.en}}</text>
+          <text class="reply-cn">{{item.cn}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 反馈 -->
+    <view wx:else class="feedback">
+      <view class="feedback-hd">
+        <text class="feedback-emoji">{{feedback.score >= 10 ? '🌟' : feedback.score >= 5 ? '👍' : '🤔'}}</text>
+        <text class="feedback-title">{{feedback.score >= 10 ? '很地道！' : feedback.score >= 5 ? '可以，但还能更好' : '换个说法会更礼貌'}}</text>
+        <text class="feedback-score">+{{feedback.score}}</text>
+      </view>
+      <text class="feedback-tip">💡 {{turns[turnIndex].tip}}</text>
+      <view class="btn btn-primary btn-block" bindtap="nextTurn">
+        {{turnIndex + 1 >= turns.length ? '查看本次表现' : '继续对话'}}
+      </view>
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:else>
+    <view class="done-card">
+      <view class="sticker sticker-pink">对话完成</view>
+      <view class="done-stars">
+        <text wx:for="{{[1,2,3]}}" wx:key="*this" class="star {{index < result.stars ? 'is-on' : ''}}">★</text>
+      </view>
+      <view class="done-score">{{result.score}}<text class="done-unit">/{{result.max}}</text></view>
+      <view class="done-label">表达得分</view>
+      <view class="done-comment">{{result.comment}}</view>
+      <view class="phrase-box">
+        <view class="phrase-title">本场关键表达</view>
+        <view class="phrase-row">
+          <text wx:for="{{scene.keyPhrases}}" wx:key="*this" class="phrase">{{item}}</text>
+        </view>
+      </view>
+      <view class="btn btn-primary btn-block" bindtap="restart">再演一次</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="goHome">回到小岛</view>
+    </view>
+  </block>
+</view>

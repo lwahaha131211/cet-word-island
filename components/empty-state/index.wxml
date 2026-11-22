@@ -1,0 +1,8 @@
+<view class="empty">
+  <text class="empty-emoji">{{emoji}}</text>
+  <text class="h3">{{title}}</text>
+  <text wx:if="{{desc}}" class="sub center">{{desc}}</text>
+  <view class="empty-action">
+    <slot></slot>
+  </view>
+</view>

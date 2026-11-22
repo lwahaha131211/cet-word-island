@@ -1,0 +1,11 @@
+<view class="card card-{{color}}" style="{{pad ? 'padding:' + pad : ''}}">
+  <view wx:if="{{tape}}" class="tape"></view>
+  <view wx:if="{{title}}" class="card-hd">
+    <view class="card-title">
+      <text wx:if="{{emoji}}" class="emoji">{{emoji}}</text>
+      <text>{{title}}</text>
+    </view>
+    <text wx:if="{{extra}}" class="card-extra">{{extra}}</text>
+  </view>
+  <slot></slot>
+</view>

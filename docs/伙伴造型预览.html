@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>伙伴造型预览</title>
+<style>
+body { margin:0; padding:24px; background:#FFF7E8; color:#3B2E2A; font-family:"Microsoft YaHei",sans-serif; }
+* { box-sizing:border-box; }
+h2 { font-size:18px; margin:16px 0 10px; }
+.grid { display:flex; gap:14px; }
+.card { width:236px; padding:12px 8px 10px; background:#FFFDF7; border:3px solid #3B2E2A; border-radius:18px; box-shadow:0 6px 0 rgba(59,46,42,.15); text-align:center; }
+.stage-label { font-size:14px; font-weight:700; margin-bottom:2px; }
+.level { font-size:12px; color:#9A8A78; }
+.pet-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+
+.pet-scale {
+  width: 220px;
+  height: 220px;
+  transform-origin: center bottom;
+}
+
+.pet {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.pet-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 150px;
+  height: 24px;
+  margin-left: -75px;
+  background: rgba(59, 46, 42, 0.14);
+  border-radius: 50%;
+}
+
+.body {
+  position: absolute;
+  border: 4px solid #3b2e2a;
+  background: var(--pc, #ffd166);
+  box-shadow: inset -10px -12px 0 rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+
+/* ---------------- 芽芽 ---------------- */
+.sprout-stem {
+  position: absolute;
+  left: 107px;
+  top: 16px;
+  width: 8px;
+  height: 48px;
+  background: #2f8f63;
+  border: 3px solid #3b2e2a;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.sprout-leaf {
+  position: absolute;
+  top: 4px;
+  width: 50px;
+  height: 36px;
+  background: var(--pa, #6fd39b);
+  border: 4px solid #3b2e2a;
+  border-radius: 100% 0 100% 0;
+  z-index: 1;
+}
+
+.sprout-leaf-l {
+  left: 60px;
+  transform: rotate(-18deg);
+}
+
+.sprout-leaf-r {
+  right: 60px;
+  transform: scaleX(-1) rotate(-18deg);
+}
+
+.stage-2 .sprout-leaf {
+  width: 56px;
+  height: 38px;
+}
+
+.stage-3 .sprout-leaf,
+.stage-4 .sprout-leaf {
+  width: 62px;
+  height: 42px;
+  top: 0;
+}
+
+.sprout-body {
+  left: 20px;
+  top: 52px;
+  width: 180px;
+  height: 152px;
+  border-radius: 48% 52% 44% 56% / 56% 50% 50% 44%;
+}
+
+.sprout-foot {
+  position: absolute;
+  bottom: 10px;
+  width: 38px;
+  height: 22px;
+  background: var(--pc, #ffd166);
+  border: 4px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.sprout-foot-l {
+  left: 58px;
+}
+
+.sprout-foot-r {
+  right: 58px;
+}
+
+.sprout-spark {
+  position: absolute;
+  right: 30px;
+  top: 62px;
+  color: #fff;
+  font-size: 30px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+  animation: petPulse 1.8s infinite;
+  z-index: 7;
+}
+
+/* ---------------- 乌乌 ---------------- */
+.ink-tail {
+  position: absolute;
+  right: 0;
+  bottom: 44px;
+  width: 46px;
+  height: 78px;
+  background: var(--pc, #4b5563);
+  border: 4px solid #3b2e2a;
+  border-radius: 60% 40% 50% 50%;
+  transform: rotate(24deg);
+  z-index: 1;
+}
+
+.ink-ear {
+  position: absolute;
+  top: 24px;
+  width: 56px;
+  height: 64px;
+  background: var(--pc, #4b5563);
+  border: 4px solid #3b2e2a;
+  border-radius: 50% 50% 18% 18%;
+  z-index: 1;
+}
+
+.ink-ear-l {
+  left: 36px;
+  transform: rotate(-18deg);
+}
+
+.ink-ear-r {
+  right: 36px;
+  transform: rotate(18deg);
+}
+
+.ink-ear::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  width: 22px;
+  height: 30px;
+  margin-left: -11px;
+  background: var(--pa, #a78bfa);
+  border-radius: 50% 50% 30% 30%;
+  opacity: 0.75;
+}
+
+.ink-body {
+  left: 25px;
+  top: 50px;
+  width: 170px;
+  height: 156px;
+  border-radius: 46% 54% 48% 52% / 58% 56% 44% 42%;
+}
+
+.ink-drip {
+  position: absolute;
+  bottom: 6px;
+  width: 18px;
+  height: 22px;
+  background: var(--pa, #a78bfa);
+  border: 3px solid #3b2e2a;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  z-index: 3;
+}
+
+.ink-drip-1 {
+  left: 62px;
+}
+
+.ink-drip-2 {
+  right: 70px;
+  height: 16px;
+}
+
+.ink-horn {
+  position: absolute;
+  top: 28px;
+  width: 12px;
+  height: 40px;
+  background: var(--pa, #a78bfa);
+  border: 3px solid #3b2e2a;
+  border-radius: 999px;
+  z-index: 4;
+}
+
+.ink-horn-l {
+  left: 72px;
+  transform: rotate(-22deg);
+}
+
+.ink-horn-r {
+  right: 72px;
+  transform: rotate(22deg);
+}
+
+.ink-aura {
+  position: absolute;
+  left: 14px;
+  top: 30px;
+  width: 192px;
+  height: 180px;
+  border: 3px dashed var(--pa, #a78bfa);
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: petSpin 12s linear infinite;
+  z-index: 0;
+}
+
+.stage-4 .ink-body {
+  box-shadow: inset -10px -12px 0 rgba(0, 0, 0, 0.18), 0 0 26px var(--pa);
+}
+
+/* ---------------- 泡泡 ---------------- */
+.whale-spout {
+  position: absolute;
+  left: 102px;
+  top: 12px;
+  width: 18px;
+  height: 42px;
+  background: #dff4ff;
+  border: 3px solid #3b2e2a;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.spout-drop {
+  position: absolute;
+  left: -14px;
+  top: -20px;
+  width: 40px;
+  height: 26px;
+  background: #dff4ff;
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+}
+
+.whale-tail {
+  position: absolute;
+  left: -2px;
+  top: 116px;
+  width: 58px;
+  height: 66px;
+  background: var(--pc, #7fb8ff);
+  border: 4px solid #3b2e2a;
+  border-radius: 60% 30% 50% 50%;
+  transform: rotate(-24deg);
+  z-index: 1;
+}
+
+.whale-fin {
+  position: absolute;
+  top: 150px;
+  width: 42px;
+  height: 24px;
+  background: var(--pa, #4ea8de);
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.whale-fin-l {
+  left: 4px;
+  transform: rotate(-20deg);
+}
+
+.whale-fin-r {
+  right: 4px;
+  transform: rotate(20deg);
+}
+
+.whale-body {
+  left: 14px;
+  top: 54px;
+  width: 192px;
+  height: 144px;
+  border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
+}
+
+.whale-belly {
+  position: absolute;
+  left: 46px;
+  top: 128px;
+  width: 128px;
+  height: 58px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.whale-star {
+  position: absolute;
+  right: 36px;
+  top: 56px;
+  color: #fff;
+  font-size: 30px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+  animation: petPulse 2s infinite;
+  z-index: 6;
+}
+
+.whale-ring {
+  position: absolute;
+  left: 10px;
+  top: 18px;
+  width: 200px;
+  height: 190px;
+  border: 3px dashed var(--pa, #4ea8de);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: petSpin 14s linear infinite;
+  z-index: 0;
+}
+
+/* ---------------- 咔哒 ---------------- */
+.turtle-leg {
+  position: absolute;
+  width: 34px;
+  height: 24px;
+  background: var(--pc, #84a98c);
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.turtle-leg-1 {
+  left: 36px;
+  bottom: 28px;
+}
+
+.turtle-leg-2 {
+  right: 36px;
+  bottom: 28px;
+}
+
+.turtle-leg-3 {
+  left: 54px;
+  bottom: 14px;
+}
+
+.turtle-leg-4 {
+  right: 54px;
+  bottom: 14px;
+}
+
+.turtle-tail {
+  position: absolute;
+  left: 94px;
+  bottom: 18px;
+  width: 24px;
+  height: 26px;
+  background: var(--pc, #84a98c);
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.turtle-shell {
+  position: absolute;
+  left: 26px;
+  top: 58px;
+  width: 168px;
+  height: 132px;
+  background: var(--pc, #84a98c);
+  border: 4px solid #3b2e2a;
+  border-radius: 50% 50% 38% 38% / 72% 72% 28% 28%;
+  box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 12px rgba(255, 255, 255, 0.18);
+  z-index: 2;
+}
+
+.turtle-gear {
+  position: absolute;
+  left: 82px;
+  top: 88px;
+  width: 54px;
+  height: 54px;
+  border: 8px dashed var(--pa, #ffd166);
+  border-radius: 50%;
+  z-index: 3;
+  animation: petSpin 9s linear infinite;
+}
+
+.gear-core {
+  position: absolute;
+  left: 13px;
+  top: 13px;
+  width: 28px;
+  height: 28px;
+  background: var(--pa, #ffd166);
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+}
+
+.turtle-head {
+  position: absolute;
+  left: 74px;
+  top: 20px;
+  width: 76px;
+  height: 72px;
+  background: var(--pc, #84a98c);
+  border: 4px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.turtle-antenna {
+  position: absolute;
+  left: 108px;
+  top: 2px;
+  width: 6px;
+  height: 26px;
+  background: #3b2e2a;
+  border-radius: 999px;
+  z-index: 5;
+}
+
+.antenna-dot {
+  position: absolute;
+  left: -6px;
+  top: -12px;
+  width: 18px;
+  height: 18px;
+  background: var(--pa, #ffd166);
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+  animation: petPulse 1.6s infinite;
+}
+
+.stage-3 .turtle-shell {
+  box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 12px rgba(255, 255, 255, 0.18),
+    0 0 24px var(--pa);
+}
+
+/* ---------------- 阿燎 ---------------- */
+.fox-tail {
+  position: absolute;
+  right: 0;
+  bottom: 46px;
+  width: 54px;
+  height: 100px;
+  background: linear-gradient(180deg, var(--pa, #ff5c5c), var(--pc, #ff9f1c));
+  border: 4px solid #3b2e2a;
+  border-radius: 60% 40% 50% 50%;
+  transform: rotate(22deg);
+  z-index: 1;
+}
+
+.fox-tail-2 {
+  right: 10px;
+  bottom: 58px;
+  transform: rotate(42deg);
+  opacity: 0.9;
+}
+
+.fox-tail-3 {
+  right: 20px;
+  bottom: 70px;
+  transform: rotate(62deg);
+  opacity: 0.8;
+}
+
+.fox-ear {
+  position: absolute;
+  top: 18px;
+  width: 58px;
+  height: 78px;
+  background: var(--pc, #ff9f1c);
+  border: 4px solid #3b2e2a;
+  border-radius: 50% 50% 12% 12%;
+  z-index: 1;
+}
+
+.fox-ear-l {
+  left: 40px;
+  transform: rotate(-14deg);
+}
+
+.fox-ear-r {
+  right: 40px;
+  transform: rotate(14deg);
+}
+
+.fox-ear::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  width: 24px;
+  height: 40px;
+  margin-left: -12px;
+  background: var(--pa, #ff5c5c);
+  border-radius: 50% 50% 30% 30%;
+  opacity: 0.75;
+}
+
+.fox-body {
+  left: 32px;
+  top: 54px;
+  width: 160px;
+  height: 148px;
+  border-radius: 46% 54% 42% 58% / 56% 56% 44% 44%;
+}
+
+.fox-muzzle {
+  position: absolute;
+  left: 74px;
+  top: 126px;
+  width: 76px;
+  height: 50px;
+  background: #fff7e8;
+  border: 3px solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.fox-ember {
+  position: absolute;
+  right: 34px;
+  top: 66px;
+  color: var(--pa, #ff5c5c);
+  font-size: 30px;
+  text-shadow: 0 0 14px var(--pa);
+  animation: petPulse 1.5s infinite;
+  z-index: 6;
+}
+
+.stage-4 .fox-body {
+  box-shadow: inset -10px -12px 0 rgba(0, 0, 0, 0.08), 0 0 28px var(--pa);
+}
+
+/* ---------------- 共用表情 ---------------- */
+.face {
+  position: absolute;
+  width: 96px;
+  height: 82px;
+  z-index: 6;
+}
+
+.face-sprout {
+  left: 62px;
+  top: 94px;
+  transform: scale(1.08);
+}
+
+.face-ink {
+  left: 62px;
+  top: 98px;
+  transform: scale(1.04);
+}
+
+.face-whale {
+  left: 58px;
+  top: 110px;
+  transform: scale(0.96);
+}
+
+.face-turtle {
+  left: 86px;
+  top: 38px;
+  transform: scale(0.7);
+}
+
+.face-fox {
+  left: 64px;
+  top: 104px;
+  transform: scale(1);
+}
+
+.eye {
+  position: absolute;
+  top: 10px;
+  width: 18px;
+  height: 24px;
+  background: #3b2e2a;
+  border-radius: 50%;
+  animation: petBlink 4.6s infinite;
+}
+
+.eye-l {
+  left: 14px;
+}
+
+.eye-r {
+  right: 14px;
+}
+
+.glint {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.blush {
+  position: absolute;
+  top: 42px;
+  width: 22px;
+  height: 12px;
+  background: rgba(255, 122, 158, 0.5);
+  border-radius: 50%;
+}
+
+.blush-l {
+  left: 0;
+}
+
+.blush-r {
+  right: 0;
+}
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  top: 42px;
+  width: 28px;
+  height: 14px;
+  margin-left: -14px;
+  border-bottom: 4px solid #3b2e2a;
+  border-radius: 0 0 60% 60%;
+}
+
+.mouth.is-sad {
+  height: 10px;
+  border-bottom: none;
+  border-top: 4px solid #3b2e2a;
+  border-radius: 60% 60% 0 0;
+  top: 48px;
+}
+
+/* ---------------- 配饰与动画 ---------------- */
+.pet-acc {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  margin-left: -30px;
+  font-size: 56px;
+  z-index: 9;
+  transform: rotate(-8deg);
+}
+
+.species-turtle .pet-acc {
+  top: -30px;
+}
+
+.species-whale .pet-acc {
+  top: -4px;
+}
+
+.species-ink .pet-acc {
+  top: -22px;
+}
+
+.branch-mark {
+  position: absolute;
+  left: 30px;
+  bottom: 28px;
+  z-index: 8;
+  font-size: 24px;
+  color: var(--pa);
+  text-shadow: 0 0 10px var(--pa);
+  animation: petPulse 2.2s infinite;
+}
+
+@keyframes petBlink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes petPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes petSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+</style></head><body>
+<h2>初始形态（Lv.1）</h2><div class="grid">
+<div class="card">
+    <div class="stage-label">芽芽 · 初芽</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-sprout stage-0 branch-" style="--pc:#FFD166;--pa:#6FD39B;">
+          <div class="pet-shadow"></div>
+          <div class="sprout-stem"></div>
+      <div class="sprout-leaf sprout-leaf-l"></div>
+      <div class="sprout-leaf sprout-leaf-r"></div>
+      <div class="sprout-body body"></div>
+      <div class="sprout-foot sprout-foot-l"></div>
+      <div class="sprout-foot sprout-foot-r"></div>
+      
+          <div class="face face-sprout">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.1</div>
+  </div>
+<div class="card">
+    <div class="stage-label">乌乌 · 墨滴</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-ink stage-0 branch-" style="--pc:#6B7280;--pa:#A78BFA;">
+          <div class="pet-shadow"></div>
+          <div class="ink-tail"></div>
+      <div class="ink-ear ink-ear-l"></div>
+      <div class="ink-ear ink-ear-r"></div>
+      <div class="ink-body body"></div>
+      <div class="ink-drip ink-drip-1"></div>
+      <div class="ink-drip ink-drip-2"></div>
+      
+      
+          <div class="face face-ink">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.1</div>
+  </div>
+<div class="card">
+    <div class="stage-label">泡泡 · 泡泡</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-whale stage-0 branch-" style="--pc:#A5D8FF;--pa:#4EA8DE;">
+          <div class="pet-shadow"></div>
+          <div class="whale-spout"><div class="spout-drop"></div></div>
+      <div class="whale-tail"></div>
+      <div class="whale-fin whale-fin-l"></div>
+      <div class="whale-fin whale-fin-r"></div>
+      <div class="whale-body body"></div>
+      <div class="whale-belly"></div>
+      
+      
+          <div class="face face-whale">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.1</div>
+  </div>
+<div class="card">
+    <div class="stage-label">咔哒 · 齿轮蛋</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-turtle stage-0 branch-" style="--pc:#A3B18A;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="turtle-leg turtle-leg-1"></div>
+      <div class="turtle-leg turtle-leg-2"></div>
+      <div class="turtle-leg turtle-leg-3"></div>
+      <div class="turtle-leg turtle-leg-4"></div>
+      <div class="turtle-tail"></div>
+      <div class="turtle-shell"></div>
+      <div class="turtle-gear"><div class="gear-core"></div></div>
+      <div class="turtle-head"></div>
+      
+          <div class="face face-turtle">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.1</div>
+  </div>
+<div class="card">
+    <div class="stage-label">阿燎 · 火星</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-fox stage-0 branch-" style="--pc:#FFB86B;--pa:#F07A16;">
+          <div class="pet-shadow"></div>
+          <div class="fox-tail fox-tail-1"></div>
+    
+    
+    <div class="fox-ear fox-ear-l"></div>
+    <div class="fox-ear fox-ear-r"></div>
+    <div class="fox-body body"></div>
+    <div class="fox-muzzle"></div>
+    
+          <div class="face face-fox">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.1</div>
+  </div>
+</div><h2>最终分支 A（Lv.12）</h2><div class="grid">
+<div class="card">
+    <div class="stage-label">芽芽 · 星叶王</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-sprout stage-4 branch-a" style="--pc:#7BDCB5;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="sprout-stem"></div>
+      <div class="sprout-leaf sprout-leaf-l"></div>
+      <div class="sprout-leaf sprout-leaf-r"></div>
+      <div class="sprout-body body"></div>
+      <div class="sprout-foot sprout-foot-l"></div>
+      <div class="sprout-foot sprout-foot-r"></div>
+      <div class="sprout-spark">✦</div>
+          <div class="face face-sprout">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">◆</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 A</div>
+  </div>
+<div class="card">
+    <div class="stage-label">乌乌 · 墨影</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-ink stage-4 branch-a" style="--pc:#1E1B4B;--pa:#A78BFA;">
+          <div class="pet-shadow"></div>
+          <div class="ink-tail"></div>
+      <div class="ink-ear ink-ear-l"></div>
+      <div class="ink-ear ink-ear-r"></div>
+      <div class="ink-body body"></div>
+      <div class="ink-drip ink-drip-1"></div>
+      <div class="ink-drip ink-drip-2"></div>
+      <div class="ink-horn ink-horn-l"></div><div class="ink-horn ink-horn-r"></div>
+      <div class="ink-aura"></div>
+          <div class="face face-ink">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">◆</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 A</div>
+  </div>
+<div class="card">
+    <div class="stage-label">泡泡 · 星潮鲸</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-whale stage-4 branch-a" style="--pc:#6D8BFF;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="whale-spout"><div class="spout-drop"></div></div>
+      <div class="whale-tail"></div>
+      <div class="whale-fin whale-fin-l"></div>
+      <div class="whale-fin whale-fin-r"></div>
+      <div class="whale-body body"></div>
+      <div class="whale-belly"></div>
+      <div class="whale-star">✦</div>
+      <div class="whale-ring"></div>
+          <div class="face face-whale">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">◆</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 A</div>
+  </div>
+<div class="card">
+    <div class="stage-label">咔哒 · 星轨龟</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-turtle stage-4 branch-a" style="--pc:#355070;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="turtle-leg turtle-leg-1"></div>
+      <div class="turtle-leg turtle-leg-2"></div>
+      <div class="turtle-leg turtle-leg-3"></div>
+      <div class="turtle-leg turtle-leg-4"></div>
+      <div class="turtle-tail"></div>
+      <div class="turtle-shell"></div>
+      <div class="turtle-gear"><div class="gear-core"></div></div>
+      <div class="turtle-head"></div>
+      <div class="turtle-antenna"><div class="antenna-dot"></div></div>
+          <div class="face face-turtle">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">◆</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 A</div>
+  </div>
+<div class="card">
+    <div class="stage-label">阿燎 · 天焰狐</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-fox stage-4 branch-a" style="--pc:#FF4D2E;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="fox-tail fox-tail-1"></div>
+    <div class="fox-tail fox-tail-2"></div>
+    <div class="fox-tail fox-tail-3"></div>
+    <div class="fox-ear fox-ear-l"></div>
+    <div class="fox-ear fox-ear-r"></div>
+    <div class="fox-body body"></div>
+    <div class="fox-muzzle"></div>
+    <div class="fox-ember">✦</div>
+          <div class="face face-fox">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">◆</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 A</div>
+  </div>
+</div><h2>最终分支 B（Lv.12）</h2><div class="grid">
+<div class="card">
+    <div class="stage-label">芽芽 · 词灵王</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-sprout stage-4 branch-b" style="--pc:#FFB1C8;--pa:#FF86AE;">
+          <div class="pet-shadow"></div>
+          <div class="sprout-stem"></div>
+      <div class="sprout-leaf sprout-leaf-l"></div>
+      <div class="sprout-leaf sprout-leaf-r"></div>
+      <div class="sprout-body body"></div>
+      <div class="sprout-foot sprout-foot-l"></div>
+      <div class="sprout-foot sprout-foot-r"></div>
+      <div class="sprout-spark">✦</div>
+          <div class="face face-sprout">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">✧</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 B</div>
+  </div>
+<div class="card">
+    <div class="stage-label">乌乌 · 墨龙</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-ink stage-4 branch-b" style="--pc:#111827;--pa:#C4B5FD;">
+          <div class="pet-shadow"></div>
+          <div class="ink-tail"></div>
+      <div class="ink-ear ink-ear-l"></div>
+      <div class="ink-ear ink-ear-r"></div>
+      <div class="ink-body body"></div>
+      <div class="ink-drip ink-drip-1"></div>
+      <div class="ink-drip ink-drip-2"></div>
+      <div class="ink-horn ink-horn-l"></div><div class="ink-horn ink-horn-r"></div>
+      <div class="ink-aura"></div>
+          <div class="face face-ink">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">✧</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 B</div>
+  </div>
+<div class="card">
+    <div class="stage-label">泡泡 · 穹鲸</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-whale stage-4 branch-b" style="--pc:#E0D4FF;--pa:#FFD166;">
+          <div class="pet-shadow"></div>
+          <div class="whale-spout"><div class="spout-drop"></div></div>
+      <div class="whale-tail"></div>
+      <div class="whale-fin whale-fin-l"></div>
+      <div class="whale-fin whale-fin-r"></div>
+      <div class="whale-body body"></div>
+      <div class="whale-belly"></div>
+      <div class="whale-star">✦</div>
+      <div class="whale-ring"></div>
+          <div class="face face-whale">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">✧</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 B</div>
+  </div>
+<div class="card">
+    <div class="stage-label">咔哒 · 时轮龟</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-turtle stage-4 branch-b" style="--pc:#52796F;--pa:#FFB86B;">
+          <div class="pet-shadow"></div>
+          <div class="turtle-leg turtle-leg-1"></div>
+      <div class="turtle-leg turtle-leg-2"></div>
+      <div class="turtle-leg turtle-leg-3"></div>
+      <div class="turtle-leg turtle-leg-4"></div>
+      <div class="turtle-tail"></div>
+      <div class="turtle-shell"></div>
+      <div class="turtle-gear"><div class="gear-core"></div></div>
+      <div class="turtle-head"></div>
+      <div class="turtle-antenna"><div class="antenna-dot"></div></div>
+          <div class="face face-turtle">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">✧</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 B</div>
+  </div>
+<div class="card">
+    <div class="stage-label">阿燎 · 赤焰狐</div>
+    <div class="pet-wrap" style="width:220px;height:220px;">
+      <div class="pet-scale">
+        <div class="pet species-fox stage-4 branch-b" style="--pc:#B91C1C;--pa:#FFB86B;">
+          <div class="pet-shadow"></div>
+          <div class="fox-tail fox-tail-1"></div>
+    <div class="fox-tail fox-tail-2"></div>
+    <div class="fox-tail fox-tail-3"></div>
+    <div class="fox-ear fox-ear-l"></div>
+    <div class="fox-ear fox-ear-r"></div>
+    <div class="fox-body body"></div>
+    <div class="fox-muzzle"></div>
+    <div class="fox-ember">✦</div>
+          <div class="face face-fox">
+    <div class="eye eye-l"><div class="glint"></div></div>
+    <div class="eye eye-r"><div class="glint"></div></div>
+    <div class="blush blush-l"></div>
+    <div class="blush blush-r"></div>
+    <div class="mouth is-happy"></div>
+  </div>
+          <div class="branch-mark">✧</div>
+        </div>
+      </div>
+    </div>
+    <div class="level">Lv.12 · 分支 B</div>
+  </div>
+</div>
+</body></html>

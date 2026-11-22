@@ -1,0 +1,49 @@
+<view class="page about-page">
+  <!-- 品牌区 -->
+  <view class="brand">
+    <view class="brand-deco d1"></view>
+    <view class="brand-deco d2"></view>
+    <pet-avatar size="200" species="{{pet.species}}" color="{{pet.color}}" accent="{{pet.accent}}" accessory="{{pet.accessory}}" mood="90" stage="{{pet.stage.index}}" branch="{{pet.branch}}" />
+    <view class="brand-name">词灵岛</view>
+    <view class="brand-en">WORD SPIRIT ISLAND</view>
+    <view class="brand-slogan">让背单词变成一件有生命感的小事</view>
+    <view class="brand-version">v{{version}} · 四六级卡通英语学习</view>
+  </view>
+
+  <!-- 特色 -->
+  <view class="feature-card">
+    <view class="feature-title">✨ 六个不一样的设计</view>
+    <view wx:for="{{features}}" wx:key="name" class="feature-row">
+      <view class="feature-emoji">{{item.emoji}}</view>
+      <view class="flex1">
+        <text class="feature-name">{{item.name}}</text>
+        <text class="feature-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 软件信息 -->
+  <view class="info-card">
+    <view class="feature-title">📋 软件信息</view>
+    <view wx:for="{{info}}" wx:key="label" class="info-row">
+      <text class="info-label">{{item.label}}</text>
+      <text class="info-value">{{item.value}}</text>
+    </view>
+    <view class="copy-btn" bindtap="copyInfo">复制软件信息</view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="about-note">
+    <view class="note-title">📖 使用说明</view>
+    <text class="note-text">1. 本小程序为《词灵岛四六级英语学习软件》的完整功能演示版本，所有学习数据保存在本机，不上传服务器。</text>
+    <text class="note-text">2. 词库、阅读、听力与对话材料为示例内容，可按同一数据结构替换为完整四六级题库。</text>
+    <text class="note-text">3. 发音与听力播放模块预留了音频接入位，将 mp3 放入 assets/audio 即可启用。</text>
+    <text class="note-text">4. 跟读评分为基于语速的示例算法，仅用于练习反馈，不作为正式测评依据。</text>
+    <text class="note-text">5. 本软件不提供任何考试押题或成绩承诺，学习效果取决于个人投入。</text>
+  </view>
+
+  <view class="about-footer">
+    <view class="btn btn-primary btn-sm" bindtap="goHome">回到词灵岛</view>
+    <text class="copyright">© 2026 词灵岛 · 保留所有权利</text>
+  </view>
+</view>

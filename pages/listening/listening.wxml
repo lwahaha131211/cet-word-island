@@ -1,0 +1,169 @@
+<view class="page listening-page">
+  <!-- 材料切换 -->
+  <scroll-view scroll-x class="mat-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="mat-row">
+      <view
+        wx:for="{{materials}}"
+        wx:key="id"
+        class="mat-chip {{activeId === item.id ? 'is-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectMaterial"
+      >
+        <text class="mat-emoji">{{item.emoji}}</text>
+        <text class="mat-name">{{item.title}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 跟读阶段 -->
+  <block wx:if="{{phase === 'listen'}}">
+    <view class="player-card">
+      <view class="player-hd">
+        <text class="player-emoji">{{material.emoji}}</text>
+        <view class="flex1">
+          <view class="player-title">{{material.title}}</view>
+          <view class="player-sub">{{material.cnTitle}} · {{material.level}}</view>
+        </view>
+        <view class="level-chip">{{material.questions.length}} 题</view>
+      </view>
+      <view class="player-desc">{{material.intro}}</view>
+
+      <view class="wave-row {{playing ? 'wave-play' : ''}}">
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+        <view class="wave-item"></view>
+      </view>
+
+      <view class="bar bar-thin">
+        <view class="bar-inner" style="width:{{playProgress}}%"></view>
+      </view>
+      <view class="player-time">
+        <text>{{playTimeText}}</text>
+        <view class="play-btn" bindtap="togglePlay">{{playing ? '⏸ 暂停' : '▶ 播放'}}</view>
+        <text>{{totalTimeText}}</text>
+      </view>
+      <view class="player-tip">先盲听一遍，再逐句跟读，效果更好</view>
+    </view>
+
+    <view class="script-hd">
+      <text class="h3">逐句跟读</text>
+      <text class="script-toggle" bindtap="toggleScript">{{showScript ? '隐藏译文' : '显示译文'}}</text>
+    </view>
+
+    <view class="sentences">
+      <view
+        wx:for="{{material.sentences}}"
+        wx:key="en"
+        class="sentence {{playingIndex === index ? 'is-playing' : ''}}"
+      >
+        <view class="sent-index">{{index + 1}}</view>
+        <view class="flex1">
+          <text class="sent-en">{{item.en}}</text>
+          <text wx:if="{{showScript}}" class="sent-cn">{{item.cn}}</text>
+          <view wx:if="{{sentenceScores[index]}}" class="sent-score">
+            ⭐ {{sentenceScores[index].stars}} · {{sentenceScores[index].score}} 分 · {{sentenceScores[index].wpm}} 词/分
+          </view>
+        </view>
+        <view class="sent-actions">
+          <view class="sent-btn" data-index="{{index}}" bindtap="playSentence">▶</view>
+          <view
+            class="sent-btn mic-btn {{recording && recIndex === index ? 'is-rec' : ''}}"
+            data-index="{{index}}"
+            bindtap="startShadow"
+          >{{recording && recIndex === index ? '■' : '🎤'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{recording}}" class="rec-bar">
+      <view class="rec-dot"></view>
+      <text class="rec-text">正在跟读第 {{recIndex + 1}} 句 · {{recSeconds}}s</text>
+      <view class="rec-stop" bindtap="stopRecord">停止并评分</view>
+    </view>
+
+    <view class="shadow-summary">
+      <view class="shadow-cell">
+        <text class="num">{{shadowAvg}}</text>
+        <text class="shadow-label">跟读均分</text>
+      </view>
+      <view class="shadow-cell">
+        <text class="num">{{shadowCount}}</text>
+        <text class="shadow-label">已跟读句数</text>
+      </view>
+      <view class="shadow-cell">
+        <text class="num">{{material.sentences.length}}</text>
+        <text class="shadow-label">材料总句数</text>
+      </view>
+    </view>
+
+    <view class="btn btn-primary btn-block" bindtap="startQuiz">进入听力理解题</view>
+  </block>
+
+  <!-- 听力题阶段 -->
+  <block wx:elif="{{phase === 'quiz'}}">
+    <view class="quiz-top">
+      <text class="quiz-progress">第 {{quizIndex + 1}} / {{quizTotal}} 题</text>
+      <text class="quiz-correct">✓ {{quizCorrect}}</text>
+    </view>
+    <view class="quiz-card">
+      <view class="quiz-q">{{quizQuestion.q}}</view>
+      <view class="options">
+        <view
+          wx:for="{{quizOptions}}"
+          wx:key="letter"
+          class="option {{quizAnswered && index === quizQuestion.answer ? 'is-correct' : ''}} {{quizAnswered && index === quizSelected && index !== quizQuestion.answer ? 'is-wrong' : ''}}"
+          data-index="{{index}}"
+          bindtap="chooseQuiz"
+        >
+          <view class="option-letter">{{item.letter}}</view>
+          <text class="option-text">{{item.text}}</text>
+        </view>
+      </view>
+      <view wx:if="{{quizAnswered}}" class="explain">
+        <text class="explain-title">{{quizSelected === quizQuestion.answer ? '🎉 正确' : '📝 解析'}}</text>
+        <text class="explain-text">{{quizQuestion.explain}}</text>
+      </view>
+    </view>
+    <view wx:if="{{quizAnswered}}" class="btn btn-primary btn-block" bindtap="nextQuiz">
+      {{quizIndex + 1 >= quizTotal ? '查看本次成绩' : '下一题'}}
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:else>
+    <view class="done-card">
+      <view class="sticker sticker-blue">听力训练完成</view>
+      <view class="done-stars">
+        <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{index < result.stars ? 'is-on' : ''}}">★</text>
+      </view>
+      <view class="done-main">{{result.shadowAvg}}<text class="done-unit">分</text></view>
+      <view class="done-label">跟读平均分</view>
+      <view class="result-grid">
+        <view class="result-cell">
+          <text class="num">{{result.shadowCount}}</text>
+          <text class="result-label">跟读句数</text>
+        </view>
+        <view class="result-cell">
+          <text class="num">{{result.correct}}/{{result.total}}</text>
+          <text class="result-label">听力答对</text>
+        </view>
+        <view class="result-cell">
+          <text class="num">{{result.accuracy}}%</text>
+          <text class="result-label">正确率</text>
+        </view>
+        <view class="result-cell">
+          <text class="num">+{{result.exp}}</text>
+          <text class="result-label">词力</text>
+        </view>
+      </view>
+      <view class="done-tip">跟读评分结合了语速与句子长度，仅作为练习参考。坚持影子跟读，语音语调会越来越自然。</view>
+      <view class="btn btn-primary btn-block" bindtap="restart">再练一次</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="goHome">回到小岛</view>
+    </view>
+  </block>
+</view>

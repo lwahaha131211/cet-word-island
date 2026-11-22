@@ -1,0 +1,254 @@
+<view class="page page-tab pet-page">
+  <!-- 伙伴切换 -->
+  <scroll-view scroll-x class="pet-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="pet-switch">
+      <view
+        wx:for="{{collection}}"
+        wx:key="id"
+        class="pet-tab {{item.active ? 'is-active' : ''}} {{item.owned ? '' : 'is-locked'}}"
+        data-id="{{item.id}}"
+        bindtap="switchPet"
+      >
+        <text class="pet-tab-emoji">{{item.emoji}}</text>
+        <view class="pet-tab-info">
+          <text class="pet-tab-name">{{item.name}}</text>
+          <text class="pet-tab-sub">{{item.owned ? item.stageName : '未解锁'}}</text>
+        </view>
+        <view wx:if="{{item.active}}" class="pet-tab-dot"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 伙伴生活场景 -->
+  <view class="sky">
+    <view class="sun"></view>
+    <view class="cloud cloud-1"></view>
+    <view class="cloud cloud-2"></view>
+    <view class="hill hill-back"></view>
+    <view class="hill hill-front"></view>
+    <view class="grass grass-1">🌿</view>
+    <view class="grass grass-2">🌼</view>
+
+    <view class="speech">
+      <text class="speech-text">{{pet.say}}</text>
+      <view class="speech-tail"></view>
+    </view>
+
+    <view class="pet-scene" bindtap="onPetTap">
+      <pet-avatar
+        size="320"
+        species="{{pet.species}}"
+        color="{{pet.color}}"
+        accent="{{pet.accent}}"
+        accessory="{{pet.accessory}}"
+        mood="{{pet.mood}}"
+        stage="{{pet.stage.index}}"
+        branch="{{pet.branch}}"
+      />
+      <view wx:if="{{hearts}}" class="hearts">
+        <text class="heart heart-1">💗</text>
+        <text class="heart heart-2">✨</text>
+        <text class="heart heart-3">💛</text>
+      </view>
+    </view>
+
+    <view class="fish-badge">🐟 {{fish}}</view>
+    <view class="owned-badge">伙伴 {{ownedCount}}/5</view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="pet-info card">
+    <view class="row between">
+      <view class="row gap-12">
+        <text class="pet-title">{{pet.title}}</text>
+        <view class="lv-chip">Lv.{{pet.level}}</view>
+      </view>
+      <view class="col align-end">
+        <text class="stage-name">{{pet.stage.name}}</text>
+        <text wx:if="{{pet.stage.branchKey}}" class="branch-mini">{{pet.stage.branchHint}}</text>
+      </view>
+    </view>
+    <view class="exp-row">
+      <text class="exp-label">成长值</text>
+      <view class="bar bar-thin flex1">
+        <view class="bar-inner" style="width:{{expPercent}}%"></view>
+      </view>
+      <text class="exp-value">{{pet.expInLevel}}/{{pet.expNeed}}</text>
+    </view>
+    <view class="status-row">
+      <view class="status">
+        <text class="status-name">🍖 饱食度</text>
+        <view class="bar bar-thin flex1">
+          <view class="bar-inner {{pet.hunger < 35 ? 'bar-low' : ''}}" style="width:{{pet.hunger}}%"></view>
+        </view>
+        <text class="status-value">{{pet.hunger}}</text>
+      </view>
+      <view class="status">
+        <text class="status-name">💗 心情</text>
+        <view class="bar bar-thin flex1 bar-pink">
+          <view class="bar-inner" style="width:{{pet.mood}}%"></view>
+        </view>
+        <text class="status-value">{{pet.mood}}</text>
+      </view>
+    </view>
+    <text class="pet-desc">{{pet.stage.desc}}</text>
+    <text class="pet-lore">{{pet.desc}}</text>
+  </view>
+
+  <!-- 互动 -->
+  <view class="action-row">
+    <view class="action action-feed" bindtap="feed">
+      <text class="action-emoji">🍖</text>
+      <text class="action-name">喂食</text>
+      <text class="action-cost">8🐟</text>
+    </view>
+    <view class="action action-play" bindtap="onPetTap">
+      <text class="action-emoji">🤚</text>
+      <text class="action-name">摸摸头</text>
+      <text class="action-cost">+心情</text>
+    </view>
+    <view class="action action-dress" bindtap="openWardrobe">
+      <text class="action-emoji">🎀</text>
+      <text class="action-name">换装</text>
+      <text class="action-cost">图鉴</text>
+    </view>
+  </view>
+
+  <!-- 下一位伙伴 -->
+  <view wx:if="{{nextPet}}" class="next-pet" bindtap="switchPet" data-id="{{nextPet.id}}">
+    <view class="next-pet-emoji">{{nextPet.emoji}}</view>
+    <view class="flex1">
+      <view class="next-pet-title">下一位伙伴 · {{nextPet.name}}</view>
+      <view class="next-pet-desc">{{nextPet.tagline}}</view>
+      <view class="bar bar-thin next-pet-bar">
+        <view class="bar-inner" style="width:{{nextPet.progress}}%"></view>
+      </view>
+      <text class="next-pet-need">{{nextPet.needText}}</text>
+    </view>
+    <text class="next-pet-arrow">🔒</text>
+  </view>
+
+  <!-- 进化图鉴 -->
+  <cartoon-card title="进化图鉴" emoji="🌟" extra="学得越多，长得越快">
+    <scroll-view scroll-x class="stage-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="stage-row">
+        <view
+          wx:for="{{stages}}"
+          wx:key="index"
+          class="stage-item {{item.current ? 'is-current' : ''}} {{item.unlocked ? '' : 'is-locked'}}"
+        >
+          <view class="stage-ball" style="background:{{item.unlocked ? item.color : '#EDE5D8'}};">
+            <text wx:if="{{item.unlocked}}">{{item.index + 1}}</text>
+            <text wx:else>🔒</text>
+          </view>
+          <text class="stage-name-item">{{item.name}}</text>
+          <text class="stage-need">{{item.min}} 级</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="garden-link" bindtap="goGarden">
+      <text>🌷 去看看伙伴种下的知识花园</text>
+      <text class="garden-arrow">→</text>
+    </view>
+  </cartoon-card>
+
+  <!-- 词汇结构驱动进化 -->
+  <cartoon-card title="词汇进化分支" emoji="🌿" extra="你的词库决定最终形态">
+    <view class="branch-note">12 级时，系统按已学词汇的结构选择最终分支；进化方向一旦确定就会固定。</view>
+    <view class="branch-row">
+      <view
+        wx:for="{{branches}}"
+        wx:key="key"
+        class="branch-card {{item.selected ? 'is-selected' : ''}} {{item.active ? 'is-active' : ''}}"
+      >
+        <view class="branch-hd">
+          <text class="branch-name">{{item.name}}</text>
+          <text wx:if="{{item.active}}" class="branch-tag">当前</text>
+          <text wx:elif="{{item.locked}}" class="branch-tag is-locked">12级</text>
+          <text wx:else class="branch-tag is-preview">预计</text>
+        </view>
+        <text class="branch-desc">{{item.desc}}</text>
+        <view class="branch-metric">
+          <text class="branch-hint">{{item.hint}}</text>
+          <text class="branch-value">{{item.value}}</text>
+        </view>
+        <view class="bar bar-thin">
+          <view class="bar-inner" style="width:{{item.percent}}%"></view>
+        </view>
+      </view>
+    </view>
+    <view class="branch-profile">
+      <text class="branch-profile-title">已学 {{profile.total}} 词的结构画像</text>
+      <view class="branch-chips">
+        <text class="branch-chip">词根 {{profile.root}}</text>
+        <text class="branch-chip">前缀 {{profile.prefix}}</text>
+        <text class="branch-chip">后缀 {{profile.suffix}}</text>
+        <text class="branch-chip">名词 {{profile.noun}}</text>
+        <text class="branch-chip">动词 {{profile.verb}}</text>
+        <text class="branch-chip">形容词 {{profile.adj}}</text>
+        <text class="branch-chip">长词 {{profile.long}}</text>
+      </view>
+    </view>
+  </cartoon-card>
+
+  <!-- 伙伴图鉴 -->
+  <cartoon-card title="伙伴图鉴" emoji="🧭" extra="{{ownedCount}}/5 已收集">
+    <view class="coll-grid">
+      <view
+        wx:for="{{collection}}"
+        wx:key="id"
+        class="coll-card {{item.owned ? '' : 'is-locked'}} {{item.active ? 'is-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="switchPet"
+      >
+        <view class="coll-hd">
+          <text class="coll-emoji">{{item.emoji}}</text>
+          <text class="coll-lv">{{item.owned ? 'Lv.' + item.level : '🔒'}}</text>
+        </view>
+        <text class="coll-name">{{item.name}}</text>
+        <text class="coll-tag">{{item.tagline}}</text>
+        <text wx:if="{{item.owned}}" class="coll-stage">{{item.stageName}}</text>
+        <text wx:if="{{item.branchName}}" class="coll-branch">分支 · {{item.branchName}}</text>
+        <view wx:else class="coll-progress">
+          <view class="bar bar-thin">
+            <view class="bar-inner" style="width:{{item.progress}}%"></view>
+          </view>
+          <text class="coll-need">{{item.unlock.text}}</text>
+        </view>
+      </view>
+    </view>
+  </cartoon-card>
+
+  <!-- 成长提示 -->
+  <view class="grow-tip">
+    <text class="grow-tip-title">💡 伙伴小贴士</text>
+    <text class="grow-tip-text">每学一个单词获得词力，词力会让当前伙伴进化；切换伙伴不会丢失各自的成长值。累计学习 {{totalLearned}} 词，今天新学 {{todayLearned}} 个。</text>
+    <view class="btn btn-primary btn-sm grow-btn" bindtap="goStudy">去赚词力</view>
+  </view>
+
+  <!-- 换装间 -->
+  <view wx:if="{{showWardrobe}}" class="mask" bindtap="closeWardrobe">
+    <view class="modal" catchtap="noop">
+      <view class="modal-title">{{pet.name}}的换装间</view>
+      <view class="modal-desc">升级解锁更多配饰</view>
+      <view class="wardrobe-list">
+        <view
+          wx:for="{{accessories}}"
+          wx:key="id"
+          class="wardrobe-item {{item.active ? 'is-active' : ''}} {{item.unlocked ? '' : 'is-locked'}}"
+          data-id="{{item.id}}"
+          bindtap="chooseAccessory"
+        >
+          <text class="wardrobe-emoji">{{item.emoji}}</text>
+          <view class="flex1">
+            <text class="wardrobe-name">{{item.name}}</text>
+            <text class="wardrobe-need">{{item.statusText}}</text>
+          </view>
+          <text wx:if="{{item.active}}" class="wardrobe-check">✓</text>
+          <text wx:elif="{{!item.unlocked}}" class="wardrobe-lock">🔒</text>
+        </view>
+      </view>
+      <view class="btn btn-ghost btn-block mt-24" bindtap="closeWardrobe">关闭</view>
+    </view>
+  </view>
+</view>

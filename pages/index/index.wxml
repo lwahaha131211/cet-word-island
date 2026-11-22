@@ -1,0 +1,125 @@
+<view class="page page-tab">
+  <!-- 顶部问候 -->
+  <view class="topbar">
+    <view class="hello">
+      <text class="hello-title">{{greeting}}</text>
+      <text class="hello-sub">{{dateText}} · 距考试 {{daysLeft}} 天</text>
+    </view>
+    <view class="wallet">
+      <view class="wallet-item">
+        <text class="wallet-icon">🐟</text>
+        <text class="wallet-num">{{fish}}</text>
+      </view>
+      <view class="wallet-item">
+        <text class="wallet-icon">🔥</text>
+        <text class="wallet-num">{{streak}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主视觉：词灵与今日进度 -->
+  <view class="hero">
+    <view class="hero-deco hero-deco-1"></view>
+    <view class="hero-deco hero-deco-2"></view>
+    <view class="hero-main">
+      <view class="sticker sticker-green">今日航行</view>
+      <view class="hero-title">{{nickname}}，把单词喂给伙伴吧</view>
+      <view class="hero-sub">今日已学 {{done}} 词 · 目标 {{target}} 词</view>
+      <view class="bar bar-thin hero-bar">
+        <view class="bar-inner" style="width:{{todayPercent}}%"></view>
+      </view>
+      <view class="hero-actions">
+        <view class="btn btn-dark btn-sm" bindtap="goStudy">开始学习</view>
+        <view class="btn btn-ghost btn-sm" bindtap="goReview">复习 {{dueCount}}</view>
+      </view>
+    </view>
+    <view class="hero-pet" bindtap="goPet">
+      <pet-avatar size="190" species="{{pet.species}}" color="{{pet.color}}" accent="{{pet.accent}}" accessory="{{pet.accessory}}" mood="{{pet.mood}}" stage="{{pet.stage.index}}" branch="{{pet.branch}}" />
+      <view class="pet-name">{{pet.name}} Lv.{{pet.level}}</view>
+    </view>
+  </view>
+
+  <!-- 今日任务 -->
+  <cartoon-card title="今日任务" emoji="📝" extra="{{tasksDone}}/{{tasks.length}} 已完成" tape="{{true}}">
+    <view wx:for="{{tasks}}" wx:key="id" class="task-row">
+      <text class="task-emoji">{{item.emoji}}</text>
+      <view class="flex1">
+        <view class="row between">
+          <text class="task-title">{{item.title}}</text>
+          <text class="task-count">{{item.current}}/{{item.target}}</text>
+        </view>
+        <view class="bar bar-thin task-bar">
+          <view class="bar-inner {{item.done ? 'task-bar-done' : ''}}" style="width:{{item.percent}}%"></view>
+        </view>
+      </view>
+      <view wx:if="{{item.claimed}}" class="task-claimed">已领</view>
+      <view wx:elif="{{item.done}}" class="btn btn-xs btn-green task-btn" data-id="{{item.id}}" bindtap="onClaim">领取</view>
+      <text wx:else class="task-reward">+{{item.reward}}🐟</text>
+    </view>
+  </cartoon-card>
+
+  <!-- 玩法入口 -->
+  <view class="section-hd">
+    <text class="h2">岛屿玩法</text>
+    <text class="sub">8 种方式记单词</text>
+  </view>
+  <view class="feature-grid">
+    <view
+      wx:for="{{features}}"
+      wx:key="name"
+      class="feature press"
+      data-url="{{item.url}}"
+      bindtap="goUrl"
+    >
+      <view class="feature-icon bg-{{item.color}}">{{item.icon}}</view>
+      <text class="feature-name">{{item.name}}</text>
+      <text class="feature-desc">{{item.desc}}</text>
+    </view>
+  </view>
+
+  <!-- 剧情进度 -->
+  <view class="story-card" bindtap="goChapters">
+    <view class="story-emoji">{{chapter.emoji}}</view>
+    <view class="flex1">
+      <view class="row gap-12">
+        <text class="story-tag">剧情</text>
+        <text class="story-title">第 {{chapter.num}} 章 · {{chapter.title}}</text>
+      </view>
+      <text class="story-desc">{{chapter.desc}}</text>
+      <view class="bar bar-thin story-bar">
+        <view class="bar-inner" style="width:{{chapter.progress}}%"></view>
+      </view>
+      <text class="tiny">解锁进度 {{chapter.progress}}% · 累计学习 {{stats.totalLearned}} 词</text>
+    </view>
+    <text class="story-arrow">→</text>
+  </view>
+
+  <!-- 学习概览 -->
+  <view class="stat-strip">
+    <view class="stat-cell">
+      <text class="num">{{stats.totalLearned}}</text>
+      <text class="stat-label">累计单词</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-cell">
+      <text class="num">{{accuracy}}%</text>
+      <text class="stat-label">答题正确率</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-cell">
+      <text class="num">{{stats.mastered}}</text>
+      <text class="stat-label">已掌握</text>
+    </view>
+  </view>
+
+  <!-- 每日一句 -->
+  <view class="quote-card">
+    <text class="quote-mark">“</text>
+    <text class="quote-en">{{quote.en}}</text>
+    <text class="quote-cn">{{quote.cn}}</text>
+    <text class="quote-author">—— {{quote.author}}</text>
+    <view class="quote-plan" bindtap="goPlan">制定备考计划 →</view>
+  </view>
+
+  <view class="footer-tip">词灵岛 · 让每个单词都长成花园里的花</view>
+</view>

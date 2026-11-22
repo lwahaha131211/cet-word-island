@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>词灵岛 源代码 AI 检测与原创性自检报告 V1.0</title>
+<style>
+:root{--ink:#1f2328;--sub:#5c6470;--line:#e3e6ea;--bg:#fff;--soft:#f7f8fa;--ok:#0f6e56;--okbg:#e1f5ee;--warn:#8a5a08;--warnbg:#fdf2d8;--bad:#a32d2d;--badbg:#fceaea;--blue:#185fa5;--bluebg:#e6f1fb}
+*{box-sizing:border-box}
+body{margin:0;background:#f2f4f6;color:var(--ink);font:14px/1.75 "Microsoft YaHei","PingFang SC",Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 20px 60px}
+header{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:16px}
+h1{font-size:23px;margin:0 0 8px;font-weight:600}
+.meta{color:var(--sub);font-size:13px}
+.lead{margin:18px 0 0;padding:14px 16px;background:var(--soft);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.lbl{font-size:12px;color:var(--sub)}
+.val{font-size:27px;font-weight:600;line-height:1.3;margin:4px 0}
+.val small{font-size:14px;font-weight:400;color:var(--sub)}
+.note{font-size:12px;color:var(--sub);line-height:1.6}
+.v-ok{color:var(--ok)}.v-warn{color:var(--warn)}.v-bad{color:var(--bad)}
+section{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:22px 30px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line);font-weight:600}
+h3{font-size:15px;margin:22px 0 10px;font-weight:600}
+p{margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600;white-space:nowrap}
+td.num{font-family:Consolas,monospace;white-space:nowrap}
+code,.mono{font-family:Consolas,"Courier New",monospace;font-size:12.5px;background:var(--soft);padding:1px 4px;border-radius:3px}
+pre{font-family:Consolas,"Courier New",monospace;font-size:12.5px;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;line-height:1.6;margin:10px 0}
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;white-space:nowrap}
+.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-bad{background:var(--badbg);color:var(--bad)}.b-info{background:var(--bluebg);color:var(--blue)}
+.quote{background:var(--soft);border-left:3px solid var(--warn);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+ul,ol{margin:10px 0;padding-left:22px}li{margin:5px 0}
+.p0{background:var(--badbg);color:var(--bad);padding:2px 9px;border-radius:5px;font-size:13px;font-weight:600}
+.p1{background:var(--warnbg);color:var(--warn);padding:2px 9px;border-radius:5px;font-size:13px;font-weight:600}
+.p2{background:var(--bluebg);color:var(--blue);padding:2px 9px;border-radius:5px;font-size:13px;font-weight:600}
+.small{font-size:12.5px;color:var(--sub)}
+footer{color:var(--sub);font-size:12.5px;padding:18px 4px;line-height:1.8}
+@media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>词灵岛四六级英语学习软件 · 源代码 AI 检测与原创性自检报告</h1>
+  <div class="meta">检测对象：<span class="mono">docs/源代码-全量.txt</span>（19877 行 / 496 KB）　·　版本：V1.0.0　·　检测日期：2026-11-07　·　方式：本地离线逐行比对 + 联网开源代码对撞</div>
+  <div class="lead"><strong>结论先行：代码是原创的，材料现在不能提交。</strong>真实性 99.99%（19877/19878 行可逐行溯源、零编造），与同类开源小程序 8/12 行连续窗口命中为 0，内部重复仅 1.09%，AI 生成痕迹主要落在<strong>文案与数据层</strong>而非代码逻辑层。但提交版材料存在 <strong>5 项 P0 硬伤</strong>（有效代码行数不足、首尾代码未闭合、断点切在 CSS 中途、非代码标记、GPL-3.0 词库权属），按 2026 新规直接送审大概率补正或驳回。</div>
+</header>
+
+<div class="cards">
+  <div class="card"><div class="lbl">综合评级</div><div class="val v-warn">76<small> / 100</small></div><div class="note">B-　原创性过关，材料须整改</div></div>
+  <div class="card"><div class="lbl">真实性溯源</div><div class="val v-ok">99.99<small>%</small></div><div class="note">19877 / 19878 行逐字一致</div></div>
+  <div class="card"><div class="lbl">外部代码重合</div><div class="val v-ok">0<small> 处</small></div><div class="note">N=8 / N=12 窗口零命中</div></div>
+  <div class="card"><div class="lbl">形式合规</div><div class="val v-bad">5<small> 项 P0</small></div><div class="note">另有权属瑕疵，见第六节</div></div>
+</div>
+
+<section>
+  <h2>一、真实性：没有编造代码</h2>
+  <p>复刻 <code>tools/export-source.js</code> 的完整管线（目录排序、排除 <code>tools/docs/.git</code>、排除两个词库文件、86 显示宽度折行、中文按 2 字符宽计），从 119 个真实源文件重新生成期望文本，与待检文件逐行比对：</p>
+  <table>
+    <tr><th style="width:28%">指标</th><th>实测</th><th style="width:16%">判定</th></tr>
+    <tr><td>被检文件行数</td><td class="num">19877</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td>重建期望行数</td><td class="num">19878（多 1 个文件末尾空行）</td><td><span class="badge b-ok">正常</span></td></tr>
+    <tr><td>逐行完全一致</td><td class="num">19877 / 19878 = 99.99%</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td>文件分段</td><td class="num">119 段 = 119 个源文件（39 js / 29 json / 26 wxss / 25 wxml）</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td>编造 / 补齐 / 改写行</td><td class="num">0</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td>软件可运行性</td><td><code>validate.js</code> 全部通过；<code>selftest.js</code> 72 项断言通过；<code>pagesmoke.js</code> 20/20 页面通过</td><td><span class="badge b-ok">通过</span></td></tr>
+  </table>
+  <p class="small">唯一差异是文件最后一个空行，属写入时的换行处理，不构成内容差异。三项自检通过，可排除 2026 新规重点打击的「纸面软件 / 无实际运行功能」。</p>
+</section>
+
+<section>
+  <h2>二、外部相似度：同类开源项目零重合</h2>
+  <p>联网检索到功能高度同构的公开项目后，实际下载 2 个仓库的前端源码（269 个文件 / 34934 有效行 / 18788 条唯一行），用 5 / 8 / 12 行连续滑窗哈希对撞：</p>
+  <table>
+    <tr><th>候选仓库</th><th class="num">文件</th><th class="num">有效行</th><th class="num">N=5</th><th class="num">N=8</th><th class="num">N=12</th></tr>
+    <tr><td><span class="mono">a1154956809/WeChat-applets</span><br><span class="small">背单词小程序，自述仿墨墨背单词</span></td><td class="num">89</td><td class="num">34082</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td><span class="mono">bysj-code/CET-4-and-CET-6-Vocabulary-System</span><br><span class="small">四六级词汇系统毕设源码</span></td><td class="num">180</td><td class="num">852</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+  </table>
+  <p><strong>N=8 与 N=12 全部 0 命中</strong>——即便把变量名全换掉，只要保留 8 行连续语句结构就会被抓到，没有抓到说明实现是独立写的。N=5 的 2 处命中落在通用属性行。</p>
+  <ul>
+    <li>整行精确命中 <strong>1447 行（7.28%）</strong>，去重后仅 <strong>78 种</strong>，全部是语言/框架样板：<code>display: flex;</code>（265 次）、<code>font-weight: 800;</code>（176 次）、<code>align-items: center;</code>（165 次）、<code>this.setData({</code>（58 次）等</li>
+    <li><strong>最长连续相同块 6 行</strong>（文档第 2278 行起），内容是 <code>flex: 1; / height: 100%; / display: flex; / flex-direction: column; / align-items: center; / justify-content: center;</code>，纯 CSS 布局样板</li>
+    <li>联网检索未发现「词灵岛」同名开源项目或软著登记记录；同类四六级学习小程序在 CSDN、GitHub 上大量存在，属<strong>功能层面公开先例</strong>，依据《计算机软件保护条例》第六条不影响代码表达的独创性</li>
+  </ul>
+</section>
+
+<section>
+  <h2>三、内部重复度：偏低，不是机械复制</h2>
+  <table>
+    <tr><th>窗口长度</th><th class="num">合格窗口</th><th class="num">重复组</th><th class="num">涉及行次</th><th class="num">占比</th></tr>
+    <tr><td>N=5</td><td class="num">16552</td><td class="num">371</td><td class="num">901</td><td class="num">4.53%</td></tr>
+    <tr><td>N=8</td><td class="num">19497</td><td class="num">181</td><td class="num">379</td><td class="num">1.91%</td></tr>
+    <tr><td>N=12</td><td class="num">19758</td><td class="num">108</td><td class="num">216</td><td class="num">1.09%</td></tr>
+  </table>
+  <p>重复度最高的一组 12 行块也只出现 <strong>2 次</strong>，样本为 WXML 的 <code>&lt;/view&gt;</code> 闭合与 <code>&lt;!-- 筛选 --&gt;</code> 注释、以及 flex 布局属性组，均为结构性重复。20 个 <code>Page()</code> 的成员并不齐整（<code>data:</code> 20、<code>onLoad</code> 11、<code>onShow</code> 10、<code>onUnload</code> 3），说明是按需编写而非整页模板复制。</p>
+</section>
+
+<section>
+  <h2>四、AI 生成痕迹：代码层低，内容 / 文档层中等偏高</h2>
+  <div class="quote"><strong>核心判断：</strong>这不是「AI 批量生成代码」的画像，而是「<strong>代码由人按统一规范编写 / 人工把控，文案与数据层有 AI 辅助特征</strong>」的画像。统计特征只能给倾向，不能证明是否用了 AI；但这一区分直接决定新版申请表的亲笔承诺能不能签。</div>
+
+  <h3>4.1 代码层：反向指标充分</h3>
+  <table>
+    <tr><th style="width:26%">指标</th><th style="width:34%">实测</th><th>与典型 AI 生成代码对照</th></tr>
+    <tr><td>命名</td><td class="num">2757 个唯一标识符；拼音缩写 0、单/双字母变量 0；平均 6.7 字符</td><td><span class="badge b-ok">低痕迹</span> 语义化英文命名，无机械替换痕迹</td></tr>
+    <tr><td>注释措辞</td><td class="num">612 行中文注释中「旨在/赋能/一站式/高效便捷」等套话 <strong>0 次</strong>；「解释显而易见」型注释仅 1 处</td><td><span class="badge b-ok">低痕迹</span> 注释讲具体技术，不堆空话</td></tr>
+    <tr><td>异常处理</td><td class="num">try 12 / catch 12 完全配对；console.* 仅 4 处；无空 catch</td><td><span class="badge b-ok">低痕迹</span> 无「捕获一切后静默跳过」</td></tr>
+    <tr><td>结构对称性</td><td class="num">20 个 Page / 5 个 Component，成员按需不齐；N=12 重复 1.09%</td><td><span class="badge b-ok">低痕迹</span> 无整页复制、无同构函数堆砌</td></tr>
+    <tr><td>调试残留</td><td class="num">TODO / FIXME / DEBUG 均为 0</td><td><span class="badge b-warn">偏干净</span> 也可能是规范的人工清理</td></tr>
+  </table>
+
+  <h3>4.2 内容 / 文档层：模板化与批量生成特征明显</h3>
+  <table>
+    <tr><th style="width:26%">指标</th><th style="width:34%">实测</th><th>判读</th></tr>
+    <tr><td>文件头模板</td><td class="num">119 个文件 × 4 行块逐字一致；<code>V1.0.0</code> 出现 120 次</td><td>整齐度人工项目少见，属生成脚本或统一模板产物</td></tr>
+    <tr><td>注释骨架</td><td class="num">25 个 <code>/* ---- 节名 ---- */</code> 节标题、76 个 JSDoc 块、158 个长等号分隔注释</td><td>CSS 分节与函数注释全覆盖，规范到近乎机械</td></tr>
+    <tr><td>内容体量</td><td class="num">1158 个中文字符串常量、111 个颜色值、6 章剧情、20 项成就、30 种伙伴形态</td><td>大量结构化文案一次性产出，是 LLM 高发区</td></tr>
+    <tr><td>词条例句</td><td class="num"><code>words.js</code> 76 条例句 / 词根拆解 / 记忆提示，在全量词库中 <strong>0 命中</strong></td><td>与第三方词库无关，属独立生成文本；例句、助记、词根正是 LLM 常写内容</td></tr>
+    <tr><td>文档行文</td><td>README、说明书、申请材料清单结构排比工整，含「把背单词设计成一座会生长的小岛」等营销化表述</td><td>文档层 AI 味明显强于代码层</td></tr>
+  </table>
+
+  <div class="quote"><strong>对申报的直接影响：</strong>2026 新版申请表要求经办人亲笔抄写「软件独立开发、<strong>未使用 AI 编写代码、撰写文档或生成登记申请材料</strong>」，并绑定签名与身份证号；失实将列入版权登记失信名单并同步个人征信。若 README、说明书、申请材料清单或词条文案确有 AI 参与，<strong>不能签这句</strong>，应改走《AI 合规及原创性声明》说明人的创造性贡献与 AI 边界。本报告不判断你是否用了 AI，只提示：代码层痕迹低不等于整份材料可以签。</div>
+</section>
+
+<section>
+  <h2>五、形式合规：提交版 HTML 有 5 项硬伤</h2>
+  <table>
+    <tr><th style="width:22%">检查项</th><th style="width:38%">实测</th><th>判定</th></tr>
+    <tr><td>页数 / 每页行数</td><td class="num">60 页 × 恰好 50 行（最小 50 / 最大 50）</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td>页眉</td><td>含「词灵岛四六级英语学习软件 V1.0.0」+ 页码，与 README、材料清单一致</td><td><span class="badge b-ok">通过</span></td></tr>
+    <tr><td><strong>有效代码行数</strong></td><td>3000 行中空行 <strong>316</strong>（10.5%）+ 注释行 <strong>176</strong>（5.9%）= 492 行；有效代码仅 <strong>2508 行</strong>，平均每页 <strong>41.8 行</strong></td><td><span class="badge b-bad">不符</span> 按「空行、注释不计行数」的实务口径，页页不足 50 行，是高频补正项</td></tr>
+    <tr><td><strong>第 30 页断点</strong></td><td>末行为 <code>.ink-ear-l {</code>，CSS 规则未闭合；第 31 页从空行开始</td><td><span class="badge b-bad">不符</span> 断点切在规则中间</td></tr>
+    <tr><td><strong>第 31 页非代码文字</strong></td><td>插入 <code>/* …… 中间部分源代码略 …… */</code> 及前后空行，共占 3 行</td><td><span class="badge b-bad">不符</span> 鉴别材料不得含与软件无关的说明文字</td></tr>
+    <tr><td><strong>第 60 页收尾</strong></td><td>末行为 <code>&nbsp;&nbsp;levelText: levelText</code>，<code>module.exports</code> 的闭括号被 <code>slice(0, 3000)</code> 截掉</td><td><span class="badge b-bad">不符</span> 末页以未闭合代码块结束</td></tr>
+    <tr><td>配置一致性</td><td><code>project.config.json</code> 的 appid 出现在材料中；其 <code>libVersion 3.4.0</code> 与 <code>project.private.config.json</code> 的 <code>3.17.6</code> 冲突</td><td><span class="badge b-warn">提示</span> appid 属公开标识非密钥，但建议脱敏并统一基础库版本</td></tr>
+  </table>
+  <div class="quote"><strong>根因在 <code>tools/export-source.js</code>：</strong>导出时保留了全部空行与注释，且 <code>selected = head.concat(标记, tail).slice(0, 3000)</code> 这一行在插入 3 行标记后又截断到 3000 行，直接砍掉了尾部 3 行源码。修法：先剥离空行与整行注释，再按 50 行有效代码分页；前后段以<strong>完整代码块边界</strong>切分；去掉中间省略标记；重新校验首尾闭合。</div>
+</section>
+
+<section>
+  <h2>六、权属与许可证：最重的一处风险</h2>
+  <p>项目自己的材料清单与词库文件头都已写明来源，本次核实到上游许可证原文：</p>
+  <table>
+    <tr><th style="width:26%">事实</th><th>核验结果</th></tr>
+    <tr><td>上游许可证</td><td><span class="mono">RealKai42/qwerty-learner</span> 的 <code>LICENSE</code> 首行确认为 <strong>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</strong>，即 GPL-3.0 强 copyleft</td></tr>
+    <tr><td>项目内数据</td><td><code>data/cet4-full.js</code>（2607 条）、<code>data/cet6-full.js</code>（2345 条）头部自述「数据来源：qwerty-learner（GPL-3.0，仅用于本地演示）」；全项目 6 处文件提及 GPL</td></tr>
+    <tr><td>导出处理</td><td><code>export-source.js</code> 的 <code>OMIT_FILES</code> 把这两个文件<strong>排除在软著源材料之外</strong></td></tr>
+    <tr><td>运行时依赖</td><td>软件通过 <code>words.js</code> 的 <code>appendFullWords</code> 合并全量词库；申请表与说明书均写「3924 个四六级词条」</td></tr>
+  </table>
+  <div class="quote"><strong>排除 ≠ 解决。</strong>其一，2026 新规要求「功能—代码—文档」三重一致：申请表写 3924 词条，提交的 60 页源代码里却<strong>找不到对应数据文件</strong>，功能描述与代码对不上，正是高频驳回理由。其二，软著申请的是整个软件，核心词库为第三方 GPL-3.0 数据时，「独立开发、原创」的权利说明存在瑕疵；GPL-3.0 在<strong>分发</strong>（小程序上线）时要求整体以同协议开源，与闭源发布冲突。项目材料清单自己也标注「发布前需替换或合规处理」。<br>建议：改用自建 / 已授权词表，或取得书面授权并按协议履行；随后把词库文件纳入材料或改写功能描述口径，保证三者一致。</div>
+  <p class="small">补充：<code>words.js</code> 的 76 条例句、词根拆解、记忆提示在全量词库中 0 命中，不属于该 GPL 数据，但属于「独立生成的文本」，其权属与 AI 参与情况需你自行确认。</p>
+</section>
+
+<section>
+  <h2>七、整改清单</h2>
+  <h3><span class="p0">P0　提交前必须改</span></h3>
+  <ol>
+    <li><strong>词库权属</strong>：替换 GPL-3.0 词库或取得授权；同步确保「3924 词条」在提交源码中有对应实现，别让功能描述悬空。</li>
+    <li><strong>重做提交版分页</strong>：先删空行与整行注释，按每页 50 行<strong>有效代码</strong>重排；前后各 30 页以完整代码块边界切分；删除「中间部分源代码略」标记；校验第 1 页从入口开始、第 60 页以闭合行结束。</li>
+    <li><strong>评估 AI 承诺</strong>：逐份确认 README、软件说明书、申请材料清单、词条例句是否由 AI 参与撰写；如有，改走《AI 合规及原创性声明》，不要签「未使用 AI 撰写文档」。</li>
+    <li><strong>功能描述扩写</strong>：现「软件功能简介」仅 <strong>268 字</strong>，新规要求 500–1300 字，需补研发背景、核心架构、功能模块、技术实现、创新亮点，且每项功能能在源码中找到对应模块。</li>
+    <li><strong>补齐真实截图</strong>：说明书中 22 处「截图」占位需换成真机 / 模拟器真实运行界面，界面内软件名与申请表一致，不带开发者工具边框或测试号水印。</li>
+  </ol>
+  <h3><span class="p1">P1　建议改</span></h3>
+  <ul>
+    <li><strong>建立版本历史</strong>：项目当前<strong>无 .git 目录</strong>，独立开发缺少客观过程证据；建议立即 <code>git init</code> 并留存需求文档、设计稿、自检记录。</li>
+    <li>补《开源组件使用声明》或至少在申请材料中说明第三方数据边界。</li>
+    <li>统一 <code>libVersion</code>（3.4.0 vs 3.17.6），并对 <code>project.config.json</code> 的 appid 做脱敏。</li>
+    <li>说明书为 <code>.md</code>，转 PDF 时按官方口径核对每页不少于 30 行、页眉全称与版本一致。</li>
+  </ul>
+  <h3><span class="p2">P2　可保留</span></h3>
+  <ul>
+    <li>20 个 Page / 5 个 Component 的结构、CSS 分节注释、文件头模板本身不违规，无需为「去 AI 味」刻意打乱；改掉反而破坏一致性。</li>
+    <li>功能与市面同类产品同构（背单词、SRS、错题本、养成）不受著作权保护，不是整改项。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>八、评分与结论</h2>
+  <table>
+    <tr><th style="width:24%">维度</th><th class="num" style="width:10%">得分</th><th>依据</th></tr>
+    <tr><td>真实性</td><td class="num v-ok">98</td><td>19877/19878 行逐字溯源，119 文件段全对应，零编造，自检 72 断言 + 20/20 页面通过</td></tr>
+    <tr><td>外部相似度</td><td class="num v-ok">95</td><td>2 个同类仓库 / 34934 行，N=8、N=12 零命中；整行命中全是 CSS 与框架样板</td></tr>
+    <tr><td>内部重复度</td><td class="num v-ok">92</td><td>N=12 重复 1.09%，最长块 6 行且为 flex 布局样板</td></tr>
+    <tr><td>AI 痕迹（代码层）</td><td class="num v-ok">82</td><td>无机械命名、无套话注释、无空 catch、页面骨架按需；仅「过于干净」一项偏弱</td></tr>
+    <tr><td>AI 痕迹（内容/文档层）</td><td class="num v-warn">62</td><td>119 文件头模板、25 节标题、1158 中文常量、76 条独立生成词条文案、文档排比工整</td></tr>
+    <tr><td>形式合规</td><td class="num v-bad">52</td><td>60×50 与页眉通过，但有效代码仅 83.6%、首尾未闭合、断点在 CSS 中途、含非代码标记</td></tr>
+    <tr><td>权属 / 许可证</td><td class="num v-bad">40</td><td>GPL-3.0 词库被排除却为运行时核心，功能—代码不一致，权利说明存在瑕疵</td></tr>
+    <tr><td><strong>综合</strong></td><td class="num"><strong>76</strong></td><td><strong>代码原创性过关；材料与权属不达标，先做 P0 再提交</strong></td></tr>
+  </table>
+  <p style="margin-top:16px">一句话：<strong>这份代码的「内容」没问题，「提交材料」和「权属声明」有问题。</strong>与上一份 GraphScribe 材料相反——那次是形式合规缺项、命名有机器痕迹；这次形式骨架已自动搭好，卡点换成了有效行数、代码闭合和 GPL 词库。</p>
+</section>
+
+<footer>
+  检测方法可复现：<span class="mono">python tools/ai_detect.py</span>（离线指标）；外部比对脚本与下载源码保留在 <span class="mono">.dupcheck/src/</span>。<br>
+  <strong>局限：</strong>① 外部比对只覆盖 2 个可公开下载的同类仓库（34934 行），不是全 GitHub，私有仓库不可见；② AI 痕迹为统计特征推断，不是 AI 检测器的判定输出，不能证明「是 / 不是 AI 生成」；③ 未做中文短语的全网精确检索（搜索引擎对中文长句短语匹配不可靠），不编造全网命中率；④ 许可证适用、GPL 分发义务与承诺书签署属法律判断，需法务或代理机构确认；⑤ 功能描述字数、截图真实性等以中国版权保护中心最新官方要求为准。<br>
+  本报告为离线自检 + 有限联网比对结果，不等同于官方审查结论，也不构成法律意见。
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,719 @@
+.pet-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+
+.pet-scale {
+  width: 220rpx;
+  height: 220rpx;
+  transform-origin: center bottom;
+}
+
+.pet {
+  position: relative;
+  width: 220rpx;
+  height: 220rpx;
+}
+
+.pet-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2rpx;
+  width: 150rpx;
+  height: 24rpx;
+  margin-left: -75rpx;
+  background: rgba(59, 46, 42, 0.14);
+  border-radius: 50%;
+}
+
+.body {
+  position: absolute;
+  border: 4rpx solid #3b2e2a;
+  background: var(--pc, #ffd166);
+  box-shadow: inset -10rpx -12rpx 0 rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+
+/* ---------------- 芽芽 ---------------- */
+.sprout-stem {
+  position: absolute;
+  left: 107rpx;
+  top: 16rpx;
+  width: 8rpx;
+  height: 48rpx;
+  background: #2f8f63;
+  border: 3rpx solid #3b2e2a;
+  border-radius: 999rpx;
+  z-index: 1;
+}
+
+.sprout-leaf {
+  position: absolute;
+  top: 4rpx;
+  width: 50rpx;
+  height: 36rpx;
+  background: var(--pa, #6fd39b);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 100% 0 100% 0;
+  z-index: 1;
+}
+
+.sprout-leaf-l {
+  left: 60rpx;
+  transform: rotate(-18deg);
+}
+
+.sprout-leaf-r {
+  right: 60rpx;
+  transform: scaleX(-1) rotate(-18deg);
+}
+
+.stage-2 .sprout-leaf {
+  width: 56rpx;
+  height: 38rpx;
+}
+
+.stage-3 .sprout-leaf,
+.stage-4 .sprout-leaf {
+  width: 62rpx;
+  height: 42rpx;
+  top: 0;
+}
+
+.sprout-body {
+  left: 20rpx;
+  top: 52rpx;
+  width: 180rpx;
+  height: 152rpx;
+  border-radius: 48% 52% 44% 56% / 56% 50% 50% 44%;
+}
+
+.sprout-foot {
+  position: absolute;
+  bottom: 10rpx;
+  width: 38rpx;
+  height: 22rpx;
+  background: var(--pc, #ffd166);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.sprout-foot-l {
+  left: 58rpx;
+}
+
+.sprout-foot-r {
+  right: 58rpx;
+}
+
+.sprout-spark {
+  position: absolute;
+  right: 30rpx;
+  top: 62rpx;
+  color: #fff;
+  font-size: 30rpx;
+  text-shadow: 0 0 12rpx rgba(255, 255, 255, 0.9);
+  animation: petPulse 1.8s infinite;
+  z-index: 7;
+}
+
+/* ---------------- 乌乌 ---------------- */
+.ink-tail {
+  position: absolute;
+  right: 0;
+  bottom: 44rpx;
+  width: 46rpx;
+  height: 78rpx;
+  background: var(--pc, #4b5563);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 60% 40% 50% 50%;
+  transform: rotate(24deg);
+  z-index: 1;
+}
+
+.ink-ear {
+  position: absolute;
+  top: 24rpx;
+  width: 56rpx;
+  height: 64rpx;
+  background: var(--pc, #4b5563);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50% 50% 18% 18%;
+  z-index: 1;
+}
+
+.ink-ear-l {
+  left: 36rpx;
+  transform: rotate(-18deg);
+}
+
+.ink-ear-r {
+  right: 36rpx;
+  transform: rotate(18deg);
+}
+
+.ink-ear::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 16rpx;
+  width: 22rpx;
+  height: 30rpx;
+  margin-left: -11rpx;
+  background: var(--pa, #a78bfa);
+  border-radius: 50% 50% 30% 30%;
+  opacity: 0.75;
+}
+
+.ink-body {
+  left: 25rpx;
+  top: 50rpx;
+  width: 170rpx;
+  height: 156rpx;
+  border-radius: 46% 54% 48% 52% / 58% 56% 44% 42%;
+}
+
+.ink-drip {
+  position: absolute;
+  bottom: 6rpx;
+  width: 18rpx;
+  height: 22rpx;
+  background: var(--pa, #a78bfa);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  z-index: 3;
+}
+
+.ink-drip-1 {
+  left: 62rpx;
+}
+
+.ink-drip-2 {
+  right: 70rpx;
+  height: 16rpx;
+}
+
+.ink-horn {
+  position: absolute;
+  top: 28rpx;
+  width: 12rpx;
+  height: 40rpx;
+  background: var(--pa, #a78bfa);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 999rpx;
+  z-index: 4;
+}
+
+.ink-horn-l {
+  left: 72rpx;
+  transform: rotate(-22deg);
+}
+
+.ink-horn-r {
+  right: 72rpx;
+  transform: rotate(22deg);
+}
+
+.ink-aura {
+  position: absolute;
+  left: 14rpx;
+  top: 30rpx;
+  width: 192rpx;
+  height: 180rpx;
+  border: 3rpx dashed var(--pa, #a78bfa);
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: petSpin 12s linear infinite;
+  z-index: 0;
+}
+
+.stage-4 .ink-body {
+  box-shadow: inset -10rpx -12rpx 0 rgba(0, 0, 0, 0.18), 0 0 26rpx var(--pa);
+}
+
+/* ---------------- 泡泡 ---------------- */
+.whale-spout {
+  position: absolute;
+  left: 102rpx;
+  top: 12rpx;
+  width: 18rpx;
+  height: 42rpx;
+  background: #dff4ff;
+  border: 3rpx solid #3b2e2a;
+  border-radius: 999rpx;
+  z-index: 1;
+}
+
+.spout-drop {
+  position: absolute;
+  left: -14rpx;
+  top: -20rpx;
+  width: 40rpx;
+  height: 26rpx;
+  background: #dff4ff;
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+}
+
+.whale-tail {
+  position: absolute;
+  left: -2rpx;
+  top: 116rpx;
+  width: 58rpx;
+  height: 66rpx;
+  background: var(--pc, #7fb8ff);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 60% 30% 50% 50%;
+  transform: rotate(-24deg);
+  z-index: 1;
+}
+
+.whale-fin {
+  position: absolute;
+  top: 150rpx;
+  width: 42rpx;
+  height: 24rpx;
+  background: var(--pa, #4ea8de);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.whale-fin-l {
+  left: 4rpx;
+  transform: rotate(-20deg);
+}
+
+.whale-fin-r {
+  right: 4rpx;
+  transform: rotate(20deg);
+}
+
+.whale-body {
+  left: 14rpx;
+  top: 54rpx;
+  width: 192rpx;
+  height: 144rpx;
+  border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
+}
+
+.whale-belly {
+  position: absolute;
+  left: 46rpx;
+  top: 128rpx;
+  width: 128rpx;
+  height: 58rpx;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.whale-star {
+  position: absolute;
+  right: 36rpx;
+  top: 56rpx;
+  color: #fff;
+  font-size: 30rpx;
+  text-shadow: 0 0 12rpx rgba(255, 255, 255, 0.9);
+  animation: petPulse 2s infinite;
+  z-index: 6;
+}
+
+.whale-ring {
+  position: absolute;
+  left: 10rpx;
+  top: 18rpx;
+  width: 200rpx;
+  height: 190rpx;
+  border: 3rpx dashed var(--pa, #4ea8de);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: petSpin 14s linear infinite;
+  z-index: 0;
+}
+
+/* ---------------- 咔哒 ---------------- */
+.turtle-leg {
+  position: absolute;
+  width: 34rpx;
+  height: 24rpx;
+  background: var(--pc, #84a98c);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.turtle-leg-1 {
+  left: 36rpx;
+  bottom: 28rpx;
+}
+
+.turtle-leg-2 {
+  right: 36rpx;
+  bottom: 28rpx;
+}
+
+.turtle-leg-3 {
+  left: 54rpx;
+  bottom: 14rpx;
+}
+
+.turtle-leg-4 {
+  right: 54rpx;
+  bottom: 14rpx;
+}
+
+.turtle-tail {
+  position: absolute;
+  left: 94rpx;
+  bottom: 18rpx;
+  width: 24rpx;
+  height: 26rpx;
+  background: var(--pc, #84a98c);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.turtle-shell {
+  position: absolute;
+  left: 26rpx;
+  top: 58rpx;
+  width: 168rpx;
+  height: 132rpx;
+  background: var(--pc, #84a98c);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50% 50% 38% 38% / 72% 72% 28% 28%;
+  box-shadow: inset 0 -14rpx 0 rgba(0, 0, 0, 0.1), inset 0 0 0 12rpx rgba(255, 255, 255, 0.18);
+  z-index: 2;
+}
+
+.turtle-gear {
+  position: absolute;
+  left: 82rpx;
+  top: 88rpx;
+  width: 54rpx;
+  height: 54rpx;
+  border: 8rpx dashed var(--pa, #ffd166);
+  border-radius: 50%;
+  z-index: 3;
+  animation: petSpin 9s linear infinite;
+}
+
+.gear-core {
+  position: absolute;
+  left: 13rpx;
+  top: 13rpx;
+  width: 28rpx;
+  height: 28rpx;
+  background: var(--pa, #ffd166);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+}
+
+.turtle-head {
+  position: absolute;
+  left: 74rpx;
+  top: 20rpx;
+  width: 76rpx;
+  height: 72rpx;
+  background: var(--pc, #84a98c);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.turtle-antenna {
+  position: absolute;
+  left: 108rpx;
+  top: 2rpx;
+  width: 6rpx;
+  height: 26rpx;
+  background: #3b2e2a;
+  border-radius: 999rpx;
+  z-index: 5;
+}
+
+.antenna-dot {
+  position: absolute;
+  left: -6rpx;
+  top: -12rpx;
+  width: 18rpx;
+  height: 18rpx;
+  background: var(--pa, #ffd166);
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+  animation: petPulse 1.6s infinite;
+}
+
+.stage-3 .turtle-shell {
+  box-shadow: inset 0 -14rpx 0 rgba(0, 0, 0, 0.1), inset 0 0 0 12rpx rgba(255, 255, 255, 0.18),
+    0 0 24rpx var(--pa);
+}
+
+/* ---------------- 阿燎 ---------------- */
+.fox-tail {
+  position: absolute;
+  right: 0;
+  bottom: 46rpx;
+  width: 54rpx;
+  height: 100rpx;
+  background: linear-gradient(180deg, var(--pa, #ff5c5c), var(--pc, #ff9f1c));
+  border: 4rpx solid #3b2e2a;
+  border-radius: 60% 40% 50% 50%;
+  transform: rotate(22deg);
+  z-index: 1;
+}
+
+.fox-tail-2 {
+  right: 10rpx;
+  bottom: 58rpx;
+  transform: rotate(42deg);
+  opacity: 0.9;
+}
+
+.fox-tail-3 {
+  right: 20rpx;
+  bottom: 70rpx;
+  transform: rotate(62deg);
+  opacity: 0.8;
+}
+
+.fox-ear {
+  position: absolute;
+  top: 18rpx;
+  width: 58rpx;
+  height: 78rpx;
+  background: var(--pc, #ff9f1c);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50% 50% 12% 12%;
+  z-index: 1;
+}
+
+.fox-ear-l {
+  left: 40rpx;
+  transform: rotate(-14deg);
+}
+
+.fox-ear-r {
+  right: 40rpx;
+  transform: rotate(14deg);
+}
+
+.fox-ear::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18rpx;
+  width: 24rpx;
+  height: 40rpx;
+  margin-left: -12rpx;
+  background: var(--pa, #ff5c5c);
+  border-radius: 50% 50% 30% 30%;
+  opacity: 0.75;
+}
+
+.fox-body {
+  left: 32rpx;
+  top: 54rpx;
+  width: 160rpx;
+  height: 148rpx;
+  border-radius: 46% 54% 42% 58% / 56% 56% 44% 44%;
+}
+
+.fox-muzzle {
+  position: absolute;
+  left: 74rpx;
+  top: 126rpx;
+  width: 76rpx;
+  height: 50rpx;
+  background: #fff7e8;
+  border: 3rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.fox-ember {
+  position: absolute;
+  right: 34rpx;
+  top: 66rpx;
+  color: var(--pa, #ff5c5c);
+  font-size: 30rpx;
+  text-shadow: 0 0 14rpx var(--pa);
+  animation: petPulse 1.5s infinite;
+  z-index: 6;
+}
+
+.stage-4 .fox-body {
+  box-shadow: inset -10rpx -12rpx 0 rgba(0, 0, 0, 0.08), 0 0 28rpx var(--pa);
+}
+
+/* ---------------- 共用表情 ---------------- */
+.face {
+  position: absolute;
+  width: 96rpx;
+  height: 82rpx;
+  z-index: 6;
+}
+
+.face-sprout {
+  left: 62rpx;
+  top: 94rpx;
+  transform: scale(1.08);
+}
+
+.face-ink {
+  left: 62rpx;
+  top: 98rpx;
+  transform: scale(1.04);
+}
+
+.face-whale {
+  left: 58rpx;
+  top: 110rpx;
+  transform: scale(0.96);
+}
+
+.face-turtle {
+  left: 86rpx;
+  top: 38rpx;
+  transform: scale(0.7);
+}
+
+.face-fox {
+  left: 64rpx;
+  top: 104rpx;
+  transform: scale(1);
+}
+
+.eye {
+  position: absolute;
+  top: 10rpx;
+  width: 18rpx;
+  height: 24rpx;
+  background: #3b2e2a;
+  border-radius: 50%;
+  animation: petBlink 4.6s infinite;
+}
+
+.eye-l {
+  left: 14rpx;
+}
+
+.eye-r {
+  right: 14rpx;
+}
+
+.glint {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: 6rpx;
+  height: 6rpx;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.blush {
+  position: absolute;
+  top: 42rpx;
+  width: 22rpx;
+  height: 12rpx;
+  background: rgba(255, 122, 158, 0.5);
+  border-radius: 50%;
+}
+
+.blush-l {
+  left: 0;
+}
+
+.blush-r {
+  right: 0;
+}
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  top: 42rpx;
+  width: 28rpx;
+  height: 14rpx;
+  margin-left: -14rpx;
+  border-bottom: 4rpx solid #3b2e2a;
+  border-radius: 0 0 60% 60%;
+}
+
+.mouth.is-sad {
+  height: 10rpx;
+  border-bottom: none;
+  border-top: 4rpx solid #3b2e2a;
+  border-radius: 60% 60% 0 0;
+  top: 48rpx;
+}
+
+/* ---------------- 配饰与动画 ---------------- */
+.pet-acc {
+  position: absolute;
+  left: 50%;
+  top: -12rpx;
+  margin-left: -30rpx;
+  font-size: 56rpx;
+  z-index: 9;
+  transform: rotate(-8deg);
+}
+
+.species-turtle .pet-acc {
+  top: -30rpx;
+}
+
+.species-whale .pet-acc {
+  top: -4rpx;
+}
+
+.species-ink .pet-acc {
+  top: -22rpx;
+}
+
+.branch-mark {
+  position: absolute;
+  left: 30rpx;
+  bottom: 28rpx;
+  z-index: 8;
+  font-size: 24rpx;
+  color: var(--pa);
+  text-shadow: 0 0 10rpx var(--pa);
+  animation: petPulse 2.2s infinite;
+}
+
+@keyframes petBlink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes petPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes petSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

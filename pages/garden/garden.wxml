@@ -1,0 +1,131 @@
+<view class="page garden-page">
+  <view class="garden-hd">
+    <view>
+      <view class="h1">知识花园</view>
+      <view class="sub">每掌握一个单词，就有一朵花盛开</view>
+    </view>
+    <view class="garden-count">
+      <text class="garden-count-num">{{count}}</text>
+      <text class="garden-count-label">朵花</text>
+    </view>
+  </view>
+
+  <!-- 花园场景 -->
+  <view class="garden-scene">
+    <view class="sun"></view>
+    <view class="cloud c1"></view>
+    <view class="cloud c2"></view>
+
+    <view wx:if="{{decorList[1]}}" class="decor decor-butterfly">🦋</view>
+    <view wx:if="{{decorList[2]}}" class="decor decor-fence">🪵</view>
+    <view wx:if="{{decorList[3]}}" class="decor decor-lantern">🏮</view>
+    <view wx:if="{{decorList[4]}}" class="decor decor-fountain">⛲</view>
+    <view wx:if="{{decorList[5]}}" class="decor decor-rainbow">🌈</view>
+
+    <view class="garden-grid">
+      <view
+        wx:for="{{cells}}"
+        wx:key="id"
+        class="plot {{item.empty ? 'is-empty' : ''}}"
+        data-index="{{index}}"
+        bindtap="openPlot"
+      >
+        <block wx:if="{{!item.empty}}">
+          <view class="flower">
+            <view class="flower-head" style="--fc:{{item.color}};">
+              <view class="petal p1"></view>
+              <view class="petal p2"></view>
+              <view class="petal p3"></view>
+              <view class="petal p4"></view>
+              <view class="petal p5"></view>
+              <view class="flower-core"></view>
+            </view>
+            <view class="flower-stem">
+              <view class="flower-leaf"></view>
+            </view>
+          </view>
+          <text class="plot-word">{{item.word}}</text>
+        </block>
+        <text wx:else class="plot-plus">+</text>
+      </view>
+    </view>
+
+    <view class="ground"></view>
+  </view>
+
+  <!-- 花园数据 -->
+  <view class="garden-stats">
+    <view class="gstat">
+      <text class="num">{{count}}</text>
+      <text class="gstat-label">盛开的花朵</text>
+    </view>
+    <view class="gstat-divider"></view>
+    <view class="gstat">
+      <text class="num">{{decorList.length}}</text>
+      <text class="gstat-label">已解锁装饰</text>
+    </view>
+    <view class="gstat-divider"></view>
+    <view class="gstat">
+      <text class="num">{{stats.streak}}</text>
+      <text class="gstat-label">连续打卡</text>
+    </view>
+  </view>
+
+  <!-- 下一装饰 -->
+  <view wx:if="{{nextDecor}}" class="next-card">
+    <view class="next-hd">
+      <text class="next-title">🎁 下一件花园装饰</text>
+      <text class="next-name">{{nextDecor.name}}</text>
+    </view>
+    <view class="bar bar-thin bar-green">
+      <view class="bar-inner" style="width:{{nextPercent}}%"></view>
+    </view>
+    <text class="next-tip">再掌握 {{nextDecor.need - count}} 个单词解锁（{{count}}/{{nextDecor.need}}）</text>
+  </view>
+  <view wx:else class="next-card is-done">
+    <text class="next-title">🏆 花园装饰已全部解锁</text>
+    <text class="next-tip">这座花园已经开满啦，继续学习会种出更多花。</text>
+  </view>
+
+  <!-- 装饰墙 -->
+  <view class="decor-card">
+    <view class="decor-title">装饰图鉴</view>
+    <view class="decor-row">
+      <view wx:for="{{decorList}}" wx:key="id" class="decor-item">
+        <text class="decor-emoji">{{item.emoji}}</text>
+        <text class="decor-name">{{item.name}}</text>
+      </view>
+      <view wx:if="{{decorList.length === 0}}" class="decor-empty">还没有装饰，先去种花吧</view>
+    </view>
+  </view>
+
+  <view class="garden-tip">
+    <text class="garden-tip-title">🌱 花园小秘密</text>
+    <text class="garden-tip-text">单词熟练度达到 4 级（连续答对并跨过复习间隔）才会开花。已经开花的单词，即使后来答错也不会凋谢，只会暂时合拢花瓣。</text>
+  </view>
+
+  <view class="garden-actions">
+    <view class="btn btn-primary flex1" bindtap="goStudy">去种一朵花</view>
+    <view class="btn btn-ghost flex1" bindtap="goPet">看看词灵</view>
+  </view>
+
+  <!-- 花朵详情 -->
+  <view wx:if="{{showDetail}}" class="mask" bindtap="closeDetail">
+    <view class="modal flower-modal" catchtap="noop">
+      <view class="flower-big">
+        <view class="flower-head big" style="--fc:{{detail.color}};">
+          <view class="petal p1"></view>
+          <view class="petal p2"></view>
+          <view class="petal p3"></view>
+          <view class="petal p4"></view>
+          <view class="petal p5"></view>
+          <view class="flower-core"></view>
+        </view>
+      </view>
+      <view class="modal-title">{{detail.word}}</view>
+      <view class="modal-desc">{{detail.cn}}</view>
+      <view class="flower-meta">种植于 {{detail.dateText}}</view>
+      <view class="btn btn-primary btn-block mt-24" bindtap="closeDetail">继续逛花园</view>
+    </view>
+  </view>
+</view>

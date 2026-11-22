@@ -1,0 +1,95 @@
+<view class="page puzzle-page">
+  <!-- 顶部状态 -->
+  <view class="puzzle-top">
+    <view class="progress-wrap">
+      <view class="bar bar-thin bar-purple">
+        <view class="bar-inner" style="width:{{progress}}%"></view>
+      </view>
+      <text class="progress-text">{{index + 1}} / {{total}}</text>
+    </view>
+    <view class="score-chip">⭐ {{score}}</view>
+    <view wx:if="{{combo > 1}}" class="combo-chip">连击 x{{combo}}</view>
+  </view>
+
+  <block wx:if="{{phase === 'play'}}">
+    <!-- 目标词 -->
+    <view class="target-card">
+      <view class="target-tag">拼出这个单词</view>
+      <view class="target-cn">{{level.word.cn}}</view>
+      <view class="target-meta">{{level.word.pos}} · {{level.word.phonetic}}</view>
+      <view class="slots {{shake ? 'is-shake' : ''}}">
+        <view
+          wx:for="{{slots}}"
+          wx:key="key"
+          class="slot {{item.piece ? 'is-filled' : ''}}"
+        >
+          <text wx:if="{{item.piece}}" class="slot-text">{{item.piece.t}}</text>
+          <text wx:else class="slot-empty">?</text>
+        </view>
+        <view class="slot-plus">+</view>
+      </view>
+      <view class="target-hint">词根之间可能有干扰项，按正确顺序点击</view>
+    </view>
+
+    <!-- 碎片池 -->
+    <view class="pool-title">
+      <text class="pool-label">词根碎片</text>
+      <text class="pool-sub">已选 {{built.length}}/{{slots.length}}</text>
+    </view>
+    <view class="pool">
+      <view
+        wx:for="{{pool}}"
+        wx:key="uid"
+        class="piece {{item.used ? 'is-used' : ''}} {{hintUid === item.uid ? 'is-hint' : ''}}"
+        data-uid="{{item.uid}}"
+        bindtap="tapPiece"
+      >
+        <text>{{item.t}}</text>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="controls">
+      <view class="ctrl" bindtap="undo">↩ 撤销</view>
+      <view class="ctrl" bindtap="clearAll">✕ 清空</view>
+      <view class="ctrl" bindtap="hint">💡 提示</view>
+    </view>
+
+    <view class="btn btn-primary btn-block check-btn" bindtap="check">检查拼写</view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:else>
+    <view class="done-card">
+      <view class="sticker sticker-purple">本轮完成</view>
+      <view class="done-emoji">🧩</view>
+      <view class="done-score">{{score}}</view>
+      <view class="done-label">本轮得分</view>
+      <view class="done-best">历史最佳 {{best}} 分</view>
+      <view class="done-tip">词根拆解能帮你把「记一个词」变成「记一串词」。明天再来挑战更高连击吧！</view>
+      <view class="btn btn-primary btn-block" bindtap="restart">再来一轮</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="goHome">回到小岛</view>
+    </view>
+  </block>
+
+  <!-- 拼写成功 -->
+  <view wx:if="{{showResult}}" class="mask" catchtap="noop">
+    <view class="modal result-modal">
+      <view class="result-spark">✦</view>
+      <view class="result-title">拼对啦！ +{{gained}} 分</view>
+      <view class="result-word">{{lastLevel.word.word}}</view>
+      <view class="result-phonetic">{{lastLevel.word.phonetic}} · {{lastLevel.word.cn}}</view>
+      <view class="result-example">{{lastLevel.word.en}}</view>
+      <view class="result-root">
+        <view wx:for="{{lastLevel.roots}}" wx:key="t" class="result-root-item">
+          <text class="result-root-t">{{item.t}}</text>
+          <text class="result-root-m">{{item.m}}</text>
+        </view>
+      </view>
+      <view class="result-tip">💡 {{lastLevel.word.tip}}</view>
+      <view class="btn btn-primary btn-block mt-24" bindtap="next">
+        {{index + 1 >= total ? '查看本轮成绩' : '下一关'}}
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,111 @@
+<view class="page review-page">
+  <!-- 答题 -->
+  <block wx:if="{{phase === 'quiz'}}">
+    <view class="quiz-top">
+      <view class="close-btn" bindtap="back">✕</view>
+      <view class="progress-wrap">
+        <view class="bar bar-thin">
+          <view class="bar-inner bar-green" style="width:{{progress}}%"></view>
+        </view>
+        <text class="progress-text">{{index + 1}} / {{total}}</text>
+      </view>
+      <view class="score-chip">✓ {{stats.correct}}</view>
+    </view>
+
+    <view class="quiz-card">
+      <view class="quiz-tag">到期复习</view>
+      <view class="quiz-word" style="font-size:{{wordSize}}rpx;">{{word.word}}</view>
+      <view class="quiz-phonetic" wx:if="{{word.phonetic}}">
+        <text>{{word.phonetic}}</text>
+        <text class="quiz-speak" bindtap="speak">🔊</text>
+      </view>
+      <view class="quiz-ask">它的中文意思是？</view>
+    </view>
+
+    <view class="options">
+      <view
+        wx:for="{{options}}"
+        wx:key="key"
+        class="option {{answered && index === answer ? 'is-correct' : ''}} {{answered && index === selected && index !== answer ? 'is-wrong' : ''}}"
+        data-index="{{index}}"
+        bindtap="select"
+      >
+        <view class="option-letter">{{item.letter}}</view>
+        <text class="option-text">{{item.text}}</text>
+        <text wx:if="{{answered && index === answer}}" class="option-mark">✓</text>
+        <text wx:elif="{{answered && index === selected}}" class="option-mark">✕</text>
+      </view>
+    </view>
+
+    <!-- 解析 -->
+    <view wx:if="{{answered}}" class="answer-box {{isCorrect ? 'is-right' : 'is-wrong'}}">
+      <view class="answer-hd">
+        <text class="answer-emoji">{{isCorrect ? '🎉' : '🩺'}}</text>
+        <text class="answer-title">{{isCorrect ? '答对啦' : '再记一遍'}}</text>
+        <text class="answer-word">{{word.word}}</text>
+      </view>
+      <view class="answer-cn">{{word.pos}} {{word.cn}}</view>
+      <view class="answer-en" wx:if="{{word.en}}">{{word.en}}</view>
+      <view class="answer-tip" wx:if="{{word.tip}}">💡 {{word.tip}}</view>
+    </view>
+
+    <view wx:if="{{answered}}" class="btn btn-primary btn-block next-btn" bindtap="next">
+      {{index + 1 >= total ? '查看本次结果' : '下一题'}}
+    </view>
+  </block>
+
+  <!-- 无到期词 -->
+  <block wx:elif="{{phase === 'empty'}}">
+    <empty-state emoji="🌤️" title="今天没有到期单词" desc="间隔复习会让记忆更牢，先去学几个新词吧">
+      <view class="row gap-16">
+        <view class="btn btn-primary btn-sm" bindtap="goStudy">学新词</view>
+        <view class="btn btn-ghost btn-sm" bindtap="goHome">回小岛</view>
+      </view>
+    </empty-state>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:else>
+    <view class="done-wrap">
+      <view class="done-card">
+        <view class="sticker sticker-green">复习完成</view>
+        <view class="done-score">{{result.accuracy}}<text class="done-score-unit">%</text></view>
+        <view class="done-label">本次正确率</view>
+        <view class="done-comment">{{result.comment}}</view>
+
+        <view class="result-grid">
+          <view class="result-cell">
+            <text class="num">{{result.total}}</text>
+            <text class="result-label">复习词数</text>
+          </view>
+          <view class="result-cell">
+            <text class="num result-green">{{result.correct}}</text>
+            <text class="result-label">答对</text>
+          </view>
+          <view class="result-cell">
+            <text class="num result-red">{{result.wrong}}</text>
+            <text class="result-label">答错</text>
+          </view>
+          <view class="result-cell">
+            <text class="num">+{{result.exp}}</text>
+            <text class="result-label">词力</text>
+          </view>
+        </view>
+
+        <view wx:if="{{wrongList.length}}" class="wrong-box">
+          <view class="wrong-title">本次错词</view>
+          <view wx:for="{{wrongList}}" wx:key="word" class="wrong-row">
+            <text class="wrong-word">{{item.word}}</text>
+            <text class="wrong-cn">{{item.cn}}</text>
+          </view>
+        </view>
+
+        <view class="done-btns">
+          <view class="btn btn-primary btn-block" bindtap="again">再来一组</view>
+          <view wx:if="{{wrongList.length}}" class="btn btn-ghost btn-block" bindtap="goWrongbook">查看错题病历</view>
+          <view class="btn btn-ghost btn-block" bindtap="goHome">回到小岛</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

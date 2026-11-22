@@ -1,0 +1,345 @@
+/* 情景对话 */
+.dialogue-page {
+  padding-bottom: 50rpx;
+}
+
+.scene-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+}
+
+.scene-row {
+  display: inline-flex;
+  gap: 12rpx;
+  padding: 2rpx;
+}
+
+.scene-chip {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 18rpx;
+  background: #fffdf7;
+  border: 3rpx solid rgba(59, 46, 42, 0.22);
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.scene-chip.is-active {
+  background: var(--pink);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.scene-chip-emoji {
+  font-size: 24rpx;
+}
+
+.scene-card {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 18rpx 22rpx;
+  background: var(--pink-soft);
+  border: 4rpx solid var(--ink);
+  border-radius: 28rpx;
+  box-shadow: 0 6rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.scene-emoji {
+  font-size: 42rpx;
+}
+
+.scene-title {
+  font-size: 27rpx;
+  font-weight: 800;
+}
+
+.scene-sub {
+  font-size: 19rpx;
+  color: var(--ink-soft);
+}
+
+.scene-score {
+  flex: none;
+  padding: 4rpx 12rpx;
+  background: #fff;
+  border: 2rpx solid var(--ink);
+  border-radius: 999rpx;
+  font-size: 19rpx;
+  font-weight: 800;
+}
+
+/* 聊天窗口 */
+.chat {
+  height: 660rpx;
+  margin-top: 18rpx;
+  background: linear-gradient(180deg, #eaf6ff 0%, #fff7e8 100%);
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: inset 0 0 0 6rpx rgba(255, 255, 255, 0.5);
+}
+
+.chat-inner {
+  padding: 20rpx 20rpx 10rpx;
+}
+
+.msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+  margin-bottom: 18rpx;
+}
+
+.msg-me {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 64rpx;
+  height: 64rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 3rpx 0 rgba(59, 46, 42, 0.2);
+}
+
+.avatar-me {
+  background: var(--yellow-soft);
+}
+
+.bubble-wrap {
+  max-width: 76%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.msg-me .bubble-wrap {
+  align-items: flex-end;
+}
+
+.bubble {
+  padding: 14rpx 18rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 6rpx 22rpx 22rpx 22rpx;
+  box-shadow: 0 4rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.bubble-me {
+  background: var(--yellow-soft);
+  border-radius: 22rpx 6rpx 22rpx 22rpx;
+}
+
+.bubble-en {
+  display: block;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.bubble-cn {
+  display: block;
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 4rpx;
+}
+
+.bubble-tip {
+  font-size: 15rpx;
+  color: var(--muted);
+  margin-top: 3rpx;
+  transform: scale(0.92);
+}
+
+.chat-pad {
+  height: 10rpx;
+}
+
+/* 回应 */
+.reply-panel {
+  margin-top: 18rpx;
+}
+
+.reply-title {
+  font-size: 21rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin: 0 4rpx 10rpx;
+}
+
+.reply-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 16rpx 18rpx;
+  margin-bottom: 10rpx;
+  background: #fffdf7;
+  border: 3rpx solid var(--ink);
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 0 rgba(59, 46, 42, 0.14);
+}
+
+.reply-option:active {
+  transform: translateY(3rpx);
+  box-shadow: 0 1rpx 0 rgba(59, 46, 42, 0.14);
+}
+
+.reply-letter {
+  width: 38rpx;
+  height: 38rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pink-soft);
+  border: 2rpx solid var(--ink);
+  border-radius: 10rpx;
+  font-size: 19rpx;
+  font-weight: 800;
+}
+
+.reply-en {
+  display: block;
+  font-size: 23rpx;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.reply-cn {
+  display: block;
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 3rpx;
+}
+
+/* 反馈 */
+.feedback {
+  margin-top: 18rpx;
+  padding: 20rpx;
+  background: var(--yellow-soft);
+  border: 3rpx solid var(--ink);
+  border-radius: 24rpx;
+  box-shadow: 0 6rpx 0 rgba(59, 46, 42, 0.14);
+}
+
+.feedback-hd {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.feedback-emoji {
+  font-size: 28rpx;
+}
+
+.feedback-title {
+  flex: 1;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.feedback-score {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.feedback-tip {
+  display: block;
+  font-size: 21rpx;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 12rpx 0 18rpx;
+}
+
+/* 结算 */
+.done-card {
+  margin-top: 14rpx;
+  padding: 40rpx 30rpx 32rpx;
+  background: #fffdf7;
+  border: 5rpx solid var(--ink);
+  border-radius: 40rpx;
+  box-shadow: 0 14rpx 0 rgba(59, 46, 42, 0.16);
+  text-align: center;
+}
+
+.done-stars {
+  display: flex;
+  justify-content: center;
+  gap: 10rpx;
+  margin-top: 18rpx;
+}
+
+.star {
+  font-size: 48rpx;
+  color: #e8ddcc;
+}
+
+.star.is-on {
+  color: var(--yellow);
+  text-shadow: 0 3rpx 0 rgba(59, 46, 42, 0.3);
+}
+
+.done-score {
+  font-size: 88rpx;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--pink);
+  margin-top: 8rpx;
+}
+
+.done-unit {
+  font-size: 30rpx;
+  color: var(--muted);
+}
+
+.done-label {
+  font-size: 20rpx;
+  color: var(--muted);
+}
+
+.done-comment {
+  margin-top: 14rpx;
+  font-size: 23rpx;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.phrase-box {
+  margin: 22rpx 0;
+  padding: 16rpx;
+  background: var(--pink-soft);
+  border-radius: 18rpx;
+  text-align: left;
+}
+
+.phrase-title {
+  font-size: 19rpx;
+  font-weight: 800;
+  color: #b03c63;
+}
+
+.phrase-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 8rpx;
+}
+
+.phrase {
+  padding: 3rpx 12rpx;
+  background: #fff;
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 999rpx;
+  font-size: 18rpx;
+}

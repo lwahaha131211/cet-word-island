@@ -1,0 +1,300 @@
+/* 错题病历本 */
+.wrong-page {
+  padding-bottom: 80rpx;
+}
+
+.record-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 30rpx 28rpx;
+  background: linear-gradient(160deg, #ffe6e6 0%, #ffc9c9 100%);
+  border: 4rpx solid var(--ink);
+  border-radius: 34rpx;
+  box-shadow: 0 10rpx 0 rgba(59, 46, 42, 0.14);
+  overflow: hidden;
+}
+
+.record-left {
+  flex: 1;
+}
+
+.record-label {
+  font-size: 21rpx;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.record-num {
+  font-size: 76rpx;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #c23b3b;
+}
+
+.record-unit {
+  font-size: 24rpx;
+  color: var(--ink-soft);
+  margin-left: 4rpx;
+}
+
+.record-sub {
+  font-size: 19rpx;
+  color: var(--ink-soft);
+}
+
+.record-emoji {
+  font-size: 80rpx;
+  transform: rotate(8deg);
+}
+
+.record-deco {
+  position: absolute;
+  right: -40rpx;
+  top: -60rpx;
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.reason-card {
+  margin-top: 22rpx;
+  padding: 22rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 28rpx;
+  box-shadow: 0 7rpx 0 rgba(59, 46, 42, 0.1);
+}
+
+.reason-title {
+  font-size: 23rpx;
+  font-weight: 800;
+  margin-bottom: 12rpx;
+}
+
+.reason-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.reason-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 6rpx 14rpx;
+  background: var(--cream);
+  border: 2rpx solid rgba(59, 46, 42, 0.15);
+  border-radius: 999rpx;
+}
+
+.reason-name {
+  font-size: 18rpx;
+  color: var(--ink-soft);
+}
+
+.reason-count {
+  font-size: 18rpx;
+  font-weight: 800;
+}
+
+.reason-bar {
+  display: flex;
+  height: 16rpx;
+  margin-top: 14rpx;
+  border-radius: 999rpx;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.reason-seg {
+  height: 100%;
+}
+
+.seg-1 {
+  background: var(--orange);
+}
+
+.seg-2 {
+  background: var(--blue);
+}
+
+.seg-3 {
+  background: var(--red);
+}
+
+.seg-4 {
+  background: var(--purple);
+}
+
+.filter-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin: 22rpx 0 14rpx;
+}
+
+.filter-row {
+  display: inline-flex;
+  gap: 10rpx;
+  padding: 2rpx;
+}
+
+.filter-chip {
+  padding: 7rpx 20rpx;
+  background: #fffdf7;
+  border: 3rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.filter-chip.is-active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.wrong-card {
+  margin-bottom: 16rpx;
+  padding: 22rpx;
+  background: #fffdf7;
+  border: 3rpx solid var(--ink);
+  border-radius: 26rpx;
+  box-shadow: 0 5rpx 0 rgba(59, 46, 42, 0.12);
+}
+
+.wrong-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+}
+
+.wrong-word {
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.wrong-phonetic {
+  font-size: 19rpx;
+  color: var(--muted);
+}
+
+.wrong-cn {
+  display: block;
+  font-size: 21rpx;
+  color: var(--ink-soft);
+  margin-top: 2rpx;
+}
+
+.reason-tag {
+  flex: none;
+  padding: 4rpx 12rpx;
+  border: 2rpx solid rgba(59, 46, 42, 0.25);
+  border-radius: 999rpx;
+  font-size: 17rpx;
+  font-weight: 700;
+}
+
+.bg-orange {
+  background: #ffe7c8;
+  color: #a85a00;
+}
+
+.bg-blue {
+  background: var(--blue-soft);
+  color: #1f6ea8;
+}
+
+.bg-red {
+  background: #ffe3e3;
+  color: #b03c3c;
+}
+
+.bg-purple {
+  background: var(--purple-soft);
+  color: #5c43a5;
+}
+
+.wrong-meta {
+  display: flex;
+  gap: 8rpx;
+  font-size: 17rpx;
+  color: var(--muted);
+  margin-top: 8rpx;
+}
+
+.prescription {
+  margin-top: 12rpx;
+  padding: 16rpx;
+  background: var(--yellow-soft);
+  border: 2rpx dashed rgba(59, 46, 42, 0.25);
+  border-radius: 18rpx;
+  animation: fadeUp 0.2s ease-out;
+}
+
+.prescription-hd {
+  font-size: 20rpx;
+  font-weight: 800;
+  color: var(--orange-deep);
+  margin-bottom: 6rpx;
+}
+
+.prescription-text {
+  display: block;
+  font-size: 20rpx;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.prescription-example {
+  margin-top: 12rpx;
+  padding-top: 10rpx;
+  border-top: 2rpx dashed rgba(59, 46, 42, 0.18);
+}
+
+.pe-label {
+  display: block;
+  font-size: 17rpx;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.pe-text {
+  display: block;
+  font-size: 20rpx;
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: 2rpx;
+}
+
+.prescription-tip {
+  margin-top: 10rpx;
+  font-size: 18rpx;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.wrong-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.wrong-toggle {
+  font-size: 19rpx;
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+.wrong-footer {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 18rpx;
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 0 20rpx;
+}

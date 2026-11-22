@@ -1,0 +1,148 @@
+<view class="page exam-page">
+  <!-- 考前说明 -->
+  <block wx:if="{{phase === 'intro'}}">
+    <view class="exam-hero">
+      <view class="exam-hero-deco"></view>
+      <view class="exam-badge">CET · 模拟</view>
+      <view class="exam-title">四六级模拟考场</view>
+      <view class="exam-sub">20 道高频词汇题 · 15 分钟 · 710 分制估分</view>
+      <view class="exam-score-badge">
+        <text class="exam-score-num">{{lastScore || '--'}}</text>
+        <text class="exam-score-label">上次估分</text>
+      </view>
+    </view>
+
+    <view class="rule-card">
+      <view class="rule-title">📋 考试须知</view>
+      <view class="rule-item"><text class="rule-dot">1</text><text>共 20 题，每题 5 个选项中的 1 个正确答案，选错不扣分。</text></view>
+      <view class="rule-item"><text class="rule-dot">2</text><text>考试时长 15 分钟，倒计时结束自动交卷。</text></view>
+      <view class="rule-item"><text class="rule-dot">3</text><text>交卷后按正确率折算 710 分制，425 分为通过线。</text></view>
+      <view class="rule-item"><text class="rule-dot">4</text><text>答错的题目会自动进入错题病历本。</text></view>
+    </view>
+
+    <view wx:if="{{history.length}}" class="history-card">
+      <view class="chart-hd">
+        <text class="h3">历史成绩</text>
+        <text class="sub">最近 {{history.length}} 次</text>
+      </view>
+      <view wx:for="{{history}}" wx:key="id" class="history-row">
+        <text class="history-date">{{item.date}}</text>
+        <text class="history-detail">{{item.correct}}/{{item.total}}</text>
+        <text class="history-score {{item.pass ? 'is-pass' : ''}}">{{item.score}}</text>
+        <text class="tag {{item.pass ? 'tag-green' : 'tag-pink'}}">{{item.pass ? '通过' : '未通过'}}</text>
+      </view>
+    </view>
+
+    <view class="btn btn-primary btn-block start-btn" bindtap="start">开始考试</view>
+    <view class="exam-tip">建议在安静环境下完成，中途离开会暂停计时。</view>
+  </block>
+
+  <!-- 考试中 -->
+  <block wx:elif="{{phase === 'exam'}}">
+    <view class="exam-top">
+      <view class="timer-box {{timeLeft <= 60 ? 'is-warning' : ''}}">⏱ {{timeText}}</view>
+      <view class="progress-wrap">
+        <view class="bar bar-thin">
+          <view class="bar-inner" style="width:{{(index + 1) / total * 100}}%"></view>
+        </view>
+        <text class="progress-text">{{index + 1}}/{{total}}</text>
+      </view>
+      <view class="sheet-btn" bindtap="toggleSheet">答题卡</view>
+    </view>
+
+    <view class="question-card">
+      <view class="question-tag">第 {{index + 1}} 题 · 词汇理解</view>
+      <view class="question-word" style="font-size:{{questions[index].size}}rpx;">{{questions[index].word.word}}</view>
+      <view class="question-phonetic" wx:if="{{questions[index].word.phonetic || questions[index].word.pos}}">
+        <text wx:if="{{questions[index].word.phonetic}}">{{questions[index].word.phonetic}}</text>
+        <text wx:if="{{questions[index].word.pos}}"> · {{questions[index].word.pos}}</text>
+      </view>
+      <view class="question-ask">选择最符合的中文释义</view>
+    </view>
+
+    <view class="exam-options">
+      <view
+        wx:for="{{questions[qIndex].options}}"
+        wx:key="letter"
+        class="exam-option {{answers[qIndex] === index ? 'is-selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="choose"
+      >
+        <view class="exam-letter">{{item.letter}}</view>
+        <text class="exam-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <view class="exam-nav">
+      <view class="btn btn-ghost btn-sm flex1" bindtap="prev">上一题</view>
+      <view class="btn btn-ghost btn-sm flex1" bindtap="next">下一题</view>
+      <view class="btn btn-primary btn-sm flex1" bindtap="confirmSubmit">交卷</view>
+    </view>
+
+    <view class="answered-tip">已作答 {{answeredCount}}/{{total}} 题</view>
+  </block>
+
+  <!-- 成绩单 -->
+  <block wx:else>
+    <view class="report-card">
+      <view class="report-badge">{{result.pass ? 'PASS' : 'KEEP GOING'}}</view>
+      <view class="report-score">{{result.score}}</view>
+      <view class="report-line">距离 425 分线 {{result.pass ? '已通过' : '还差 ' + (425 - result.score) + ' 分'}}</view>
+      <view class="report-comment">{{result.comment}}</view>
+
+      <view class="report-grid">
+        <view class="report-cell">
+          <text class="num">{{result.correct}}/{{result.total}}</text>
+          <text class="report-label">答对题数</text>
+        </view>
+        <view class="report-cell">
+          <text class="num">{{result.accuracy}}%</text>
+          <text class="report-label">正确率</text>
+        </view>
+        <view class="report-cell">
+          <text class="num">{{result.minutes}}</text>
+          <text class="report-label">用时(分钟)</text>
+        </view>
+      </view>
+
+      <view wx:if="{{result.wrongList.length}}" class="review-box">
+        <view class="review-title">错题回顾</view>
+        <view wx:for="{{result.wrongList}}" wx:key="word" class="review-row">
+          <view class="flex1">
+            <text class="review-word">{{item.word}}</text>
+            <text class="review-cn">{{item.cn}}</text>
+          </view>
+          <view class="review-answer">
+            <text class="review-chosen">你选：{{item.chosen}}</text>
+            <text class="review-correct">正确：{{item.answer}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="report-btns">
+        <view class="btn btn-primary btn-block" bindtap="restart">再考一次</view>
+        <view class="btn btn-ghost btn-block" bindtap="goWrongbook">查看错题病历</view>
+        <view class="btn btn-ghost btn-block" bindtap="goHome">回到小岛</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 答题卡 -->
+  <view wx:if="{{showSheet}}" class="mask" bindtap="toggleSheet">
+    <view class="modal sheet-modal" catchtap="noop">
+      <view class="modal-title">答题卡</view>
+      <view class="modal-desc">已作答 {{answeredCount}}/{{total}} 题</view>
+      <view class="sheet-grid">
+        <view
+          wx:for="{{questions}}"
+          wx:key="id"
+          class="sheet-cell {{answers[index] >= 0 ? 'is-done' : ''}} {{index === qIndex ? 'is-current' : ''}}"
+          data-index="{{index}}"
+          bindtap="jump"
+        >{{index + 1}}</view>
+      </view>
+      <view class="btn btn-primary btn-block mt-24" bindtap="toggleSheet">继续答题</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="confirmSubmit">交卷</view>
+    </view>
+  </view>
+</view>

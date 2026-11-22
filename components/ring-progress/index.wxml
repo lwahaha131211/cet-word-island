@@ -1,0 +1,7 @@
+<view class="ring" style="{{ringStyle}}">
+  <view class="ring-inner" style="width:{{innerSize}}rpx;height:{{innerSize}}rpx;">
+    <text wx:if="{{value}}" class="ring-value">{{value}}</text>
+    <text wx:if="{{label}}" class="ring-label">{{label}}</text>
+    <slot></slot>
+  </view>
+</view>

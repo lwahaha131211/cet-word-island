@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>词灵岛四六级英语学习软件 源代码（软著提交版）</title>
+<style>
+@page { size: A4; margin: 16mm 14mm; }
+body { margin: 0; background: #fff; color: #000; font-family: "Consolas", "Courier New", monospace; }
+.page { page-break-after: always; width: 100%; }
+.page:last-child { page-break-after: auto; }
+.doc-header { display: flex; justify-content: space-between; font-family: "Microsoft YaHei", sans-serif; font-size: 10pt; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 8px; }
+pre { margin: 0; font-size: 8pt; line-height: 1.5; white-space: pre; }
+</style>
+</head>
+<body>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 1 页 / 共 60 页</span></div><pre>/* ============================================================
+ * 文件：app.js
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/**
+ * 词灵岛 · 四六级卡通英语学习小程序
+ * 应用入口：初始化本地学习数据，记录设备信息，维护每日学习状态。
+ */
+const store = require('./utils/store.js')
+
+App({
+  globalData: {
+    appName: '词灵岛',
+    version: '1.0.0',
+    systemInfo: null,
+    statusBarHeight: 20,
+    // 页面间临时传递的学习结果
+    lastSession: null
+  },
+
+  onLaunch() {
+    // 初始化本地状态（含版本迁移与默认值补齐）
+    store.init()
+
+    try {
+      const info = wx.getSystemInfoSync()
+      this.globalData.systemInfo = info
+      this.globalData.statusBarHeight = info.statusBarHeight || 20
+    } catch (e) {
+      console.warn('获取系统信息失败', e)
+    }
+
+    // 刷新宠物心情与每日任务
+    store.touchOpen()
+    store.ensureDaily()
+  },
+
+  onShow() {
+    store.ensureDaily()
+  },
+
+  onError(err) {
+    console.error('[词灵岛] 运行异常：', err)
+  }
+})
+
+
+/* ============================================================
+ * 文件：app.json
+ * 软件：词灵岛四六级英语学习软件 V1.0.0</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 2 页 / 共 60 页</span></div><pre> * ============================================================ */
+{
+  "pages": [
+    "pages/index/index",
+    "pages/books/books",
+    "pages/pet/pet",
+    "pages/profile/profile",
+    "pages/study/study",
+    "pages/review/review",
+    "pages/puzzle/puzzle",
+    "pages/listening/listening",
+    "pages/reading/reading",
+    "pages/dialogue/dialogue",
+    "pages/writing/writing",
+    "pages/garden/garden",
+    "pages/plan/plan",
+    "pages/stats/stats",
+    "pages/achievements/achievements",
+    "pages/wrongbook/wrongbook",
+    "pages/exam/exam",
+    "pages/chapters/chapters",
+    "pages/settings/settings",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FFF7E8",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "词灵岛",
+    "backgroundColor": "#FFF7E8",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#9A8A78",
+    "selectedColor": "#F07A16",
+    "backgroundColor": "#FFFDF7",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "小岛"
+      },
+      {
+        "pagePath": "pages/books/books",
+        "text": "词书"
+      },
+      {
+        "pagePath": "pages/pet/pet",
+        "text": "小窝"</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 3 页 / 共 60 页</span></div><pre>      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {
+    "cartoon-card": "/components/cartoon-card/index",
+    "pet-avatar": "/components/pet-avatar/index",
+    "ring-progress": "/components/ring-progress/index",
+    "empty-state": "/components/empty-state/index"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
+
+
+/* ============================================================
+ * 文件：app.wxss
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/* =========================================================
+   词灵岛 · 全局卡通视觉系统
+   设计语言：奶油纸张底 + 深棕描边 + 硬阴影 + 马卡龙色块
+   ========================================================= */
+
+page {
+  --ink: #3b2e2a;
+  --ink-soft: #6b5a50;
+  --cream: #fff7e8;
+  --paper: #fffdf7;
+  --orange: #ff9f1c;
+  --orange-deep: #f07a16;
+  --yellow: #ffd166;
+  --yellow-soft: #fff2c9;
+  --green: #2ec4b6;
+  --green-soft: #d9f7f2;
+  --blue: #4ea8de;
+  --blue-soft: #dcefff;
+  --pink: #ff86ae;
+  --pink-soft: #ffe3ec;
+  --purple: #9b7ede;
+  --purple-soft: #ece4ff;
+  --red: #ff5c5c;
+  --muted: #9a8a78;
+  --line: rgba(59, 46, 42, 0.12);
+
+  background-color: var(--cream);</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 4 页 / 共 60 页</span></div><pre>  color: var(--ink);
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Heiti SC", sans-
+serif;
+  font-size: 28rpx;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+button,
+input,
+textarea,
+scroll-view {
+  box-sizing: border-box;
+}
+
+/* ---------------- 页面容器 ---------------- */
+.page {
+  min-height: 100vh;
+  padding: 24rpx 28rpx 64rpx;
+  background-image:
+    radial-gradient(rgba(255, 159, 28, 0.16) 3rpx, transparent 3rpx),
+    radial-gradient(rgba(46, 196, 182, 0.13) 3rpx, transparent 3rpx);
+  background-size: 56rpx 56rpx, 56rpx 56rpx;
+  background-position: 0 0, 28rpx 28rpx;
+}
+
+.page-tab {
+  padding-bottom: 200rpx;
+}
+
+.safe-bottom {
+  height: env(safe-area-inset-bottom);
+}
+
+/* ---------------- 排版 ---------------- */
+.h1 {
+  font-size: 48rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  line-height: 1.3;
+}
+
+.h2 {
+  font-size: 36rpx;
+  font-weight: 800;
+  line-height: 1.4;
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 5 页 / 共 60 页</span></div><pre>.h3 {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.sub {
+  font-size: 24rpx;
+  color: var(--muted);
+}
+
+.tiny {
+  font-size: 22rpx;
+  color: var(--muted);
+}
+
+.bold {
+  font-weight: 800;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.white {
+  color: #fff;
+}
+
+.ink {
+  color: var(--ink);
+}
+
+.center {
+  text-align: center;
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---------------- 布局 ---------------- */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.col {
+  display: flex;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 6 页 / 共 60 页</span></div><pre>  flex-direction: column;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+.around {
+  justify-content: space-around;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.flex1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap-8 {
+  gap: 8rpx;
+}
+
+.gap-12 {
+  gap: 12rpx;
+}
+
+.gap-16 {
+  gap: 16rpx;
+}
+
+.gap-20 {
+  gap: 20rpx;
+}
+
+.gap-24 {
+  gap: 24rpx;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 7 页 / 共 60 页</span></div><pre>}
+
+.mt-8 {
+  margin-top: 8rpx;
+}
+
+.mt-12 {
+  margin-top: 12rpx;
+}
+
+.mt-16 {
+  margin-top: 16rpx;
+}
+
+.mt-24 {
+  margin-top: 24rpx;
+}
+
+.mt-32 {
+  margin-top: 32rpx;
+}
+
+.mb-16 {
+  margin-bottom: 16rpx;
+}
+
+.mb-24 {
+  margin-bottom: 24rpx;
+}
+
+.grid-2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.grid-2 &gt; .grid-item {
+  width: calc((100% - 20rpx) / 2);
+}
+
+.grid-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.grid-3 &gt; .grid-item {
+  width: calc((100% - 32rpx) / 3);
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 8 页 / 共 60 页</span></div><pre>.grid-4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.grid-4 &gt; .grid-item {
+  width: calc((100% - 42rpx) / 4);
+}
+
+/* ---------------- 卡片 ---------------- */
+.card {
+  position: relative;
+  background: var(--paper);
+  border: 4rpx solid var(--ink);
+  border-radius: 32rpx;
+  padding: 28rpx;
+  box-shadow: 0 10rpx 0 rgba(59, 46, 42, 0.13);
+}
+
+.card + .card {
+  margin-top: 24rpx;
+}
+
+.card-yellow {
+  background: var(--yellow-soft);
+}
+
+.card-green {
+  background: var(--green-soft);
+}
+
+.card-blue {
+  background: var(--blue-soft);
+}
+
+.card-pink {
+  background: var(--pink-soft);
+}
+
+.card-purple {
+  background: var(--purple-soft);
+}
+
+.card-orange {
+  background: #ffe9cf;
+}
+
+.card-dark {
+  background: var(--ink);</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 9 页 / 共 60 页</span></div><pre>  color: #fff;
+}
+
+.card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.card-title .emoji {
+  font-size: 34rpx;
+}
+
+.card-extra {
+  font-size: 24rpx;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.card-dark .card-extra,
+.card-dark .sub {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 手绘胶带装饰 */
+.tape {
+  position: absolute;
+  top: -18rpx;
+  left: 50%;
+  width: 132rpx;
+  height: 34rpx;
+  margin-left: -66rpx;
+  background: rgba(255, 209, 102, 0.75);
+  border: 2rpx solid rgba(59, 46, 42, 0.22);
+  transform: rotate(-3deg);
+  border-radius: 4rpx;
+}
+
+/* ---------------- 按钮 ---------------- */
+.btn {
+  display: flex;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 10 页 / 共 60 页</span></div><pre>  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  height: 92rpx;
+  padding: 0 36rpx;
+  border: 4rpx solid var(--ink);
+  border-radius: 46rpx;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 8rpx 0 var(--ink);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #ffb84d 0%, var(--orange) 100%);
+}
+
+.btn-green {
+  background: var(--green);
+  color: #fff;
+}
+
+.btn-blue {
+  background: var(--blue);
+  color: #fff;
+}
+
+.btn-pink {
+  background: var(--pink);
+  color: #fff;
+}
+
+.btn-purple {
+  background: var(--purple);
+  color: #fff;
+}
+
+.btn-dark {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.35);
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 11 页 / 共 60 页</span></div><pre>.btn-ghost {
+  box-shadow: 0 6rpx 0 rgba(59, 46, 42, 0.25);
+  border-width: 3rpx;
+}
+
+.btn-sm {
+  height: 64rpx;
+  padding: 0 26rpx;
+  border-width: 3rpx;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+  box-shadow: 0 5rpx 0 var(--ink);
+}
+
+.btn-xs {
+  height: 52rpx;
+  padding: 0 20rpx;
+  border-width: 3rpx;
+  border-radius: 26rpx;
+  font-size: 22rpx;
+  box-shadow: 0 4rpx 0 var(--ink);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-hover {
+  transform: translateY(6rpx);
+  box-shadow: 0 2rpx 0 var(--ink);
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  box-shadow: 0 4rpx 0 rgba(59, 46, 42, 0.2);
+}
+
+/* ---------------- 标签 / 贴纸 ---------------- */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 6rpx 18rpx;
+  background: var(--yellow);
+  border: 3rpx solid var(--ink);
+  border-radius: 18rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.3;
+  box-shadow: 0 4rpx 0 var(--ink);</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 12 页 / 共 60 页</span></div><pre>  transform: rotate(-3deg);
+}
+
+.sticker-green {
+  background: var(--green);
+  color: #fff;
+}
+
+.sticker-blue {
+  background: var(--blue);
+  color: #fff;
+}
+
+.sticker-pink {
+  background: var(--pink);
+  color: #fff;
+}
+
+.sticker-purple {
+  background: var(--purple);
+  color: #fff;
+}
+
+.sticker-plain {
+  background: #fff;
+  transform: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(59, 46, 42, 0.06);
+  color: var(--ink-soft);
+  font-size: 21rpx;
+  font-weight: 600;
+}
+
+.tag-orange {
+  background: #ffe7c2;
+  color: #a85a00;
+}
+
+.tag-green {
+  background: var(--green-soft);
+  color: #147a70;
+}
+
+.tag-blue {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 13 页 / 共 60 页</span></div><pre>  background: var(--blue-soft);
+  color: #1f6ea8;
+}
+
+.tag-pink {
+  background: var(--pink-soft);
+  color: #b03c63;
+}
+
+.tag-purple {
+  background: var(--purple-soft);
+  color: #5c43a5;
+}
+
+/* ---------------- 进度条 ---------------- */
+.bar {
+  position: relative;
+  height: 28rpx;
+  border: 3rpx solid var(--ink);
+  border-radius: 999rpx;
+  background: #fff;
+  overflow: hidden;
+}
+
+.bar-inner {
+  height: 100%;
+  border-radius: 999rpx;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--orange),
+    var(--orange) 12rpx,
+    #ffb84d 12rpx,
+    #ffb84d 24rpx
+  );
+  transition: width 0.45s ease;
+}
+
+.bar-inner.bar-green {
+  background: var(--green);
+}
+
+.bar-inner.bar-blue {
+  background: var(--blue);
+}
+
+.bar-thin {
+  height: 18rpx;
+  border-width: 2rpx;
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 14 页 / 共 60 页</span></div><pre>.bar-green .bar-inner {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--green),
+    var(--green) 12rpx,
+    #62dccf 12rpx,
+    #62dccf 24rpx
+  );
+}
+
+.bar-blue .bar-inner {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--blue),
+    var(--blue) 12rpx,
+    #7fc1e8 12rpx,
+    #7fc1e8 24rpx
+  );
+}
+
+.bar-pink .bar-inner {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--pink),
+    var(--pink) 12rpx,
+    #ffb0c8 12rpx,
+    #ffb0c8 24rpx
+  );
+}
+
+.bar-purple .bar-inner {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--purple),
+    var(--purple) 12rpx,
+    #b9a6ea 12rpx,
+    #b9a6ea 24rpx
+  );
+}
+
+/* ---------------- 列表行 ---------------- */
+.cell {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 26rpx 0;
+  border-bottom: 2rpx dashed var(--line);
+}
+
+.cell:last-child {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 15 页 / 共 60 页</span></div><pre>  border-bottom: none;
+}
+
+.cell-icon {
+  width: 76rpx;
+  height: 76rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 22rpx;
+  box-shadow: 0 4rpx 0 rgba(59, 46, 42, 0.18);
+}
+
+.cell-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cell-title {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.cell-desc {
+  font-size: 22rpx;
+  color: var(--muted);
+  margin-top: 2rpx;
+}
+
+.cell-arrow {
+  font-size: 24rpx;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+/* ---------------- 数值 ---------------- */
+.num {
+  font-size: 44rpx;
+  font-weight: 800;
+  line-height: 1.1;
+  font-family: "DIN Alternate", "PingFang SC", sans-serif;
+}
+
+.num-sm {
+  font-size: 32rpx;
+  font-weight: 800;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 16 页 / 共 60 页</span></div><pre>}
+
+.unit {
+  font-size: 20rpx;
+  color: var(--muted);
+  margin-left: 4rpx;
+  font-weight: 600;
+}
+
+/* ---------------- 装饰图形 ---------------- */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2rpx);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.cloud {
+  position: absolute;
+  width: 160rpx;
+  height: 56rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 999rpx;
+  opacity: 0.9;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 50%;
+}
+
+.cloud::before {
+  width: 64rpx;
+  height: 64rpx;
+  left: 24rpx;
+  top: -34rpx;
+  border-bottom-color: transparent;
+}
+
+.cloud::after {
+  width: 46rpx;
+  height: 46rpx;
+  right: 26rpx;
+  top: -22rpx;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 17 页 / 共 60 页</span></div><pre>  border-bottom-color: transparent;
+}
+
+/* ---------------- 输入 ---------------- */
+.input {
+  height: 88rpx;
+  padding: 0 26rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 24rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 280rpx;
+  padding: 24rpx;
+  background: #fff;
+  border: 3rpx solid var(--ink);
+  border-radius: 24rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.placeholder {
+  color: #c4b5a5;
+}
+
+/* ---------------- 弹层 ---------------- */
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(59, 46, 42, 0.45);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+}
+
+.modal {
+  width: 100%;
+  max-width: 620rpx;
+  background: var(--paper);
+  border: 4rpx solid var(--ink);</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 18 页 / 共 60 页</span></div><pre>  border-radius: 36rpx;
+  padding: 40rpx 32rpx 32rpx;
+  box-shadow: 0 14rpx 0 rgba(59, 46, 42, 0.3);
+  animation: popIn 0.22s ease-out;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  text-align: center;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-top: 12rpx;
+  line-height: 1.7;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+
+.modal-btns .btn {
+  flex: 1;
+}
+
+/* ---------------- 空状态 ---------------- */
+.empty {
+  padding: 72rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.empty-emoji {
+  font-size: 96rpx;
+  filter: grayscale(0.15);
+}
+
+/* ---------------- 动画 ---------------- */
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 19 页 / 共 60 页</span></div><pre>  50% {
+    transform: translateY(-14rpx);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.86);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeUp {
+  0% {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 20 页 / 共 60 页</span></div><pre>    transform: translateY(20rpx);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes soundWave {
+  0%,
+  100% {
+    height: 16rpx;
+  }
+  50% {
+    height: 48rpx;
+  }
+}
+
+.anim-float {
+  animation: floaty 3s ease-in-out infinite;
+}
+
+.anim-pop {
+  animation: popIn 0.3s ease-out both;
+}
+
+.anim-wiggle {
+  animation: wiggle 1.6s ease-in-out infinite;
+}
+
+.anim-fade-up {
+  animation: fadeUp 0.35s ease-out both;
+}
+
+/* 音波条 */
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  height: 56rpx;
+}
+
+.wave-item {
+  width: 8rpx;
+  height: 18rpx;
+  border-radius: 999rpx;
+  background: var(--orange-deep);
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 21 页 / 共 60 页</span></div><pre>.wave-play .wave-item {
+  animation: soundWave 0.9s ease-in-out infinite;
+}
+
+.wave-play .wave-item:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.wave-play .wave-item:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.wave-play .wave-item:nth-child(4) {
+  animation-delay: 0.36s;
+}
+
+.wave-play .wave-item:nth-child(5) {
+  animation-delay: 0.48s;
+}
+
+/* ---------------- 分割线 ---------------- */
+.dashed {
+  height: 2rpx;
+  background-image: linear-gradient(
+    to right,
+    var(--line) 0,
+    var(--line) 12rpx,
+    transparent 12rpx,
+    transparent 24rpx
+  );
+  background-size: 24rpx 2rpx;
+  margin: 24rpx 0;
+}
+
+/* ---------------- 其它 ---------------- */
+.relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.rotate-l {
+  transform: rotate(-2deg);
+}
+
+.rotate-r {
+  transform: rotate(2deg);
+}</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 22 页 / 共 60 页</span></div><pre>
+.press {
+  transition: transform 0.08s ease;
+}
+
+.press:active {
+  transform: scale(0.97);
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  line-height: normal;
+}
+
+button::after {
+  border: none;
+}
+
+scroll-view {
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ============================================================
+ * 文件：components/cartoon-card/index.js
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/**
+ * 卡通卡片容器：统一的描边、硬阴影与胶带装饰
+ */
+Component({
+  options: {
+    multipleSlots: true,
+    addGlobalClass: true
+  },
+  properties: {
+    title: { type: String, value: '' },
+    emoji: { type: String, value: '' },
+    extra: { type: String, value: '' },
+    color: { type: String, value: '' },
+    tape: { type: Boolean, value: false },
+    pad: { type: String, value: '' }
+  }
+})
+
+
+/* ============================================================
+ * 文件：components/cartoon-card/index.json</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 23 页 / 共 60 页</span></div><pre> * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+{
+  "component": true
+}
+
+
+/* ============================================================
+ * 文件：components/cartoon-card/index.wxml
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+&lt;view class="card card-{{color}}" style="{{pad ? 'padding:' + pad : ''}}"&gt;
+  &lt;view wx:if="{{tape}}" class="tape"&gt;&lt;/view&gt;
+  &lt;view wx:if="{{title}}" class="card-hd"&gt;
+    &lt;view class="card-title"&gt;
+      &lt;text wx:if="{{emoji}}" class="emoji"&gt;{{emoji}}&lt;/text&gt;
+      &lt;text&gt;{{title}}&lt;/text&gt;
+    &lt;/view&gt;
+    &lt;text wx:if="{{extra}}" class="card-extra"&gt;{{extra}}&lt;/text&gt;
+  &lt;/view&gt;
+  &lt;slot&gt;&lt;/slot&gt;
+&lt;/view&gt;
+
+
+/* ============================================================
+ * 文件：components/cartoon-card/index.wxss
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/* 样式继承全局 app.wxss 中的 .card 体系 */
+
+
+/* ============================================================
+ * 文件：components/empty-state/index.js
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/**
+ * 空状态占位
+ */
+Component({
+  options: {
+    multipleSlots: true,
+    addGlobalClass: true
+  },
+  properties: {
+    emoji: { type: String, value: '🫧' },
+    title: { type: String, value: '这里还空空的' },
+    desc: { type: String, value: '' }
+  }
+})
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 24 页 / 共 60 页</span></div><pre>
+/* ============================================================
+ * 文件：components/empty-state/index.json
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+{
+  "component": true
+}
+
+
+/* ============================================================
+ * 文件：components/empty-state/index.wxml
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+&lt;view class="empty"&gt;
+  &lt;text class="empty-emoji"&gt;{{emoji}}&lt;/text&gt;
+  &lt;text class="h3"&gt;{{title}}&lt;/text&gt;
+  &lt;text wx:if="{{desc}}" class="sub center"&gt;{{desc}}&lt;/text&gt;
+  &lt;view class="empty-action"&gt;
+    &lt;slot&gt;&lt;/slot&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+
+
+/* ============================================================
+ * 文件：components/empty-state/index.wxss
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+.empty-action {
+  margin-top: 24rpx;
+}
+
+
+/* ============================================================
+ * 文件：components/pet-avatar/index.js
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/**
+ * 原创伙伴形象：5 个物种 × 5 段形态，纯 CSS 绘制
+ * species: sprout / ink / whale / turtle / fox
+ * stage: 0-4
+ */
+const ACC_MAP = {
+  hat: '🎩',
+  scarf: '🧣',
+  crown: '👑',
+  wings: '✨',
+  none: ''
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 25 页 / 共 60 页</span></div><pre>Component({
+  options: {
+    addGlobalClass: true
+  },
+  properties: {
+    size: { type: Number, value: 220 },
+    species: { type: String, value: 'sprout' },
+    color: { type: String, value: '#FFD166' },
+    accent: { type: String, value: '#6FD39B' },
+    accessory: { type: String, value: 'none' },
+    mood: { type: Number, value: 80 },
+    stage: { type: Number, value: 0 },
+    branch: { type: String, value: '' },
+    animate: { type: Boolean, value: true }
+  },
+  data: {
+    scale: 1,
+    happy: true,
+    accEmoji: ''
+  },
+  observers: {
+    size: function (val) {
+      const s = Number(val) || 220
+      this.setData({ scale: s / 220 })
+    },
+    mood: function (val) {
+      this.setData({ happy: Number(val) &gt;= 40 })
+    },
+    accessory: function (val) {
+      this.setData({ accEmoji: ACC_MAP[val] || '' })
+    }
+  },
+  lifetimes: {
+    attached() {
+      this.setData({
+        scale: (Number(this.data.size) || 220) / 220,
+        happy: Number(this.data.mood) &gt;= 40,
+        accEmoji: ACC_MAP[this.data.accessory] || ''
+      })
+    }
+  }
+})
+
+
+/* ============================================================
+ * 文件：components/pet-avatar/index.json
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+{
+  "component": true</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 26 页 / 共 60 页</span></div><pre>}
+
+
+/* ============================================================
+ * 文件：components/pet-avatar/index.wxml
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+&lt;template name="face"&gt;
+  &lt;view class="face face-{{species}}"&gt;
+    &lt;view class="eye eye-l"&gt;&lt;view class="glint"&gt;&lt;/view&gt;&lt;/view&gt;
+    &lt;view class="eye eye-r"&gt;&lt;view class="glint"&gt;&lt;/view&gt;&lt;/view&gt;
+    &lt;view class="blush blush-l"&gt;&lt;/view&gt;
+    &lt;view class="blush blush-r"&gt;&lt;/view&gt;
+    &lt;view class="mouth {{happy ? 'is-happy' : 'is-sad'}}"&gt;&lt;/view&gt;
+  &lt;/view&gt;
+&lt;/template&gt;
+
+&lt;view class="pet-wrap" style="width:{{size}}rpx;height:{{size}}rpx;"&gt;
+  &lt;view class="pet-scale" style="transform:scale({{scale}});"&gt;
+    &lt;view
+      class="pet species-{{species}} stage-{{stage}} branch-{{branch}} {{animate ? 'an
+im-float' : ''}}"
+      style="--pc:{{color}};--pa:{{accent}};"
+    &gt;
+      &lt;view class="pet-shadow"&gt;&lt;/view&gt;
+
+      &lt;!-- 芽芽：叶片灵体 --&gt;
+      &lt;block wx:if="{{species === 'sprout'}}"&gt;
+        &lt;view class="sprout-stem"&gt;&lt;/view&gt;
+        &lt;view class="sprout-leaf sprout-leaf-l"&gt;&lt;/view&gt;
+        &lt;view class="sprout-leaf sprout-leaf-r"&gt;&lt;/view&gt;
+        &lt;view class="sprout-body body"&gt;&lt;/view&gt;
+        &lt;view class="sprout-foot sprout-foot-l"&gt;&lt;/view&gt;
+        &lt;view class="sprout-foot sprout-foot-r"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 2}}" class="sprout-spark"&gt;✦&lt;/view&gt;
+      &lt;/block&gt;
+
+      &lt;!-- 乌乌：墨团小猫 --&gt;
+      &lt;block wx:elif="{{species === 'ink'}}"&gt;
+        &lt;view class="ink-tail"&gt;&lt;/view&gt;
+        &lt;view class="ink-ear ink-ear-l"&gt;&lt;/view&gt;
+        &lt;view class="ink-ear ink-ear-r"&gt;&lt;/view&gt;
+        &lt;view class="ink-body body"&gt;&lt;/view&gt;
+        &lt;view class="ink-drip ink-drip-1"&gt;&lt;/view&gt;
+        &lt;view class="ink-drip ink-drip-2"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 1}}" class="ink-horn ink-horn-l"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 1}}" class="ink-horn ink-horn-r"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 3}}" class="ink-aura"&gt;&lt;/view&gt;
+      &lt;/block&gt;
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 27 页 / 共 60 页</span></div><pre>      &lt;!-- 泡泡：云鲸 --&gt;
+      &lt;block wx:elif="{{species === 'whale'}}"&gt;
+        &lt;view class="whale-spout"&gt;&lt;view class="spout-drop"&gt;&lt;/view&gt;&lt;/view&gt;
+        &lt;view class="whale-tail"&gt;&lt;/view&gt;
+        &lt;view class="whale-fin whale-fin-l"&gt;&lt;/view&gt;
+        &lt;view class="whale-fin whale-fin-r"&gt;&lt;/view&gt;
+        &lt;view class="whale-body body"&gt;&lt;/view&gt;
+        &lt;view class="whale-belly"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 2}}" class="whale-star"&gt;✦&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 4}}" class="whale-ring"&gt;&lt;/view&gt;
+      &lt;/block&gt;
+
+      &lt;!-- 咔哒：齿轮龟 --&gt;
+      &lt;block wx:elif="{{species === 'turtle'}}"&gt;
+        &lt;view class="turtle-leg turtle-leg-1"&gt;&lt;/view&gt;
+        &lt;view class="turtle-leg turtle-leg-2"&gt;&lt;/view&gt;
+        &lt;view class="turtle-leg turtle-leg-3"&gt;&lt;/view&gt;
+        &lt;view class="turtle-leg turtle-leg-4"&gt;&lt;/view&gt;
+        &lt;view class="turtle-tail"&gt;&lt;/view&gt;
+        &lt;view class="turtle-shell"&gt;&lt;/view&gt;
+        &lt;view class="turtle-gear"&gt;&lt;view class="gear-core"&gt;&lt;/view&gt;&lt;/view&gt;
+        &lt;view class="turtle-head"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 2}}" class="turtle-antenna"&gt;&lt;view class="antenna-dot"&gt;
+&lt;/view&gt;&lt;/view&gt;
+      &lt;/block&gt;
+
+      &lt;!-- 阿燎：焰狐 --&gt;
+      &lt;block wx:else&gt;
+        &lt;view class="fox-tail fox-tail-1"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 2}}" class="fox-tail fox-tail-2"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 4}}" class="fox-tail fox-tail-3"&gt;&lt;/view&gt;
+        &lt;view class="fox-ear fox-ear-l"&gt;&lt;/view&gt;
+        &lt;view class="fox-ear fox-ear-r"&gt;&lt;/view&gt;
+        &lt;view class="fox-body body"&gt;&lt;/view&gt;
+        &lt;view class="fox-muzzle"&gt;&lt;/view&gt;
+        &lt;view wx:if="{{stage &gt;= 3}}" class="fox-ember"&gt;✦&lt;/view&gt;
+      &lt;/block&gt;
+
+      &lt;template is="face" data="{{species: species, happy: happy}}" /&gt;
+      &lt;view wx:if="{{branch}}" class="branch-mark"&gt;{{branch === 'a' ? '◆' : '✧'}}&lt;/vie
+w&gt;
+      &lt;text wx:if="{{accEmoji}}" class="pet-acc"&gt;{{accEmoji}}&lt;/text&gt;
+    &lt;/view&gt;
+  &lt;/view&gt;
+&lt;/view&gt;
+
+
+/* ============================================================
+ * 文件：components/pet-avatar/index.wxss
+ * 软件：词灵岛四六级英语学习软件 V1.0.0</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 28 页 / 共 60 页</span></div><pre> * ============================================================ */
+.pet-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: visible;
+}
+
+.pet-scale {
+  width: 220rpx;
+  height: 220rpx;
+  transform-origin: center bottom;
+}
+
+.pet {
+  position: relative;
+  width: 220rpx;
+  height: 220rpx;
+}
+
+.pet-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2rpx;
+  width: 150rpx;
+  height: 24rpx;
+  margin-left: -75rpx;
+  background: rgba(59, 46, 42, 0.14);
+  border-radius: 50%;
+}
+
+.body {
+  position: absolute;
+  border: 4rpx solid #3b2e2a;
+  background: var(--pc, #ffd166);
+  box-shadow: inset -10rpx -12rpx 0 rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+
+/* ---------------- 芽芽 ---------------- */
+.sprout-stem {
+  position: absolute;
+  left: 107rpx;
+  top: 16rpx;
+  width: 8rpx;
+  height: 48rpx;
+  background: #2f8f63;
+  border: 3rpx solid #3b2e2a;
+  border-radius: 999rpx;</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 29 页 / 共 60 页</span></div><pre>  z-index: 1;
+}
+
+.sprout-leaf {
+  position: absolute;
+  top: 4rpx;
+  width: 50rpx;
+  height: 36rpx;
+  background: var(--pa, #6fd39b);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 100% 0 100% 0;
+  z-index: 1;
+}
+
+.sprout-leaf-l {
+  left: 60rpx;
+  transform: rotate(-18deg);
+}
+
+.sprout-leaf-r {
+  right: 60rpx;
+  transform: scaleX(-1) rotate(-18deg);
+}
+
+.stage-2 .sprout-leaf {
+  width: 56rpx;
+  height: 38rpx;
+}
+
+.stage-3 .sprout-leaf,
+.stage-4 .sprout-leaf {
+  width: 62rpx;
+  height: 42rpx;
+  top: 0;
+}
+
+.sprout-body {
+  left: 20rpx;
+  top: 52rpx;
+  width: 180rpx;
+  height: 152rpx;
+  border-radius: 48% 52% 44% 56% / 56% 50% 50% 44%;
+}
+
+.sprout-foot {
+  position: absolute;
+  bottom: 10rpx;
+  width: 38rpx;
+  height: 22rpx;
+  background: var(--pc, #ffd166);</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 30 页 / 共 60 页</span></div><pre>  border: 4rpx solid #3b2e2a;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.sprout-foot-l {
+  left: 58rpx;
+}
+
+.sprout-foot-r {
+  right: 58rpx;
+}
+
+.sprout-spark {
+  position: absolute;
+  right: 30rpx;
+  top: 62rpx;
+  color: #fff;
+  font-size: 30rpx;
+  text-shadow: 0 0 12rpx rgba(255, 255, 255, 0.9);
+  animation: petPulse 1.8s infinite;
+  z-index: 7;
+}
+
+/* ---------------- 乌乌 ---------------- */
+.ink-tail {
+  position: absolute;
+  right: 0;
+  bottom: 44rpx;
+  width: 46rpx;
+  height: 78rpx;
+  background: var(--pc, #4b5563);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 60% 40% 50% 50%;
+  transform: rotate(24deg);
+  z-index: 1;
+}
+
+.ink-ear {
+  position: absolute;
+  top: 24rpx;
+  width: 56rpx;
+  height: 64rpx;
+  background: var(--pc, #4b5563);
+  border: 4rpx solid #3b2e2a;
+  border-radius: 50% 50% 18% 18%;
+  z-index: 1;
+}
+
+.ink-ear-l {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 31 页 / 共 60 页</span></div><pre>
+/* …… 中间部分源代码略 …… */
+
+  try {
+    wx.setStorageSync(STORAGE_KEY, state)
+  } catch (e) {
+    console.warn('保存本地数据失败', e)
+  }
+}
+
+function resetAll() {
+  state = defaultState()
+  save()
+  return state
+}
+
+/** 打开小程序时刷新当前伙伴的饱食度与心情 */
+function touchOpen() {
+  const now = Date.now()
+  const pet = activePetRecord()
+  if (!pet.lastTick) pet.lastTick = now
+  const days = Math.floor((now - pet.lastTick) / DAY)
+  if (days &gt; 0) {
+    pet.hunger = clamp(pet.hunger - days * 6, 12, 100)
+    pet.mood = clamp(pet.mood - days * 5, 12, 100)
+    pet.lastTick = pet.lastTick + days * DAY
+  }
+  unlockPets()
+  syncPetUnlocks()
+  syncChapters()
+  save()
+}
+
+/** 保证每日任务与统计结构存在 */
+function ensureDaily() {
+  const s = getState()
+  const t = todayKey()
+  if (!s.stats.days[t]) {
+    s.stats.days[t] = emptyDay()
+  }
+  if (s.tasks.date !== t) {
+    s.tasks.date = t
+    s.tasks.claimed = []
+  }
+  // 只保留最近 180 天明细，控制存储体积
+  const keys = Object.keys(s.stats.days)
+  if (keys.length &gt; 180) {
+    keys.sort()
+    keys.slice(0, keys.length - 180).forEach((k) =&gt; delete s.stats.days[k])
+  }</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 32 页 / 共 60 页</span></div><pre>  save()
+  return s.stats.days[t]
+}
+
+function getToday() {
+  const s = getState()
+  return s.stats.days[todayKey()] || emptyDay()
+}
+
+/* ============================================================
+ * 学习记录与复习调度
+ * ============================================================ */
+function getRecord(wordId) {
+  return getState().records[wordId] || null
+}
+
+function isMastered(wordId) {
+  const r = getRecord(wordId)
+  return !!(r &amp;&amp; r.level &gt;= 4)
+}
+
+function isDue(wordId, now) {
+  const r = getRecord(wordId)
+  if (!r) return false
+  return r.nextAt &lt;= (now || Date.now())
+}
+
+/**
+ * 提交一个单词的学习反馈
+ * @param {Object} word   单词对象（需含 id / word / book）
+ * @param {Number} quality 0 不认识 / 1 模糊 / 2 认识
+ * @returns {Object} { record, levelUp, newAchievements }
+ */
+function submitWord(word, quality) {
+  const s = getState()
+  const t = todayKey()
+  const day = ensureDaily()
+  const now = Date.now()
+  const id = word.id
+  const isNew = !s.records[id]
+  const beforeLevel = s.records[id] ? s.records[id].level : 0
+  const record = s.records[id] || {
+    wordId: id,
+    word: word.word,
+    book: word.book || 'cet4',
+    level: 0,
+    seen: 0,
+    right: 0,
+    wrong: 0,
+    firstAt: now,</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 33 页 / 共 60 页</span></div><pre>    lastAt: now,
+    nextAt: now
+  }
+
+  record.seen += 1
+  record.lastAt = now
+  if (quality === 2) {
+    record.level = clamp(record.level + 1, 0, 6)
+    record.right += 1
+    record.nextAt = now + SRS_DAYS[record.level] * DAY
+  } else if (quality === 1) {
+    record.level = clamp(record.level, 0, 6)
+    record.nextAt = now + DAY
+  } else {
+    record.level = clamp(record.level - 1, 0, 6)
+    record.wrong += 1
+    record.nextAt = now + AGAIN_GAP
+  }
+  s.records[id] = record
+
+  if (isNew) {
+    s.stats.totalLearned += 1
+    day.newWords += 1
+  } else {
+    day.reviews += 1
+    s.stats.totalReviews += 1
+  }
+
+  if (quality === 2) {
+    s.stats.totalCorrect += 1
+    day.correct += 1
+  } else if (quality === 0) {
+    s.stats.totalWrong += 1
+    day.wrong += 1
+  }
+
+  const petBefore = getPetLevel()
+  const gainExp = quality === 2 ? 10 : quality === 1 ? 7 : 5
+  addExp(gainExp)
+  s.wallet.fish += quality === 2 ? 2 : 1
+  const active = activePetRecord()
+  active.hunger = clamp(active.hunger - 1, 10, 100)
+  active.mood = clamp(active.mood + 1, 10, 100)
+  s.lastSession = {
+    wordId: id,
+    quality: quality,
+    at: now
+  }
+  touchStudy(day)
+  if (record.level &gt;= 4) {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 34 页 / 共 60 页</span></div><pre>    plantWord(word)
+  }
+  const newPets = unlockPets()
+  const newAchievements = checkAchievements()
+  save()
+  return {
+    record: clone(record),
+    beforeLevel: beforeLevel,
+    levelUp: getPetLevel() &gt; petBefore,
+    newAchievements: newAchievements,
+    newPets: newPets
+  }
+}
+
+function touchStudy(day) {
+  const s = getState()
+  const t = todayKey()
+  if (s.stats.lastStudyDay === t) return
+  const yesterday = dayKey(Date.now() - DAY)
+  s.stats.streak = s.stats.lastStudyDay === yesterday ? s.stats.streak + 1 : 1
+  s.stats.maxStreak = Math.max(s.stats.maxStreak, s.stats.streak)
+  s.stats.lastStudyDay = t
+  if (day &amp;&amp; day !== s.stats.days[t]) s.stats.days[t] = day
+}
+
+/** 通用行为记账：阅读、听力、测验等 */
+function logActivity(payload) {
+  const p = payload || {}
+  const s = getState()
+  const day = ensureDaily()
+  if (p.newWords) day.newWords += p.newWords
+  if (p.reviews) {
+    day.reviews += p.reviews
+    s.stats.totalReviews += p.reviews
+  }
+  if (p.correct) {
+    day.correct += p.correct
+    s.stats.totalCorrect += p.correct
+  }
+  if (p.wrong) {
+    day.wrong += p.wrong
+    s.stats.totalWrong += p.wrong
+  }
+  if (p.minutes) {
+    day.minutes = Math.round((day.minutes + p.minutes) * 10) / 10
+    s.stats.totalMinutes = Math.round((s.stats.totalMinutes + p.minutes) * 10) / 10
+  }
+  if (p.quizzes) day.quizzes += p.quizzes
+  if (p.exp) addExp(p.exp)
+  if (p.fish) s.wallet.fish += p.fish</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 35 页 / 共 60 页</span></div><pre>  const active = activePetRecord()
+  active.hunger = clamp(active.hunger - 1, 10, 100)
+  touchStudy(day)
+  unlockPets()
+  const newly = checkAchievements()
+  save()
+  return newly
+}
+
+function addMinutes(minutes) {
+  if (!minutes || minutes &lt;= 0) return
+  const s = getState()
+  const day = ensureDaily()
+  const m = Math.round(minutes * 10) / 10
+  day.minutes = Math.round((day.minutes + m) * 10) / 10
+  s.stats.totalMinutes = Math.round((s.stats.totalMinutes + m) * 10) / 10
+  save()
+}
+
+function addExp(exp) {
+  const pet = activePetRecord()
+  pet.exp += exp
+  pet.level = getPetLevel(pet.exp)
+  syncPetUnlocks()
+}
+
+/** 按用户设置触发触感反馈 */
+function vibrate(type) {
+  const s = getState()
+  if (!s.settings.vibrate) return
+  try {
+    wx.vibrateShort({ type: type || 'light' })
+  } catch (e) {}
+}
+
+/* ============================================================
+ * 词汇结构分析
+ * 词根 / 前缀 / 后缀 / 词性 / 长词分布决定伙伴最终进化分支。
+ * ============================================================ */
+function analyzeWord(word) {
+  const flags = {
+    prefix: 0, suffix: 0, root: 0, long: 0,
+    noun: 0, verb: 0, adj: 0, adv: 0,
+    verbAdj: 0, nounAdj: 0, affix: 0
+  }
+  if (!word || !word.word) return flags
+  const text = word.word.toLowerCase()
+
+  PREFIXES.forEach((p) =&gt; {
+    if (text.indexOf(p) === 0) flags.prefix = 1</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 36 页 / 共 60 页</span></div><pre>  })
+  SUFFIXES.forEach((s) =&gt; {
+    if (text.length &gt; s.length + 1 &amp;&amp; text.slice(-s.length) === s) flags.suffix = 1
+  })
+  if (word.roots &amp;&amp; word.roots.length) flags.root = 1
+  if (text.length &gt;= 9) flags.long = 1
+
+  const parts = (word.pos || '')
+    .toLowerCase()
+    .split('/')
+    .map((p) =&gt; p.replace(/\./g, '').trim())
+    .filter(Boolean)
+
+  if (parts.length) {
+    parts.forEach((p) =&gt; {
+      if (p === 'n') flags.noun = 1
+      else if (p === 'v') flags.verb = 1
+      else if (p === 'adj') flags.adj = 1
+      else if (p === 'adv') flags.adv = 1
+    })
+  } else {
+    // 无词性时按后缀粗略判断，保证全量词也能参与统计
+    if (/(tion|sion|ment|ness|ity|ance|ence|ship|hood|ism|ist|age|ure)$/.test(text)) f
+lags.noun = 1
+    if (/(ify|ize|ise|ate|en)$/.test(text)) flags.verb = 1
+    if (/(ous|ful|less|able|ible|ive|al|ic|ent|ant)$/.test(text)) flags.adj = 1
+    if (/ly$/.test(text)) flags.adv = 1
+  }
+
+  flags.verbAdj = flags.verb + flags.adj
+  flags.nounAdj = flags.noun + flags.adj
+  flags.affix = flags.prefix + flags.suffix
+  return flags
+}
+
+/** 汇总已学词汇的结构画像（按 totalLearned 缓存） */
+function getVocabProfile() {
+  const s = getState()
+  const key = s.stats.totalLearned
+  if (vocabCache &amp;&amp; vocabCache.key === key) return vocabCache.value
+
+  const wordsData = require('../data/words.js')
+  const profile = {
+    total: 0, prefix: 0, suffix: 0, root: 0, long: 0,
+    noun: 0, verb: 0, adj: 0, adv: 0,
+    verbAdj: 0, nounAdj: 0, affix: 0
+  }
+  Object.keys(s.records).forEach((id) =&gt; {
+    const word = wordsData.getById(id)
+    if (!word) return</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 37 页 / 共 60 页</span></div><pre>    const flags = analyzeWord(word)
+    profile.total += 1
+    Object.keys(flags).forEach((k) =&gt; {
+      profile[k] += flags[k]
+    })
+  })
+
+  const metrics = [
+    ['prefix', '前缀'], ['suffix', '后缀'], ['root', '词根'],
+    ['noun', '名词'], ['verb', '动词'], ['adj', '形容词'], ['adv', '副词'],
+    ['long', '长词'], ['affix', '词缀']
+  ]
+  let dominant = ['均衡', 0]
+  metrics.forEach((m) =&gt; {
+    if (profile[m[0]] &gt; dominant[1]) dominant = [m[1], profile[m[0]]]
+  })
+  profile.dominant = dominant[0]
+  profile.dominantValue = dominant[1]
+  vocabCache = { key: key, value: profile }
+  return profile
+}
+
+/** 按词汇结构选最终分支：指标高者胜，打平走 a */
+function pickPetBranch(species, profile) {
+  if (!species || !species.branches || species.branches.length &lt; 2) return ''
+  const p = profile || getVocabProfile()
+  const a = species.branches[0]
+  const b = species.branches[1]
+  const va = p[a.metric] || 0
+  const vb = p[b.metric] || 0
+  return va &gt;= vb ? a.key : b.key
+}
+
+/* ============================================================
+ * 伙伴养成
+ * ============================================================ */
+function createPetRecord() {
+  return {
+    exp: 0,
+    hunger: 82,
+    mood: 86,
+    lastTick: Date.now(),
+    lastFedAt: 0,
+    lastPlayAt: 0,
+    accessory: 'none',
+    unlocked: ['none'],
+    branch: '',
+    level: 1
+  }
+}</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 38 页 / 共 60 页</span></div><pre>
+function activePetRecord() {
+  const s = getState()
+  if (!s.pets.owned[s.pets.active]) {
+    s.pets.active = 'sprout'
+  }
+  if (!s.pets.owned.sprout) {
+    s.pets.owned.sprout = createPetRecord()
+  }
+  const record = s.pets.owned[s.pets.active] || s.pets.owned.sprout
+  if (!Array.isArray(record.unlocked)) record.unlocked = ['none']
+  if (!record.accessory) record.accessory = 'none'
+  if (typeof record.exp !== 'number') record.exp = 0
+  if (typeof record.hunger !== 'number') record.hunger = 82
+  if (typeof record.mood !== 'number') record.mood = 86
+  if (typeof record.branch !== 'string') record.branch = ''
+  return record
+}
+
+function getSpecies(id) {
+  return petsData.getById(id || getState().pets.active)
+}
+
+function getPetLevel(exp, speciesId) {
+  const s = getState()
+  const id = speciesId || s.pets.active
+  const record = s.pets.owned[id]
+  const total = typeof exp === 'number' ? exp : record ? record.exp : 0
+  return Math.max(1, Math.floor(total / 100) + 1)
+}
+
+function getPetStage(level, speciesId) {
+  const species = getSpecies(speciesId)
+  const stages = species.stages
+  const lv = level || getPetLevel(undefined, species.id)
+  let index = 0
+  stages.forEach((st, i) =&gt; {
+    if (lv &gt;= st.level) index = i
+  })
+
+  let stage = stages[index]
+  let branch = null
+  let branchKey = ''
+  if (index === stages.length - 1 &amp;&amp; species.branches) {
+    const record = getState().pets.owned[species.id]
+    branchKey = (record &amp;&amp; record.branch) || pickPetBranch(species, getVocabProfile())
+    branch = species.branches.filter((b) =&gt; b.key === branchKey)[0] || species.branche
+s[0]
+    stage = Object.assign({}, stage, {
+      name: branch.name,</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 39 页 / 共 60 页</span></div><pre>      color: branch.color,
+      accent: branch.accent,
+      desc: branch.desc
+    })
+  }
+
+  return {
+    index: index,
+    name: stage.name,
+    color: stage.color,
+    accent: stage.accent,
+    desc: stage.desc,
+    min: stage.level,
+    branchKey: branchKey,
+    branchName: branch ? branch.name : '',
+    branchHint: branch ? branch.hint : '',
+    branch: branch,
+    next: stages[index + 1] || null
+  }
+}
+
+function getPetView() {
+  const s = getState()
+  const species = getSpecies()
+  const record = activePetRecord()
+  const level = getPetLevel(record.exp, species.id)
+  const stage = getPetStage(level, species.id)
+  const lines = species.lines || []
+  let say = lines[s.stats.totalLearned % Math.max(1, lines.length)] || species.tagline
+  if (record.hunger &lt; 35) say = '肚子咕咕叫啦，喂我一条小鱼干好不好？'
+  else if (record.mood &lt; 40) say = '有点无聊，摸摸我的头嘛～'
+  else if (s.stats.streak &gt;= 7) say = '连续打卡 ' + s.stats.streak + ' 天，你超棒的！'
+  else if (s.stats.totalLearned &gt;= 100) say = '我们已经认识 ' + s.stats.totalLearned +
+ ' 个单词啦！'
+  return {
+    species: species.id,
+    name: species.name,
+    title: species.title,
+    emoji: species.emoji,
+    tagline: species.tagline,
+    desc: species.desc,
+    level: level,
+    exp: record.exp,
+    expInLevel: record.exp % 100,
+    expNeed: 100,
+    hunger: Math.round(record.hunger),
+    mood: Math.round(record.mood),
+    stage: stage,
+    branch: stage.branchKey,
+    branchName: stage.branchName,</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 40 页 / 共 60 页</span></div><pre>    branchHint: stage.branchHint,
+    accessory: record.accessory,
+    unlocked: record.unlocked,
+    say: say,
+    color: stage.color,
+    accent: stage.accent,
+    ownedCount: Object.keys(s.pets.owned).length
+  }
+}
+
+/** 当前伙伴的进化阶段 */
+function getStages(speciesId) {
+  const species = getSpecies(speciesId)
+  const level = getPetLevel(undefined, species.id)
+  const currentStage = getPetStage(level, species.id)
+  const current = currentStage.index
+  const record = getState().pets.owned[species.id]
+  let finalBranch = null
+  if (species.branches) {
+    const key = (record &amp;&amp; record.branch) || pickPetBranch(species, getVocabProfile())
+    finalBranch = species.branches.filter((b) =&gt; b.key === key)[0] || species.branches
+[0]
+  }
+  return species.stages.map((st, index) =&gt; {
+    const isFinal = index === species.stages.length - 1
+    const branch = isFinal &amp;&amp; finalBranch ? finalBranch : null
+    return {
+      index: index,
+      name: branch ? branch.name : st.name,
+      color: branch ? branch.color : st.color,
+      accent: branch ? branch.accent : st.accent,
+      desc: branch ? branch.desc : st.desc,
+      min: st.level,
+      unlocked: level &gt;= st.level,
+      current: index === current,
+      isBranch: !!branch,
+      branchHint: branch ? branch.hint : ''
+    }
+  })
+}
+
+function syncPetBranch(record, species) {
+  if (!species || !species.branches || record.branch) return false
+  if (getPetLevel(record.exp, species.id) &lt; 12) return false
+  record.branch = pickPetBranch(species, getVocabProfile())
+  return true
+}
+
+function syncPetUnlocks() {
+  const s = getState()</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 41 页 / 共 60 页</span></div><pre>  const rules = [
+    { level: 3, id: 'hat' },
+    { level: 5, id: 'scarf' },
+    { level: 8, id: 'crown' },
+    { level: 12, id: 'wings' }
+  ]
+  Object.keys(s.pets.owned).forEach((id) =&gt; {
+    const record = s.pets.owned[id]
+    if (!record) return
+    const lv = getPetLevel(record.exp, id)
+    rules.forEach((r) =&gt; {
+      if (lv &gt;= r.level &amp;&amp; record.unlocked.indexOf(r.id) === -1) {
+        record.unlocked.push(r.id)
+      }
+    })
+    const species = petsData.getById(id)
+    if (species) syncPetBranch(record, species)
+  })
+}
+
+function setAccessory(id) {
+  const record = activePetRecord()
+  if (record.unlocked.indexOf(id) === -1) return false
+  record.accessory = id
+  save()
+  return true
+}
+
+/** 解锁新伙伴：按累计学习词汇量 */
+function unlockPets() {
+  const s = getState()
+  const newly = []
+  petsData.list.forEach((species) =&gt; {
+    if (s.stats.totalLearned &gt;= species.unlock.learned &amp;&amp; !s.pets.owned[species.id]) {
+      s.pets.owned[species.id] = createPetRecord()
+      newly.push({
+        id: species.id,
+        name: species.name,
+        title: species.title,
+        emoji: species.emoji,
+        desc: species.desc,
+        unlock: species.unlock
+      })
+    }
+  })
+  if (newly.length) save()
+  return newly
+}
+
+/** 切换当前伙伴 */</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 42 页 / 共 60 页</span></div><pre>function switchPet(id) {
+  const s = getState()
+  const species = getSpecies(id)
+  if (!s.pets.owned[id]) {
+    const remain = Math.max(0, species.unlock.learned - s.stats.totalLearned)
+    return {
+      ok: false,
+      msg: '再学习 ' + remain + ' 个单词就能解锁 ' + species.name
+    }
+  }
+  if (s.pets.active === id) {
+    return { ok: true, msg: species.name + ' 已经在身边啦' }
+  }
+  s.pets.active = id
+  const record = s.pets.owned[id]
+  if (!record.lastTick) record.lastTick = Date.now()
+  syncPetUnlocks()
+  save()
+  return { ok: true, msg: '已切换为 ' + species.name }
+}
+
+/** 伙伴图鉴 */
+function getPetCollection() {
+  const s = getState()
+  return petsData.list.map((species) =&gt; {
+    const owned = !!s.pets.owned[species.id]
+    const record = s.pets.owned[species.id]
+    const level = owned ? getPetLevel(record.exp, species.id) : 1
+    const stage = getPetStage(level, species.id)
+    const progress =
+      species.unlock.learned &lt;= 0
+        ? 100
+        : Math.min(100, Math.round((s.stats.totalLearned / species.unlock.learned) * 1
+00))
+    const remain = Math.max(0, species.unlock.learned - s.stats.totalLearned)
+    return {
+      id: species.id,
+      name: species.name,
+      title: species.title,
+      emoji: species.emoji,
+      tagline: species.tagline,
+      unlock: species.unlock,
+      needText: owned ? '' : remain &gt; 0 ? '再学 ' + remain + ' 词解锁' : '达到解锁条件
+',
+      owned: owned,
+      active: s.pets.active === species.id,
+      level: level,
+      stageIndex: stage.index,
+      stageName: stage.name,
+      stageColor: stage.color,</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 43 页 / 共 60 页</span></div><pre>      branchKey: stage.branchKey,
+      branchName: stage.branchName,
+      progress: progress
+    }
+  })
+}
+
+/** 当前伙伴的两条最终进化分支与词汇结构指标 */
+function getPetBranches(speciesId) {
+  const species = getSpecies(speciesId)
+  if (!species.branches) return []
+  const s = getState()
+  const record = s.pets.owned[species.id]
+  const level = record ? getPetLevel(record.exp, species.id) : 1
+  const profile = getVocabProfile()
+  const selected = (record &amp;&amp; record.branch) || pickPetBranch(species, profile)
+  const values = species.branches.map((b) =&gt; profile[b.metric] || 0)
+  const max = Math.max(1, values[0] || 0, values[1] || 0)
+  return species.branches.map((b, index) =&gt; ({
+    key: b.key,
+    name: b.name,
+    color: b.color,
+    accent: b.accent,
+    desc: b.desc,
+    hint: b.hint,
+    value: values[index],
+    percent: Math.round((values[index] / max) * 100),
+    selected: b.key === selected,
+    active: level &gt;= 12 &amp;&amp; b.key === selected,
+    locked: level &lt; 12
+  }))
+}
+
+/** 喂食：消耗小鱼干，恢复饱食度并获得经验 */
+function feedPet() {
+  const s = getState()
+  const record = activePetRecord()
+  const species = getSpecies()
+  if (s.wallet.fish &lt; 8) {
+    return { ok: false, msg: '小鱼干不够啦，去学习赚一点吧！' }
+  }
+  if (record.hunger &gt;= 98) {
+    return { ok: false, msg: species.name + ' 已经吃得圆滚滚啦～' }
+  }
+  s.wallet.fish -= 8
+  record.hunger = clamp(record.hunger + 18, 0, 100)
+  record.mood = clamp(record.mood + 6, 0, 100)
+  record.lastFedAt = Date.now()
+  const before = getPetLevel()
+  addExp(15)</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 44 页 / 共 60 页</span></div><pre>  save()
+  return {
+    ok: true,
+    msg: '咔嚓咔嚓～' + species.name + ' 吃得很开心！',
+    levelUp: getPetLevel() &gt; before
+  }
+}
+
+/** 抚摸互动：有 30 秒冷却，避免刷心情 */
+function petPet() {
+  const record = activePetRecord()
+  const now = Date.now()
+  if (now - (record.lastPlayAt || 0) &lt; 30 * 1000) {
+    return { ok: false, msg: '它还在回味刚才的摸摸呢～' }
+  }
+  record.lastPlayAt = now
+  record.mood = clamp(record.mood + 10, 0, 100)
+  addExp(5)
+  save()
+  return { ok: true, msg: '它眯起眼睛，蹭了蹭你的手心。' }
+}
+
+/* ============================================================
+ * 知识花园
+ * ============================================================ */
+function plantWord(word) {
+  const s = getState()
+  if (!word || !word.id) return false
+  const exists = s.garden.plots.some((p) =&gt; p.wordId === word.id)
+  if (exists) return false
+  if (s.garden.plots.length &gt;= 36) return false
+  s.garden.plots.push({
+    id: 'plot_' + word.id,
+    wordId: word.id,
+    word: word.word,
+    cn: word.cn,
+    color: FLOWER_COLORS[hash(word.id) % FLOWER_COLORS.length],
+    plantedAt: Date.now(),
+    stage: 3
+  })
+  const count = s.garden.plots.length
+  const decorRules = [
+    { need: 3, id: 'butterfly' },
+    { need: 6, id: 'fence' },
+    { need: 12, id: 'lantern' },
+    { need: 20, id: 'fountain' },
+    { need: 30, id: 'rainbow' }
+  ]
+  decorRules.forEach((r) =&gt; {
+    if (count &gt;= r.need &amp;&amp; s.garden.decor.indexOf(r.id) === -1) {</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 45 页 / 共 60 页</span></div><pre>      s.garden.decor.push(r.id)
+    }
+  })
+  save()
+  return true
+}
+
+function getGardenView() {
+  const s = getState()
+  const plots = s.garden.plots.slice()
+  const colors = {}
+  plots.forEach((p) =&gt; {
+    colors[p.color] = (colors[p.color] || 0) + 1
+  })
+  return {
+    plots: plots,
+    count: plots.length,
+    decor: s.garden.decor,
+    theme: s.garden.theme,
+    colors: colors,
+    nextDecor: getNextDecor(plots.length)
+  }
+}
+
+function getNextDecor(count) {
+  const rules = [
+    { need: 3, id: 'butterfly', name: '小蝴蝶' },
+    { need: 6, id: 'fence', name: '木栅栏' },
+    { need: 12, id: 'lantern', name: '暖光灯' },
+    { need: 20, id: 'fountain', name: '许愿喷泉' },
+    { need: 30, id: 'rainbow', name: '彩虹拱门' }
+  ]
+  for (let i = 0; i &lt; rules.length; i++) {
+    if (count &lt; rules[i].need) return rules[i]
+  }
+  return null
+}
+
+/* ============================================================
+ * 错题病历本
+ * ============================================================ */
+const REASONS = ['形近混淆', '音近听错', '遗忘', '语境误解']
+
+function addWrong(wordId, reason, detail) {
+  const s = getState()
+  if (!wordId) return
+  const r = reason &amp;&amp; REASONS.indexOf(reason) &gt;= 0 ? reason : '遗忘'
+  const exist = s.wrongbook.filter((w) =&gt; w.wordId === wordId &amp;&amp; !w.resolved)[0]
+  if (exist) {
+    exist.count += 1</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 46 页 / 共 60 页</span></div><pre>    exist.at = Date.now()
+    exist.reason = r
+  } else {
+    s.wrongbook.unshift({
+      id: 'w_' + wordId + '_' + Date.now(),
+      wordId: wordId,
+      word: detail &amp;&amp; detail.word ? detail.word : '',
+      cn: detail &amp;&amp; detail.cn ? detail.cn : '',
+      reason: r,
+      detail: detail || null,
+      count: 1,
+      at: Date.now(),
+      resolved: false
+    })
+  }
+  if (s.wrongbook.length &gt; 300) s.wrongbook.length = 300
+  save()
+}
+
+function resolveWrong(wordId) {
+  const s = getState()
+  s.wrongbook.forEach((w) =&gt; {
+    if (w.wordId === wordId) w.resolved = true
+  })
+  save()
+}
+
+function getWrongList() {
+  const s = getState()
+  const list = s.wrongbook.slice()
+  list.sort((a, b) =&gt; {
+    if (a.resolved !== b.resolved) return a.resolved ? 1 : -1
+    return b.at - a.at
+  })
+  return list
+}
+
+function getWrongStats() {
+  const list = getWrongList().filter((w) =&gt; !w.resolved)
+  const map = {}
+  REASONS.forEach((r) =&gt; {
+    map[r] = 0
+  })
+  list.forEach((w) =&gt; {
+    map[w.reason] = (map[w.reason] || 0) + 1
+  })
+  return { total: list.length, byReason: map }
+}
+
+/* ============================================================</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 47 页 / 共 60 页</span></div><pre> * 每日任务
+ * ============================================================ */
+function getTasks() {
+  const s = getState()
+  const day = getToday()
+  return TASK_POOL.map((t) =&gt; {
+    const current = Math.min(day[t.metric] || 0, t.target)
+    return {
+      id: t.id,
+      emoji: t.emoji,
+      title: t.title.replace('{n}', t.target),
+      target: t.target,
+      current: Math.round(current),
+      reward: t.reward,
+      percent: Math.min(100, Math.round((current / t.target) * 100)),
+      done: current &gt;= t.target,
+      claimed: s.tasks.claimed.indexOf(t.id) &gt;= 0
+    }
+  })
+}
+
+function claimTask(id) {
+  const s = getState()
+  ensureDaily()
+  const task = getTasks().filter((t) =&gt; t.id === id)[0]
+  if (!task || !task.done || task.claimed) {
+    return { ok: false, msg: '任务还没有完成哦' }
+  }
+  s.tasks.claimed.push(id)
+  s.wallet.fish += task.reward
+  addExp(10)
+  save()
+  return { ok: true, msg: '领取成功，获得 ' + task.reward + ' 条小鱼干！' }
+}
+
+/* ============================================================
+ * 成就系统
+ * ============================================================ */
+function getMetricValue(metric) {
+  const s = getState()
+  switch (metric) {
+    case 'learned':
+      return s.stats.totalLearned
+    case 'streak':
+      return s.stats.streak
+    case 'reviews':
+      return s.stats.totalReviews
+    case 'correct':
+      return s.stats.totalCorrect
+    case 'minutes':</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 48 页 / 共 60 页</span></div><pre>      return Math.floor(s.stats.totalMinutes)
+    case 'garden':
+      return s.garden.plots.length
+    case 'petLevel':
+      return getPetLevel()
+    case 'puzzle':
+      return s.puzzle.cleared.length
+    case 'chapters':
+      return s.chapters.finished.length
+    case 'exam':
+      return s.exam.history.length
+    case 'bestScore':
+      return s.exam.history.reduce((m, e) =&gt; Math.max(m, e.score || 0), 0)
+    case 'fish':
+      return s.wallet.fish
+    default:
+      return 0
+  }
+}
+
+function getAchievements() {
+  const s = getState()
+  return achievementsData.map((a) =&gt; {
+    const cur = getMetricValue(a.metric)
+    const unlocked = !!s.achievements.unlocked[a.id]
+    return {
+      id: a.id,
+      name: a.name,
+      emoji: a.emoji,
+      desc: a.desc,
+      metric: a.metric,
+      target: a.target,
+      current: Math.min(cur, a.target),
+      percent: Math.min(100, Math.round((cur / a.target) * 100)),
+      unlocked: unlocked,
+      unlockedAt: s.achievements.unlocked[a.id] || 0
+    }
+  })
+}
+
+function checkAchievements() {
+  const s = getState()
+  const newly = []
+  syncChapters()
+  achievementsData.forEach((a) =&gt; {
+    if (s.achievements.unlocked[a.id]) return
+    if (getMetricValue(a.metric) &gt;= a.target) {
+      s.achievements.unlocked[a.id] = Date.now()
+      s.wallet.fish += 30
+      addExp(20)</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 49 页 / 共 60 页</span></div><pre>      newly.push({ id: a.id, name: a.name, emoji: a.emoji, desc: a.desc })
+    }
+  })
+  return newly
+}
+
+/* ============================================================
+ * 剧情章节
+ * ============================================================ */
+function syncChapters() {
+  const s = getState()
+  const learned = s.stats.totalLearned
+  let changed = false
+  chaptersData.forEach((c) =&gt; {
+    if (learned &gt;= c.need &amp;&amp; s.chapters.unlocked.indexOf(c.id) === -1) {
+      s.chapters.unlocked.push(c.id)
+      changed = true
+    }
+  })
+  if (changed) save()
+  return s.chapters.unlocked
+}
+
+function getChapters() {
+  const s = getState()
+  return chaptersData.map((c, index) =&gt; {
+    const unlocked = s.chapters.unlocked.indexOf(c.id) &gt;= 0
+    const finished = s.chapters.finished.indexOf(c.id) &gt;= 0
+    return {
+      id: c.id,
+      num: index + 1,
+      title: c.title,
+      emoji: c.emoji,
+      need: c.need,
+      desc: c.desc,
+      scene: c.scene,
+      story: c.story,
+      reward: c.reward,
+      unlocked: unlocked,
+      finished: finished,
+      progress: c.need &lt;= 0 ? 100 : Math.min(100, Math.round((s.stats.totalLearned / c
+.need) * 100))
+    }
+  })
+}
+
+function finishChapter(id) {
+  const s = getState()
+  if (s.chapters.finished.indexOf(id) === -1) {
+    s.chapters.finished.push(id)</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 50 页 / 共 60 页</span></div><pre>    logActivity({ exp: 30, fish: 25, minutes: 5 })
+    save()
+  }
+  return true
+}
+
+/* ============================================================
+ * 测验 / 考试 / 其它模块
+ * ============================================================ */
+function saveExamResult(result) {
+  const s = getState()
+  const item = Object.assign(
+    {
+      at: Date.now(),
+      date: todayKey()
+    },
+    result
+  )
+  s.exam.history.unshift(item)
+  if (s.exam.history.length &gt; 30) s.exam.history.length = 30
+  logActivity({
+    correct: result.correct || 0,
+    wrong: result.wrong || 0,
+    minutes: result.minutes || 0,
+    quizzes: result.total || 0,
+    exp: 20,
+    fish: 10
+  })
+  save()
+  return item
+}
+
+function markFinished(kind, id) {
+  const s = getState()
+  if (!s[kind] || !s[kind].finished) return
+  if (s[kind].finished.indexOf(id) === -1) {
+    s[kind].finished.push(id)
+    s.wallet.fish += 12
+    addExp(18)
+    save()
+  }
+}
+
+function saveListeningScore(id, score) {
+  const s = getState()
+  const best = s.listenings.best[id] || 0
+  s.listenings.best[id] = Math.max(best, score)
+  save()
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 51 页 / 共 60 页</span></div><pre>function savePuzzleResult(score, cleared) {
+  const s = getState()
+  s.puzzle.playCount += 1
+  s.puzzle.best = Math.max(s.puzzle.best, score)
+  if (cleared &amp;&amp; s.puzzle.cleared.indexOf(cleared) === -1) {
+    s.puzzle.cleared.push(cleared)
+  }
+  save()
+}
+
+function saveWriting(score) {
+  const s = getState()
+  s.writing.count += 1
+  s.writing.best = Math.max(s.writing.best, score)
+  save()
+}
+
+/* ============================================================
+ * 统计视图
+ * ============================================================ */
+function getStatsView() {
+  const s = getState()
+  const days = []
+  for (let i = 6; i &gt;= 0; i--) {
+    const key = dayKey(Date.now() - i * DAY)
+    const d = s.stats.days[key] || emptyDay()
+    const date = new Date(Date.now() - i * DAY)
+    days.push({
+      key: key,
+      label: ['日', '一', '二', '三', '四', '五', '六'][date.getDay()],
+      newWords: d.newWords,
+      reviews: d.reviews,
+      minutes: d.minutes,
+      total: d.newWords + d.reviews
+    })
+  }
+  const max = Math.max(10, days.reduce((m, d) =&gt; Math.max(m, d.total), 0))
+  days.forEach((d) =&gt; {
+    d.percent = Math.round((d.total / max) * 100)
+  })
+
+  const total = s.stats.totalCorrect + s.stats.totalWrong
+  const accuracy = total &gt; 0 ? Math.round((s.stats.totalCorrect / total) * 100) : 0
+
+  const levels = [0, 0, 0, 0, 0, 0, 0]
+  Object.keys(s.records).forEach((id) =&gt; {
+    const lv = s.records[id].level
+    levels[Math.min(lv, 6)] += 1
+  })
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 52 页 / 共 60 页</span></div><pre>  return {
+    days: days,
+    accuracy: accuracy,
+    totalLearned: s.stats.totalLearned,
+    streak: s.stats.streak,
+    maxStreak: s.stats.maxStreak,
+    minutes: Math.round(s.stats.totalMinutes),
+    totalReviews: s.stats.totalReviews,
+    levels: levels,
+    mastered: s.records ? Object.keys(s.records).filter((id) =&gt; s.records[id].level &gt;=
+ 4).length : 0,
+    fish: s.wallet.fish
+  }
+}
+
+/** 最近 N 天打卡热力图 */
+function getHeatmap(weeks) {
+  const s = getState()
+  const w = weeks || 8
+  const cells = []
+  const today = new Date()
+  const offset = (today.getDay() + 6) % 7 // 周一为第一天
+  const start = new Date(today.getTime() - (w * 7 - 1 - (6 - offset)) * DAY)
+  start.setHours(0, 0, 0, 0)
+  for (let i = 0; i &lt; w * 7; i++) {
+    const d = new Date(start.getTime() + i * DAY)
+    const key = dayKey(d.getTime())
+    const day = s.stats.days[key]
+    const count = day ? day.newWords + day.reviews : 0
+    cells.push({
+      key: key,
+      day: d.getDate(),
+      count: count,
+      level: count === 0 ? 0 : count &lt; 10 ? 1 : count &lt; 25 ? 2 : count &lt; 50 ? 3 : 4
+    })
+  }
+  return cells
+}
+
+function getBookProgress(words, bookId) {
+  const s = getState()
+  let learned = 0
+  let mastered = 0
+  let due = 0
+  const now = Date.now()
+  words.forEach((w) =&gt; {
+    const r = s.records[w.id]
+    if (r) {
+      learned += 1
+      if (r.level &gt;= 4) mastered += 1</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 53 页 / 共 60 页</span></div><pre>      if (r.nextAt &lt;= now) due += 1
+    }
+  })
+  return {
+    total: words.length,
+    learned: learned,
+    mastered: mastered,
+    due: due,
+    percent: words.length ? Math.round((learned / words.length) * 100) : 0
+  }
+}
+
+/** 取得到期复习词（按到期时间升序） */
+function getDueWords(words, limit) {
+  const now = Date.now()
+  return words
+    .filter((w) =&gt; {
+      const r = getState().records[w.id]
+      return r &amp;&amp; r.nextAt &lt;= now
+    })
+    .sort((a, b) =&gt; getState().records[a.id].nextAt - getState().records[b.id].nextAt)
+    .slice(0, limit || 40)
+}
+
+/** 取得未学新词：用 ID 哈希做稳定打散，避免每天都从 a 开头 */
+function getNewWords(words, limit) {
+  const pool = words.filter((w) =&gt; !getState().records[w.id])
+  pool.sort((a, b) =&gt; hash(a.id) - hash(b.id))
+  return pool.slice(0, limit || 20)
+}
+
+module.exports = {
+  STORAGE_KEY: STORAGE_KEY,
+  DAY: DAY,
+  SRS_DAYS: SRS_DAYS,
+  REASONS: REASONS,
+  init: init,
+  getState: getState,
+  save: save,
+  resetAll: resetAll,
+  clone: clone,
+  dayKey: dayKey,
+  todayKey: todayKey,
+  touchOpen: touchOpen,
+  ensureDaily: ensureDaily,
+  getToday: getToday,
+  getRecord: getRecord,
+  isMastered: isMastered,
+  isDue: isDue,
+  submitWord: submitWord,</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 54 页 / 共 60 页</span></div><pre>  logActivity: logActivity,
+  addMinutes: addMinutes,
+  addExp: addExp,
+  vibrate: vibrate,
+  getPetLevel: getPetLevel,
+  getPetStage: getPetStage,
+  getPetView: getPetView,
+  getStages: getStages,
+  getPetCollection: getPetCollection,
+  getPetBranches: getPetBranches,
+  getVocabProfile: getVocabProfile,
+  switchPet: switchPet,
+  unlockPets: unlockPets,
+  feedPet: feedPet,
+  petPet: petPet,
+  setAccessory: setAccessory,
+  plantWord: plantWord,
+  getGardenView: getGardenView,
+  addWrong: addWrong,
+  resolveWrong: resolveWrong,
+  getWrongList: getWrongList,
+  getWrongStats: getWrongStats,
+  getTasks: getTasks,
+  claimTask: claimTask,
+  getAchievements: getAchievements,
+  checkAchievements: checkAchievements,
+  getMetricValue: getMetricValue,
+  syncChapters: syncChapters,
+  getChapters: getChapters,
+  finishChapter: finishChapter,
+  saveExamResult: saveExamResult,
+  markFinished: markFinished,
+  saveListeningScore: saveListeningScore,
+  savePuzzleResult: savePuzzleResult,
+  saveWriting: saveWriting,
+  getStatsView: getStatsView,
+  getHeatmap: getHeatmap,
+  getBookProgress: getBookProgress,
+  getDueWords: getDueWords,
+  getNewWords: getNewWords
+}
+
+
+/* ============================================================
+ * 文件：utils/util.js
+ * 软件：词灵岛四六级英语学习软件 V1.0.0
+ * ============================================================ */
+/**
+ * 词灵岛 · 通用工具函数
+ * 日期、随机、选项生成、写作诊断、跟读评分等纯函数集合。</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 55 页 / 共 60 页</span></div><pre> */
+
+const LINK_WORDS = [
+  'however', 'therefore', 'moreover', 'furthermore', 'in addition', 'besides',
+  'consequently', 'nevertheless', 'meanwhile', 'whereas', 'although', 'though',
+  'despite', 'in conclusion', 'as a result', 'for instance', 'for example',
+  'on the one hand', 'on the other hand', 'in contrast', 'what is more',
+  'firstly', 'secondly', 'finally', 'above all', 'to sum up'
+]
+
+const COMMON_WORDS = [
+  'the', 'and', 'that', 'have', 'for', 'not', 'with', 'you', 'this', 'but',
+  'his', 'from', 'they', 'say', 'her', 'she', 'will', 'one', 'all', 'would',
+  'there', 'their', 'what', 'out', 'about', 'who', 'get', 'which', 'when',
+  'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people',
+  'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other',
+  'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think',
+  'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first',
+  'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these', 'give',
+  'day', 'most', 'us', 'is', 'are', 'was', 'were', 'be', 'been', 'has',
+  'had', 'do', 'does', 'did', 'a', 'an', 'of', 'in', 'to', 'it', 'on',
+  'at', 'by', 'as', 'or', 'if', 'so', 'no', 'my', 'me', 'we', 'he', 'she'
+]
+
+function padZero(n) {
+  return n &lt; 10 ? '0' + n : '' + n
+}
+
+function formatDate(ts, fmt) {
+  const d = ts instanceof Date ? ts : new Date(ts || Date.now())
+  const map = {
+    YYYY: d.getFullYear(),
+    MM: padZero(d.getMonth() + 1),
+    DD: padZero(d.getDate()),
+    HH: padZero(d.getHours()),
+    mm: padZero(d.getMinutes()),
+    ss: padZero(d.getSeconds())
+  }
+  const pattern = fmt || 'YYYY-MM-DD'
+  return pattern.replace(/YYYY|MM|DD|HH|mm|ss/g, (k) =&gt; map[k])
+}
+
+function weekdayCN(ts) {
+  const d = ts instanceof Date ? ts : new Date(ts || Date.now())
+  return ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][d.getD
+ay()]
+}
+
+function greeting() {
+  const h = new Date().getHours()</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 56 页 / 共 60 页</span></div><pre>  if (h &lt; 6) return '夜深了，伙伴在等你'
+  if (h &lt; 11) return '早上好，开启今天的词海航行'
+  if (h &lt; 14) return '中午好，来背几个单词吧'
+  if (h &lt; 18) return '下午好，保持专注'
+  if (h &lt; 22) return '晚上好，今天也要打卡哦'
+  return '晚安，睡前复习效果更好'
+}
+
+/** 计算距目标日期还有几天（当天为 0） */
+function daysUntil(dateStr) {
+  if (!dateStr) return 0
+  const parts = dateStr.split('-')
+  const target = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  return Math.round((target.getTime() - today.getTime()) / 86400000)
+}
+
+function shuffle(arr) {
+  const a = arr.slice()
+  for (let i = a.length - 1; i &gt; 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const tmp = a[i]
+    a[i] = a[j]
+    a[j] = tmp
+  }
+  return a
+}
+
+function sample(arr, n) {
+  return shuffle(arr).slice(0, n)
+}
+
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n))
+}
+
+function percent(part, total) {
+  if (!total) return 0
+  return Math.max(0, Math.min(100, Math.round((part / total) * 100)))
+}
+
+function formatDuration(minutes) {
+  const m = Math.round(minutes || 0)
+  if (m &lt; 60) return m + ' 分钟'
+  const h = Math.floor(m / 60)
+  const rest = m % 60
+  return rest &gt; 0 ? h + ' 小时 ' + rest + ' 分' : h + ' 小时'
+}
+</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 57 页 / 共 60 页</span></div><pre>function truncate(str, len) {
+  if (!str) return ''
+  return str.length &gt; len ? str.slice(0, len) + '…' : str
+}
+
+/** 根据中文释义生成四选一题目 */
+function buildOptions(word, pool, count) {
+  const n = count || 4
+  const correct = word.cn
+  const used = {}
+  used[correct] = true
+  const wrong = []
+  shuffle(pool).forEach((w) =&gt; {
+    if (wrong.length &gt;= n - 1) return
+    if (!w || w.id === word.id) return
+    if (!w.cn || used[w.cn]) return
+    used[w.cn] = true
+    wrong.push(w.cn)
+  })
+  const fallback = ['放弃；抛弃', '大量的；广阔的', '促进；推动', '明显的；显著的', '
+减少；降低']
+  let i = 0
+  while (wrong.length &lt; n - 1) {
+    if (!used[fallback[i]]) {
+      used[fallback[i]] = true
+      wrong.push(fallback[i])
+    }
+    i++
+  }
+  const options = shuffle(
+    wrong.concat([correct]).map((text, index) =&gt; ({
+      text: text,
+      key: 'opt_' + index
+    }))
+  )
+  let answer = 0
+  options.forEach((o, idx) =&gt; {
+    if (o.text === correct) answer = idx
+  })
+  return { options: options, answer: answer }
+}
+
+/** 取当天固定的一句英文 */
+function dailyQuote(quotes) {
+  const list = quotes || []
+  if (!list.length) return null
+  const seed = new Date().getFullYear() * 1000 + new Date().getMonth() * 40 + new Date
+().getDate()
+  return list[seed % list.length]
+}</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 58 页 / 共 60 页</span></div><pre>
+/** 英文写作诊断：从词数、句式、连接词、词汇丰富度四个维度给分 */
+function analyzeWriting(text) {
+  const raw = (text || '').trim()
+  const words = raw ? raw.split(/\s+/).filter((w) =&gt; /[a-zA-Z]/.test(w)) : []
+  const sentences = raw
+    ? raw
+        .split(/[.!?]+/)
+        .map((s) =&gt; s.trim())
+        .filter((s) =&gt; s.length &gt; 0)
+    : []
+  const wordCount = words.length
+  const sentenceCount = sentences.length
+  const avgLen = sentenceCount ? Math.round(wordCount / sentenceCount) : 0
+  const lower = raw.toLowerCase()
+
+  const usedLinks = []
+  LINK_WORDS.forEach((l) =&gt; {
+    if (lower.indexOf(l) &gt;= 0 &amp;&amp; usedLinks.length &lt; 8) usedLinks.push(l)
+  })
+
+  const clean = words.map((w) =&gt; w.toLowerCase().replace(/[^a-z']/g, '')).filter(Boole
+an)
+  const unique = {}
+  clean.forEach((w) =&gt; {
+    unique[w] = true
+  })
+  const uniqueCount = Object.keys(unique).length
+  const uniqueRate = wordCount ? uniqueCount / wordCount : 0
+
+  let longWords = 0
+  clean.forEach((w) =&gt; {
+    if (w.length &gt;= 8 &amp;&amp; COMMON_WORDS.indexOf(w) === -1) longWords += 1
+  })
+  const longRate = wordCount ? longWords / wordCount : 0
+
+  let score = 0
+  if (wordCount &gt;= 120) score += 30
+  else if (wordCount &gt;= 100) score += 24
+  else if (wordCount &gt;= 80) score += 18
+  else if (wordCount &gt;= 50) score += 10
+  else score += Math.round(wordCount / 6)
+
+  if (sentenceCount &gt;= 8) score += 15
+  else if (sentenceCount &gt;= 5) score += 12
+  else if (sentenceCount &gt;= 3) score += 8
+  else score += 3
+
+  if (avgLen &gt;= 12 &amp;&amp; avgLen &lt;= 22) score += 15
+  else if (avgLen &gt; 8) score += 9</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 59 页 / 共 60 页</span></div><pre>  else score += 4
+
+  score += Math.min(15, usedLinks.length * 3)
+  score += Math.min(15, Math.round(uniqueRate * 40))
+  score += Math.min(10, Math.round(longRate * 80))
+  score = clamp(score, 0, 100)
+
+  const advice = []
+  if (wordCount &lt; 100) advice.push('篇幅偏短：四级作文建议 120 词左右，可补充一个具体
+例子。')
+  if (sentenceCount &lt; 5) advice.push('句式偏单一：尝试加入定语从句、状语从句，让句子有
+长有短。')
+  if (avgLen &gt; 24) advice.push('句子过长：适当拆分为短句，避免语法失控。')
+  if (usedLinks.length &lt; 3) advice.push('衔接不足：可使用 however / therefore / in add
+ition 等连接词。')
+  if (uniqueRate &lt; 0.55 &amp;&amp; wordCount &gt; 40) advice.push('重复用词较多：尝试用同义替换，
+例如 important → crucial。')
+  if (longRate &lt; 0.08 &amp;&amp; wordCount &gt; 60) advice.push('词汇偏基础：可加入 2-3 个四六级
+高频词提升表达。')
+  if (!advice.length) advice.push('整体结构完整、表达流畅，继续保持这种写作节奏。')
+
+  let grade = '继续加油'
+  if (score &gt;= 85) grade = '优秀'
+  else if (score &gt;= 70) grade = '良好'
+  else if (score &gt;= 55) grade = '合格'
+
+  return {
+    wordCount: wordCount,
+    sentenceCount: sentenceCount,
+    avgLen: avgLen,
+    uniqueCount: uniqueCount,
+    uniqueRate: Math.round(uniqueRate * 100),
+    links: usedLinks,
+    longWords: longWords,
+    score: score,
+    grade: grade,
+    advice: advice
+  }
+}
+
+/** 影子跟读评分：结合语速与文本匹配度给出星级（示例算法） */
+function scoreShadowing(text, durationSec) {
+  const words = (text || '').split(/\s+/).filter(Boolean).length
+  const dur = Math.max(1, Number(durationSec) || 1)
+  const wpm = Math.round((words / dur) * 60)
+  let score = 60
+  if (wpm &gt;= 90 &amp;&amp; wpm &lt;= 170) score += 25
+  else if (wpm &gt;= 70 &amp;&amp; wpm &lt; 90) score += 15
+  else if (wpm &gt; 170 &amp;&amp; wpm &lt;= 200) score += 12
+  else score += 5</pre></div>
+<div class="page"><div class="doc-header"><span>词灵岛四六级英语学习软件 V1.0.0</span><span>第 60 页 / 共 60 页</span></div><pre>  if (dur &gt; 1.2) score += 8
+  if (words &gt;= 6) score += 5
+  score = clamp(score, 55, 98)
+  let stars = 3
+  if (score &gt;= 90) stars = 5
+  else if (score &gt;= 80) stars = 4
+  else if (score &gt;= 70) stars = 3
+  else stars = 2
+  return { score: score, stars: stars, wpm: wpm, duration: dur }
+}
+
+/** 错因 → 复习处方 */
+function prescription(reason) {
+  const map = {
+    形近混淆: '把易混词放在同一张对比卡上，先看词根再看尾缀，连续 3 天各复习一次。',
+    音近听错: '跟读标准发音 5 遍，边读边在纸上写音标，重点区分重音位置。',
+    遗忘: '按 10 分钟 → 1 天 → 2 天的间隔重新见面，并在例句中回忆词义。',
+    语境误解: '回到原句，用「谁 + 做了什么 + 结果」复述句意，再判断词义。'
+  }
+  return map[reason] || map['遗忘']
+}
+
+/** 根据熟练度返回描述 */
+function levelText(level) {
+  if (level &gt;= 5) return '已掌握'
+  if (level &gt;= 4) return '较熟练'
+  if (level &gt;= 2) return '学习中'
+  if (level &gt;= 1) return '刚认识'
+  return '未学习'
+}
+
+module.exports = {
+  LINK_WORDS: LINK_WORDS,
+  padZero: padZero,
+  formatDate: formatDate,
+  weekdayCN: weekdayCN,
+  greeting: greeting,
+  daysUntil: daysUntil,
+  shuffle: shuffle,
+  sample: sample,
+  clamp: clamp,
+  percent: percent,
+  formatDuration: formatDuration,
+  truncate: truncate,
+  buildOptions: buildOptions,
+  dailyQuote: dailyQuote,
+  analyzeWriting: analyzeWriting,
+  scoreShadowing: scoreShadowing,
+  prescription: prescription,
+  levelText: levelText</pre></div>
+</body>
+</html>

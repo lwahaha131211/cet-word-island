@@ -1,0 +1,66 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/books/books",
+    "pages/pet/pet",
+    "pages/profile/profile",
+    "pages/study/study",
+    "pages/review/review",
+    "pages/puzzle/puzzle",
+    "pages/listening/listening",
+    "pages/reading/reading",
+    "pages/dialogue/dialogue",
+    "pages/writing/writing",
+    "pages/garden/garden",
+    "pages/plan/plan",
+    "pages/stats/stats",
+    "pages/achievements/achievements",
+    "pages/wrongbook/wrongbook",
+    "pages/exam/exam",
+    "pages/chapters/chapters",
+    "pages/settings/settings",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FFF7E8",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "词灵岛",
+    "backgroundColor": "#FFF7E8",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#9A8A78",
+    "selectedColor": "#F07A16",
+    "backgroundColor": "#FFFDF7",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "小岛"
+      },
+      {
+        "pagePath": "pages/books/books",
+        "text": "词书"
+      },
+      {
+        "pagePath": "pages/pet/pet",
+        "text": "小窝"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {
+    "cartoon-card": "/components/cartoon-card/index",
+    "pet-avatar": "/components/pet-avatar/index",
+    "ring-progress": "/components/ring-progress/index",
+    "empty-state": "/components/empty-state/index"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

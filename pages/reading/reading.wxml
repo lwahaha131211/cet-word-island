@@ -1,0 +1,132 @@
+<view class="page reading-page">
+  <!-- 文章选择 -->
+  <scroll-view scroll-x class="article-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="article-row">
+      <view
+        wx:for="{{readings}}"
+        wx:key="id"
+        class="article-chip {{activeId === item.id ? 'is-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectArticle"
+      >
+        <text class="article-chip-emoji">{{item.emoji}}</text>
+        <text class="article-chip-title">{{item.title}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 阅读阶段 -->
+  <block wx:if="{{phase === 'read'}}">
+    <view class="paper">
+      <view class="paper-hd">
+        <text class="paper-emoji">{{article.emoji}}</text>
+        <view class="flex1">
+          <view class="paper-title">{{article.title}}</view>
+          <view class="paper-sub">{{article.cnTitle}} · {{article.level}}</view>
+        </view>
+        <view class="timer-chip">⏱ {{elapsedText}}</view>
+      </view>
+
+      <view class="paper-meta">
+        <text class="tag tag-blue">约 {{article.minutes}} 分钟</text>
+        <text class="tag tag-green">{{article.questions.length}} 道理解题</text>
+        <text class="tag tag-orange">{{article.keyWords.length}} 个生词</text>
+      </view>
+
+      <view class="passage">
+        <text wx:for="{{article.passage}}" wx:key="*this" class="paragraph">{{item}}</text>
+      </view>
+
+      <view class="keyword-box">
+        <view class="keyword-title">🔍 点一点生词</view>
+        <view class="keyword-row">
+          <view
+            wx:for="{{article.keyWords}}"
+            wx:key="word"
+            class="keyword"
+            data-index="{{index}}"
+            bindtap="showWord"
+          >{{item.word}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="read-footer">
+      <text class="read-hint">读完再答题，正确率会更高</text>
+      <view class="btn btn-primary btn-block" bindtap="startQuiz">开始答题</view>
+    </view>
+  </block>
+
+  <!-- 答题阶段 -->
+  <block wx:elif="{{phase === 'quiz'}}">
+    <view class="quiz-top">
+      <text class="quiz-progress">第 {{quizIndex + 1}} / {{article.questions.length}} 题</text>
+      <text class="quiz-correct">✓ {{quizCorrect}}</text>
+    </view>
+
+    <view class="quiz-card">
+      <view class="quiz-q">{{quizQuestion.q}}</view>
+      <view class="options">
+        <view
+          wx:for="{{quizOptions}}"
+          wx:key="letter"
+          class="option {{quizAnswered && index === quizQuestion.answer ? 'is-correct' : ''}} {{quizAnswered && index === quizSelected && index !== quizQuestion.answer ? 'is-wrong' : ''}}"
+          data-index="{{index}}"
+          bindtap="choose"
+        >
+          <view class="option-letter">{{item.letter}}</view>
+          <text class="option-text">{{item.text}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{quizAnswered}}" class="explain">
+        <view class="explain-hd">
+          <text class="explain-emoji">{{quizSelected === quizQuestion.answer ? '🎉' : '📝'}}</text>
+          <text class="explain-title">{{quizSelected === quizQuestion.answer ? '回答正确' : '答案解析'}}</text>
+        </view>
+        <text class="explain-text">{{quizQuestion.explain}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{quizAnswered}}" class="btn btn-primary btn-block" bindtap="next">
+      {{quizIndex + 1 >= article.questions.length ? '查看成绩' : '下一题'}}
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:else>
+    <view class="done-card">
+      <view class="sticker sticker-green">阅读完成</view>
+      <view class="done-score">{{result.accuracy}}<text class="done-unit">%</text></view>
+      <view class="done-label">理解正确率</view>
+      <view class="done-comment">{{result.comment}}</view>
+      <view class="result-grid">
+        <view class="result-cell">
+          <text class="num">{{result.correct}}/{{result.total}}</text>
+          <text class="result-label">答对题数</text>
+        </view>
+        <view class="result-cell">
+          <text class="num">{{result.minutes}}</text>
+          <text class="result-label">用时(分钟)</text>
+        </view>
+        <view class="result-cell">
+          <text class="num">+{{result.exp}}</text>
+          <text class="result-label">词力</text>
+        </view>
+      </view>
+      <view class="done-tip">生词：{{article.keyWords[0].word}} · {{article.keyWords[1].word}} · {{article.keyWords[2].word}}</view>
+      <view class="btn btn-primary btn-block" bindtap="retry">再读一遍</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="goHome">回到小岛</view>
+    </view>
+  </block>
+
+  <!-- 生词弹层 -->
+  <view wx:if="{{showWord}}" class="mask" bindtap="closeWord">
+    <view class="modal word-modal" catchtap="noop">
+      <view class="word-pop-word">{{wordInfo.word}}</view>
+      <view class="word-pop-cn">{{wordInfo.cn}}</view>
+      <view class="btn btn-primary btn-block mt-24" bindtap="speakWord">🔊 听发音</view>
+      <view class="btn btn-ghost btn-block mt-16" bindtap="closeWord">继续阅读</view>
+    </view>
+  </view>
+</view>

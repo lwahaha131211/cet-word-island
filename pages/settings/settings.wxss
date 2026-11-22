@@ -1,0 +1,102 @@
+/* 设置 */
+.settings-page {
+  padding-bottom: 80rpx;
+}
+
+.setting-card {
+  margin-top: 22rpx;
+  padding: 22rpx 24rpx;
+  background: #fffdf7;
+  border: 4rpx solid var(--ink);
+  border-radius: 30rpx;
+  box-shadow: 0 8rpx 0 rgba(59, 46, 42, 0.11);
+}
+
+.setting-title {
+  font-size: 24rpx;
+  font-weight: 800;
+  margin-bottom: 4rpx;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14rpx;
+  padding: 16rpx 0;
+  border-bottom: 2rpx dashed var(--line);
+}
+
+.setting-row:last-of-type {
+  border-bottom: none;
+}
+
+.setting-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-name {
+  display: block;
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.setting-desc {
+  display: block;
+  font-size: 18rpx;
+  color: var(--muted);
+  margin-top: 2rpx;
+}
+
+.setting-value {
+  font-size: 20rpx;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.time-value {
+  padding: 6rpx 16rpx;
+  background: var(--cream);
+  border: 2rpx solid rgba(59, 46, 42, 0.2);
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.setting-note {
+  margin-top: 10rpx;
+  font-size: 17rpx;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.danger-btn {
+  margin-top: 16rpx;
+  height: 78rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff1f1;
+  border: 3rpx solid var(--red);
+  border-radius: 20rpx;
+  color: #c23b3b;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.menu-arrow {
+  font-size: 30rpx;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.settings-footer {
+  margin-top: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 18rpx;
+  color: var(--muted);
+}
