@@ -1,4 +1,4 @@
-﻿# 词灵岛 · 四六级卡通英语学习小程序
+# 词灵岛 · 四六级卡通英语学习小程序
 
 > 软件名称：**词灵岛四六级英语学习软件**  
 > 版本号：**V1.0.0**  
@@ -9,6 +9,14 @@
 而是把「背单词」设计成一座会生长的小岛：学习行为会喂养伙伴、让知识花园开花、
 推动剧情章节前进。项目已完成 20 个页面、4 个公共组件、**3920 个四六级唯一词条（含重叠共 4952 条）**、
 **5 只可进化原创伙伴**与完整本地数据层，可直接导入微信开发者工具运行。
+
+[![在线预览](https://img.shields.io/badge/在线预览-GitHub%20Pages-FF9F1C?style=flat-square)](https://lwahaha131211.github.io/cet-word-island/)
+[![页面](https://img.shields.io/badge/页面-20%20个-4EA8DE?style=flat-square)](#三页面清单20-个)
+[![词条](https://img.shields.io/badge/词条-3920%20个-2EC4B6?style=flat-square)](#词库结构)
+[![伙伴](https://img.shields.io/badge/伙伴-5%20只可进化-9B7EDE?style=flat-square)](https://lwahaha131211.github.io/cet-word-island/伙伴造型预览.html)
+
+> 🌐 **在线预览**：<https://lwahaha131211.github.io/cet-word-island/>  
+> 无需安装微信开发者工具即可查看伙伴造型、AI 检测报告与源码汇编。
 
 ---
 
