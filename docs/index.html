@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>词灵岛 · 四六级卡通英语学习小程序</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #FFF7E8;
+    color: #3B2E2A;
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: radial-gradient(#3B2E2A 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: 0 0;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+
+  .hero {
+    background: #FFFDF7;
+    border: 4px solid #3B2E2A;
+    border-radius: 32px;
+    padding: 40px 36px;
+    box-shadow: 0 10px 0 rgba(59, 46, 42, .13);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .hero .sub {
+    font-size: 14px;
+    color: #8a7a72;
+    margin-bottom: 18px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .badge {
+    background: #FFD166;
+    border: 2px solid #3B2E2A;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .badge.green { background: #2EC4B6; color: #fff; }
+  .badge.blue { background: #4EA8DE; color: #fff; }
+  .badge.pink { background: #FF86AE; color: #fff; }
+  .badge.purple { background: #9B7EDE; color: #fff; }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    padding-left: 14px;
+    border-left: 6px solid #FF9F1C;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .card {
+    display: block;
+    background: #FFFDF7;
+    border: 3px solid #3B2E2A;
+    border-radius: 20px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 6px 0 rgba(59, 46, 42, .12);
+    transition: transform .12s, box-shadow .12s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 0 rgba(59, 46, 42, .16);
+  }
+  .card .icon { font-size: 28px; margin-bottom: 8px; }
+  .card .name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .card .desc { font-size: 13px; color: #8a7a72; }
+
+  .info {
+    background: #FFFDF7;
+    border: 3px solid #3B2E2A;
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-shadow: 0 6px 0 rgba(59, 46, 42, .12);
+    margin-bottom: 20px;
+  }
+  .info ul { padding-left: 22px; }
+  .info li { margin-bottom: 6px; font-size: 14px; }
+  .info code {
+    background: #FFF0D4;
+    border: 1px solid #e8d4b0;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 13px;
+    font-family: Consolas, Monaco, monospace;
+  }
+
+  .warn {
+    background: #FFF0D4;
+    border: 3px solid #FF9F1C;
+    border-radius: 16px;
+    padding: 16px 20px;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: #a89a92;
+    padding: 20px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>词灵岛</h1>
+    <div class="sub">四六级卡通英语学习 · 微信小程序 V1.0.0</div>
+    <p style="font-size:15px;color:#6b5a52;">
+      不是把单词表搬进手机，而是把背单词设计成一座会生长的小岛。<br>
+      学习行为会喂养伙伴、让知识花园开花、推动剧情章节前进。
+    </p>
+    <div class="badges">
+      <span class="badge">20 个页面</span>
+      <span class="badge green">3920 个词条</span>
+      <span class="badge blue">5 只可进化伙伴</span>
+      <span class="badge pink">词根拼图</span>
+      <span class="badge purple">知识花园</span>
+      <span class="badge">零图片依赖</span>
+    </div>
+  </div>
+
+  <h2>在线预览</h2>
+  <div class="cards">
+    <a class="card" href="伙伴造型预览.html">
+      <div class="icon">🐾</div>
+      <div class="name">伙伴造型预览</div>
+      <div class="desc">5 只伙伴 × 3 个阶段 × 2 条分支，共 30 种造型</div>
+    </a>
+    <a class="card" href="AI检测报告_V1.0.html">
+      <div class="icon">📊</div>
+      <div class="name">AI 检测报告</div>
+      <div class="desc">代码 AI 生成率检测结果 V1.0</div>
+    </a>
+    <a class="card" href="源代码-软著提交版.html">
+      <div class="icon">📄</div>
+      <div class="name">源代码（软著提交版）</div>
+      <div class="desc">软件著作权申请用的源码汇编</div>
+    </a>
+  </div>
+
+  <h2>快速开始</h2>
+  <div class="info">
+    <ul>
+      <li>克隆仓库：<code>git clone https://github.com/lwahaha131211/cet-word-island.git</code></li>
+      <li>打开微信开发者工具 → 导入项目 → 选择 <code>cet-word-island-miniprogram</code> 目录</li>
+      <li>修改 <code>project.config.json</code> 中的 AppID 为你自己的小程序账号</li>
+      <li>无需后端，所有数据保存在本机 Storage，首次打开即可完整体验</li>
+    </ul>
+  </div>
+
+  <h2>六大特色</h2>
+  <div class="info">
+    <ul>
+      <li><b>多伙伴养成</b>：5 只原创伙伴，各 5 段进化，最终分支由词根/词性结构决定</li>
+      <li><b>词根拼图工坊</b>：把单词拆成词根碎片混入干扰项，按构词顺序拼回</li>
+      <li><b>知识花园</b>：单词熟练度达 4 级才开花，花色由单词 ID 哈希决定</li>
+      <li><b>剧情章节</b>：6 个章节，词汇量是解锁故事的唯一钥匙</li>
+      <li><b>卡通手绘风</b>：深棕描边 + 奶油底色 + 硬阴影，全部插图 CSS 绘制</li>
+      <li><b>无后端依赖</b>：本地数据层，离线完整可用</li>
+    </ul>
+  </div>
+
+  <div class="warn">
+    <b>⚠️ 词库授权说明</b><br>
+    词库整理自 GPL-3.0 开源项目
+    <a href="https://github.com/RealKai42/qwerty-learner" style="color:#3B2E2A;">qwerty-learner</a>。
+    GPL-3.0 具有传染性，当前仅用于本地学习与演示；对外发布或商业运营前，
+    请替换为已授权词库，或按 GPL-3.0 开源整个项目。
+  </div>
+
+  <footer>
+    © 2026 词灵岛 · 仅用于学习与软件著作权申请演示<br>
+    <a href="https://github.com/lwahaha131211/cet-word-island" style="color:#3B2E2A;">GitHub 仓库</a>
+  </footer>
+
+</div>
+</body>
+</html>
